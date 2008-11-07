@@ -3,13 +3,16 @@
 # parses the line
 # and stores the tokens somehow
 
-class Parser():
+class Parser(object):
     
-    def loadFile(self, file):
+    def load_file(self, filename):
         pass
     
-    def parseLine(self):
+    def parse_line(self):
         pass
     
-    def storeTokens(self):
+    def store_tokens(self):
+        pass
+    
+    def __init__(self):
         pass
