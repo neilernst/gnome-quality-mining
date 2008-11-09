@@ -11,7 +11,7 @@ class Parser(object):
     def parse_line(self):
         pass
     
-    def store_tokens(self):
+    def store_tokens(self, node):
         pass
     
     def __init__(self):

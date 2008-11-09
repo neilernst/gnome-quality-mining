@@ -1,4 +1,4 @@
-from MySQLdb.cursors import Cursor, SSDictCursor
+from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 from MSR.main.Parser import Parser
 from MSR.main.GnomeDataObject import GnomeDataObject
@@ -14,30 +14,31 @@ class MailParser(Parser):
     TABLE = "messages"
     
     def connect(self, db_name):
-        """ connect to the db. Uses SSDictCursor -- serverside, dictionary returned"""
-        self.db = MySQLdb.connect(passwd=self.PASSWORD,db=db_name, cursorclass=SSDictCursor)
+        """ connect to the db. Uses DictCursor -- dictionary returned"""
+        self.db = MySQLdb.connect(passwd=self.PASSWORD, db=db_name, cursorclass=DictCursor)
+        self.cursor = self.db.cursor()
 
     def query(self, query_string):
         """ get all the rows in the db """
-        
-        self.c = self.db.cursor()
-        self.c.execute(query_string)
-        while self.c.fetchone():
-            r = self.c.fetchone()
+        self.cursor.execute(query_string)
+        result_list = self.cursor.fetchall()
+        for r in result_list:
             date = r['first_date']
             subj = r['subject']
-            body = r['message_body'] # TODO format is [<email.Message.Message instance at 0xb75f110c>, <email.Message.Message instance at 0xb75f148c>]  
-            text = subj + body #TODO must unpickle body?
+            body = r['message_body']  
+            text = subj + body 
             node = GnomeDataObject(GnomeDataObject.MAIL)  
             node.setDate(date)
             node.setEvent(text)
             node.setRSN(-1) #-1 indicates no RSN retrieved
             self.store_tokens(node)
-        self.c.close()
+        self.cursor.close()
           
     def return_result(self):
         """ for testing"""
-        return self.c.fetchone()
+    
+    def return_data(self):
+        return self.data
     
     def load_file(self, filename):
         """ call connect to fill contract"""
@@ -48,17 +49,18 @@ class MailParser(Parser):
         self.query("SELECT * FROM" + self.TABLE)
     
     def store_tokens(self, node):
+        print node.getEvent()
         self.data.append(node)
     
     def __init__(self):
         Parser.__init__(self)
-        self.c = None
+        self.cursor = None
         self.db = None
         self.data = []
     
 if __name__ == '__main__':
     p = MailParser()
     p.load_file("deskbar-mail")
-    p.query("Select * from messages")
-    print p.return_result()
+    p.query("Select message_body, first_date, subject from messages")
+    print p.return_data()[2]
     

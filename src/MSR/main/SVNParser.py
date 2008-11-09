@@ -37,6 +37,7 @@ class SVNParser(Parser):
         return self.data
             
     def __init__(self):
+        Parser.__init__(self)
         self.f = None
         self.data = [] # a list of GDOs with the parsed data
             

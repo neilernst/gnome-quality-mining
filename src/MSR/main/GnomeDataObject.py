@@ -12,8 +12,8 @@ class GnomeDataObject():
     CHANGE = "Changelog"
     MAIL  = "Mail"
     
-    def __init__(self,type):
-        self.type = type    
+    def __init__(self,eventtype):
+        self.eventtype = eventtype    
         
     def setDate(self, date):
         self.date = date
@@ -28,10 +28,13 @@ class GnomeDataObject():
         self.event = event
         
     def getType(self):
-        return self.type
+        return self.eventtype
     
     def getRSN(self):
         return self.rsn
     
     def setRSN(self, rsn):
         self.rsn = rsn
+        
+    def __str__(self):
+        print self.getType() + " date: "+  self.getDate().isoformat() + " RSN: " + str(self.getRSN()) + " Event: " + self.getEvent()
