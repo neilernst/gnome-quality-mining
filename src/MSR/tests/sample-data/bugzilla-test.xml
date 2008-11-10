@@ -1,5 +1,5 @@
+<?xml version="1.0"?>
 <bugzilla>
-
 <bug>
   <bug_id>
     83261
@@ -387,3 +387,4 @@ Thanks for the testcase
     97383
   </duplicate_of>
 </bug>
+</bugzilla>
