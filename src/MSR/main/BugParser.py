@@ -1,85 +1,110 @@
 from MSR.main.Parser import Parser
-from xml.dom import minidom
 from MSR.main.GnomeDataObject import GnomeDataObject
 from datetime import datetime
 from xml.sax import ContentHandler, parse
+import re
 
 class BugParser(Parser):
     """ Parses bugzilla logs and creates GnomeDataObjects for each event"""
         
     def load_file(self, filename):
         """ Parse an XML-formatted SVN output file"""
-#        bugfile = open(filename)
-#        self.f = minidom.parse(bugfile)
-#        bugfile.close()
-        ch = BugContentHandler()
-        parse(filename, ch)
-        
-        
-    
+        self.ch = BugContentHandler()
+        parse(filename, self.ch)
+            
     def parse_line(self):
-        """ parse the entries in the log file, add them to the list of GDOs"""
-        entries = self.f.getElementsByTagName('bug')
-        for entry in entries:
-            if entry.childNodes[3].hasChildNodes():
-                bug_date = entry.ChildNodes[4].childNodes[0].data
-                bug_date = bug_date[5:28] # strip the \n junk
-                bug_date = datetime.strptime(bug_date, '%Y-%m-%d %H:%M:%S')
-                
-            if entry.childNodes[7].hasChildNodes():
-                strdate = entry.childNodes[3].childNodes[0].data
-                strdate = strdate[0:19] #this removes the milliseconds and TZ info
-                date = datetime.strptime(strdate, '%Y-%m-%dT%H:%M:%S') 
-                msg = entry.childNodes[7].childNodes[0].data # DOM TextNode containing log message. Hard-coding == bad
-            n = GnomeDataObject(GnomeDataObject.SVN)
-            n.setDate(date)
-            #n.setRSN(revNum)
-            n.setEvent(msg)
-            self.store_tokens(n)
+        pass
             
     def store_tokens(self, node):
-        self.data.append(node)
-        
+        pass
+
     def get_data(self):
-        return self.data
+        return self.ch.get_data()
             
     def __init__(self):
         Parser.__init__(self)
         self.f = None
-        self.data = [] # a list of GDOs with the parsed data
+        self.ch = None # a list of GDOs with the parsed data
         
 class BugContentHandler(ContentHandler):
-    """ a content handler for SAx that processes Gnome bugzilla xml events"""
-    
-    CURRENT = "none"
+    """ a content handler for SAx that processes Gnome bugzilla xml events"""  
     
     def startDocument(self):
-        pass
+        print "Beginning parsing"
     
     def endDocument(self):
-        pass
+        print "Parsing complete"
     
     def startElement(self, name, attrs):
         #print "Starting: " + name
-        if name == "product":
-            self.CURRENT = name
-        else:
-            self.CURRENT = "none"
+        self.current = name
+        if name == "bug": # the high-level element
+            pass
+        if name == "comment":
+            self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
+            self.gdo.setRSN(-1) # no RSN in these events
+            self.isComment = True
         
     def endElement(self, name):
-        #print "Ending: " + name
-        pass 
+        if name == "bug":
+            self.isProduct = False # reset if set to true from last bug 
+        if name == "comment":
+            self.isComment = False
+            self.data.append(self.gdo) # we've parsed a bug, so add the completed bug event to our list....
     
-    def ignorableWhitespace(self,whitespace):
-        pass
+    def get_data(self):
+        return self.data
+    
     
     def characters(self,content):
-        if self.CURRENT == "product":
-            print content
+        """ returns the characters inside an element, incl. whitespace"""
+        # parse out whitespace
+        white = re.compile('\S')
+#        autoComment = re.compile('\*\*\*.*\*\*\*')  
+        if self.current == "product":
+            content = content.replace(' ', '') 
+            if content in self.products: 
+                self.isProduct = True            
+        if self.isProduct: # only for our product of interest. Eventually a list.
+            if self.isComment:
+                if self.current == "bug_when":
+                    lines = content.splitlines()
+                    for line in lines:
+                        line = line.lstrip()
+                        if white.match(line):
+                            date = datetime.strptime(line, '%Y-%m-%d %H:%M:%S') 
+                            self.gdo.setDate(date)
+                if self.current == "text":
+                    saveLine = ""
+                    lines = content.splitlines()
+                    newline = re.compile("\n")
+                    for line in lines:
+                        line = line.lstrip()
+                        if white.match(line):
+                            print line
+                            #print "line num: " + str(num) + " " + line
+#                            if not autoComment.match(line):
+                            #line = newline.match(line) # strip linebreaks
+                            #line = line.strip()
+                            saveLine = saveLine + line 
+                        saveLine = newline.sub("", saveLine)
+                        self.gdo.setEvent(saveLine)
+                        #print saveLine
+            
+    def __init__(self):
+        ContentHandler.__init__(self)
+        self.data = []
+        self.isProduct = False
+        self.products = ["galeon", "scaffold", "deskbar"]
+        self.isComment = False
+        self.current = "none"
+        self.gdo = None
             
 if __name__ == "__main__":
     s = BugParser()
     #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
-    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml')   
-    #s.parse_line()   
-   # assert(len(s.get_data()) == 781)
+    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
+#    print len(s.get_data())
+    for data in s.get_data():
+        print data
+        pass

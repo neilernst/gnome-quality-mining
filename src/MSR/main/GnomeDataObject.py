@@ -5,8 +5,8 @@ class GnomeDataObject():
     
     date = None # a Python datetime.Date object
     event = None # the text associated with some change to the product e.g. mail, changelog, commit comment, bug report
-    rsn = None # the release sequence number, e.g. the changeset
-    type = None # one of SVN, BUG, 
+    rsn = None # the release sequence number, e.g. the changeset. -1 indicates no RSN
+    eventtype = None # one of SVN, BUG, CHANGE, MAIL
     SVN = "SVN"
     BUG = "Bug"
     CHANGE = "Changelog"
@@ -37,4 +37,4 @@ class GnomeDataObject():
         self.rsn = rsn
         
     def __str__(self):
-        print self.getType() + " date: "+  self.getDate().isoformat() + " RSN: " + str(self.getRSN()) + " Event: " + self.getEvent()
+        return "type: " + self.getType() + " date: "+  self.getDate().isoformat() + " RSN: " + str(self.getRSN()) + " Event: " + self.getEvent()
