@@ -42,14 +42,16 @@ class BugContentHandler(ContentHandler):
             pass
         if name == "comment":
             self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
-            self.gdo.setRSN(-1) # no RSN in these events
+            self.gdo.setRSN(-1)# no RSN in these events
             self.isComment = True
+            self.saveLine = ""
         
     def endElement(self, name):
         if name == "bug":
             self.isProduct = False # reset if set to true from last bug 
         if name == "comment":
             self.isComment = False
+            self.saveLine = ""
             self.data.append(self.gdo) # we've parsed a bug, so add the completed bug event to our list....
     
     def get_data(self):
@@ -60,7 +62,7 @@ class BugContentHandler(ContentHandler):
         """ returns the characters inside an element, incl. whitespace"""
         # parse out whitespace
         white = re.compile('\S')
-#        autoComment = re.compile('\*\*\*.*\*\*\*')  
+        autoComment = re.compile('\*\*\*.*\*\*\*')  
         if self.current == "product":
             content = content.replace(' ', '') 
             if content in self.products: 
@@ -75,21 +77,13 @@ class BugContentHandler(ContentHandler):
                             date = datetime.strptime(line, '%Y-%m-%d %H:%M:%S') 
                             self.gdo.setDate(date)
                 if self.current == "text":
-                    saveLine = ""
                     lines = content.splitlines()
-                    newline = re.compile("\n")
                     for line in lines:
                         line = line.lstrip()
                         if white.match(line):
-                            print line
-                            #print "line num: " + str(num) + " " + line
-#                            if not autoComment.match(line):
-                            #line = newline.match(line) # strip linebreaks
-                            #line = line.strip()
-                            saveLine = saveLine + line 
-                        saveLine = newline.sub("", saveLine)
-                        self.gdo.setEvent(saveLine)
-                        #print saveLine
+                            if not autoComment.match(line):
+                                self.saveLine = self.saveLine + " " + line 
+                        self.gdo.setEvent(self.saveLine)
             
     def __init__(self):
         ContentHandler.__init__(self)
@@ -99,11 +93,12 @@ class BugContentHandler(ContentHandler):
         self.isComment = False
         self.current = "none"
         self.gdo = None
+        self.saveLine = ""
             
 if __name__ == "__main__":
     s = BugParser()
-    #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
-    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
+    s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
+#    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
 #    print len(s.get_data())
     for data in s.get_data():
         print data
