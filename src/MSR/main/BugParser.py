@@ -39,7 +39,7 @@ class BugContentHandler(ContentHandler):
         #print "Starting: " + name
         self.current = name
         if name == "bug": # the high-level element
-            pass
+            self.bugCount += self.bugCount
         if name == "comment":
             self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
             self.gdo.setRSN(-1)# no RSN in these events
@@ -74,7 +74,11 @@ class BugContentHandler(ContentHandler):
                     for line in lines:
                         line = line.lstrip()
                         if white.match(line):
-                            date = datetime.strptime(line, '%Y-%m-%d %H:%M:%S') 
+                            try: 
+                                date = datetime.strptime(line, '%Y-%m-%d %H:%M:%S')
+                            except ValueError:
+                                print 'Error on bug date in bug: ' + str(self.bugCount)
+                                date = datetime.today() 
                             self.gdo.setDate(date)
                 if self.current == "text":
                     lines = content.splitlines()
@@ -89,16 +93,17 @@ class BugContentHandler(ContentHandler):
         ContentHandler.__init__(self)
         self.data = []
         self.isProduct = False
-        self.products = ["galeon", "scaffold", "deskbar"]
+        self.products = ["ekiga", "deskbar-applet", "totem", "evolution", "metacity", "evolution", "empathy", "nautilus"]
         self.isComment = False
         self.current = "none"
         self.gdo = None
         self.saveLine = ""
+        self.bugCount = 0
             
 if __name__ == "__main__":
     s = BugParser()
-    s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
-#    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
+#    s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
+    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
 #    print len(s.get_data())
     for data in s.get_data():
         print data
