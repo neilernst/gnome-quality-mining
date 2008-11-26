@@ -19,22 +19,34 @@ class GnomeDataObject():
         self.date = date
         
     def getDate(self):
-        return self.date
+        if self.date != None:
+            return self.date.isoformat()
+        else:
+            return "no date" # a nothing date
     
     def getEvent(self):
-        return self.event
-    
+        if self.event != None:
+            return self.event
+        else:
+            return "no event" # a nothing date    
+        
     def setEvent(self, event):
         self.event = event
         
     def getType(self):
-        return self.eventtype
-    
+        if self.eventtype != None:
+            return self.eventtype
+        else:
+            return "no type" # a nothing date
+        
     def getRSN(self):
-        return self.rsn
-    
+        if self.rsn != None:
+            return self.rsn
+        else:
+            return -1 # a nothing date
+        
     def setRSN(self, rsn):
         self.rsn = rsn
         
     def __str__(self):
-        return "type: " + self.getType() + " date: "+  self.getDate().isoformat() + " RSN: " + str(self.getRSN()) + " Event: " + self.getEvent()
+        return "type: " + self.getType() + " date: "+  self.getDate() + " RSN: " + str(self.getRSN()) + " Event: " + self.getEvent()
