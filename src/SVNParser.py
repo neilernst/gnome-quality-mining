@@ -1,6 +1,6 @@
-from MSR.main.Parser import Parser
+from Parser import Parser
 from xml.dom import minidom
-from MSR.main.GnomeDataObject import GnomeDataObject
+from GnomeDataObject import GnomeDataObject
 from datetime import datetime
 
 class SVNParser(Parser):
