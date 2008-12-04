@@ -2,7 +2,7 @@ from MSR.main.Parser import Parser
 from MSR.main.GnomeDataObject import GnomeDataObject
 from datetime import datetime
 from xml.sax import ContentHandler, parse, parseString,SAXParseException
-import re
+import re, codecs
 from detect_encode import detectXMLEncoding
 from stripInvalidChars import stripNonValidXMLCharacters
 from string import upper
@@ -13,8 +13,15 @@ class BugParser(Parser):
     def load_file(self, filename):
         """ Parse an XML-formatted Bugzilla output file"""
         self.ch = BugContentHandler()
-        parseString(filename, self.ch)
-        
+        #parseString(filename, self.ch)
+        #fileObj = codecs.open( filename, "r", "utf-8" )
+        fileObj = open(filename, "r")
+        u = fileObj.read() # Returns a Unicode string from the UTF-8 bytes in the file
+        # Strip the BOM from the beginning of the Unicode string, if it exists
+        #u.lstrip( unicode( codecs.BOM_UTF8, "utf8" ) )
+
+    	parseString(u, self.ch)
+
     def parse_line(self):
         pass
             
@@ -109,15 +116,15 @@ if __name__ == "__main__":
     import sys
     sys.path.append('/home/nernst/workspace/msr/src')
     s = BugParser()
-    #fp = open('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
-    fp = open('/home/nernst/workspaces/workspace-gany/msr/data/out.xml')
-    stripped = stripNonValidXMLCharacters(fp)
-    s.load_file(stripped)
+#    fp = open('/home/nernst/workspaces/workspace-gany/msr/data/gb_clean.xml')
+    #fp = open('/home/nernst/workspaces/workspace-gany/msr/data/out.xml')
+#    stripped = stripNonValidXMLCharacters(fp)
+#    s.load_file(stripped)
 #    r = detectXMLEncoding(fp)
 #    print r
-##    s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/gnome_bugzilla.xml')
-#    s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out.xml')
-##    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/bugzilla-test.xml') 
+
+    #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
+    s.load_file('/home/nernst/workspace/msr/data/out3.xml') 
 #    print len(s.get_data())
     for data in s.get_data():
-        print data
+        print unicode(data)
