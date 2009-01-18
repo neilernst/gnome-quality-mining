@@ -2,6 +2,7 @@ from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 import _mysql_exceptions
 from Parser import Parser
+import getopt,sys
 from GnomeDataObject import GnomeDataObject
 
 # the Mail data is in MySql dumps. We will use the subject and body as our corpus, and the date of sending as the date. We can't directly determine 
@@ -32,7 +33,7 @@ class MailParser(Parser):
             date = r['first_date']
             subj = r['subject']
             body = r['message_body']  
-            text = subj + body 
+            text = subj + ' ' + body 
             node = GnomeDataObject(GnomeDataObject.MAIL)  
             node.setDate(date)
             node.setEvent(text)
@@ -53,14 +54,19 @@ class MailParser(Parser):
     def parse_line(self):
         """ generic query to fill contract"""
         self.query("SELECT * FROM" + self.TABLE)
+        
+    def set_product(self, name):
+        """allows us to specify which product we are parsing"""
+        self.product_name = name
     
     def store_tokens(self, node):
         """ store in the database"""
-        self.connect_store(Parser.STORAGE_DB)
-        store_query_string = '%s (rsn, date, type, event) VALUES (%i, %s, %s, %s)' % \
-                                    (Parser.STORAGE_TABLE, node.getRSN(), node.getDate(), node.getType(), node.getEvent())
+        store_con = self.connect_store(Parser.STORAGE_DB)
+        #print node.getEvent()
+        #store_query_string = "INSERT INTO %s (rsn, date, type, event) VALUES (%i, %s, %s, %s)" % \  (Parser.STORAGE_TABLE, node.getRSN(), node.getDate(), node.getType(), node.getEvent())
         try:
-            self.store_cursor.execute(store_query_string)
+            self.store_cursor.execute("INSERT INTO data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
+            (node.getRSN(), node.getDate(), node.getType(), node.getEvent(), self.product_name) )
         except (ValueError):
             print 'Error in query syntax'
     
@@ -74,7 +80,24 @@ class MailParser(Parser):
     
 if __name__ == '__main__':
     p = MailParser()
-    p.load_file("fm3_nautilus_mls")
-    p.query("Select message_body, first_date, subject from messages")
+    try:
+        options, args = getopt.getopt(sys.argv[1:], "f:p:")
+    except getopt.GetoptError, err:
+            # print help information and exit:
+            print str(err) # will print something like "option -a not recognized"
+            sys.exit(2)
+    file_name = None
+    product = None
+    for o,a in options:
+        if o == "-f":
+            file_name = a
+        elif o == "-p":
+            product = a
+        else:
+            assert False, "unhandled option"
+    if file_name != None and product != None:
+        p.set_product(product)
+        p.load_file(file_name)
+        p.query("Select message_body, first_date, subject from messages")
     #print p.return_data()[2]
     

@@ -1,5 +1,6 @@
 # created by the parser 
 import datetime
+import re
 
 class GnomeDataObject():
     
@@ -19,6 +20,7 @@ class GnomeDataObject():
         self.date = date
         
     def getDate(self):
+        ''' return a date formatted as an ISO string'''
         if self.date != None:
             return self.date.isoformat()
         else:
@@ -26,9 +28,9 @@ class GnomeDataObject():
     
     def getEvent(self):
         if self.event != None:
-            return self.event
+            return self.event#.replace("'", "\\'")
         else:
-            return "no event" # a nothing date    
+            return "no event" # a nothing event    
         
     def setEvent(self, event):
         self.event = event

@@ -5,7 +5,7 @@
 
 class Parser(object):
     
-STORAGE_TABLE = "data"
+    STORAGE_TABLE = "data"
     STORAGE_DB = "data_objects"
 
     def load_file(self, filename):
