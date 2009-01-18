@@ -124,7 +124,7 @@ if __name__ == "__main__":
 #    print r
 
     #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
-    s.load_file('/home/nernst/workspace/msr/data/out3.xml') 
+    s.load_file('data/out3.xml') 
 #    print len(s.get_data())
     for data in s.get_data():
         print unicode(data)

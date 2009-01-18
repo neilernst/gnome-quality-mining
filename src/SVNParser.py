@@ -1,4 +1,6 @@
 from Parser import Parser
+from MySQLdb.cursors import DictCursor,SSDictCursor
+import MySQLdb
 from xml.dom import minidom
 from GnomeDataObject import GnomeDataObject
 from datetime import datetime
@@ -43,6 +45,6 @@ class SVNParser(Parser):
             
 if __name__ == "__main__":
     s = SVNParser()
-    s.load_file('/home/nernst/workspace/msr/src/MSR/tests/sample-data/totem.xml')   
+    s.load_file('sample-data/totem.xml')   
     s.parse_line()   
     assert(len(s.get_data()) == 781)
