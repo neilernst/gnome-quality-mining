@@ -1,11 +1,12 @@
-from MSR.main.Parser import Parser
-from MSR.main.GnomeDataObject import GnomeDataObject
 from datetime import datetime
+from MySQLdb.cursors import DictCursor,SSDictCursor
+import MySQLdb, getopt, sys
 from xml.sax import ContentHandler, parse, parseString,SAXParseException
 import re, codecs
 from detect_encode import detectXMLEncoding
-from stripInvalidChars import stripNonValidXMLCharacters
+#from stripInvalidChars import stripNonValidXMLCharacters
 from string import upper
+from base_classes import Parser, GnomeDataObject
 
 class BugParser(Parser):
     """ Parses bugzilla logs and creates GnomeDataObjects for each event"""
@@ -35,6 +36,10 @@ class BugParser(Parser):
         Parser.__init__(self)
         self.f = None
         self.ch = None # a list of GDOs with the parsed data
+    
+    def set_product(self, name):
+        """allows us to specify which product we are parsing. Not used here, as bug list contains all products."""
+        self.product_name = name
         
 class BugContentHandler(ContentHandler):
     """ a content handler for SAx that processes Gnome bugzilla xml events"""  
@@ -105,7 +110,8 @@ class BugContentHandler(ContentHandler):
         ContentHandler.__init__(self)
         self.data = []
         self.isProduct = False
-        self.products = ["EKIGA", "DESKBAR-APPLET", "TOTEM", "EVOLUTION", "METACITY", "EVINCE", "EMPATHY", "NAUTILUS"]
+        self.products = ["EKIGA", "DESKBAR-APPLET", "TOTEM", \
+                        "EVOLUTION", "METACITY", "EVINCE", "EMPATHY", "NAUTILUS"]
         self.isComment = False
         self.current = "none"
         self.gdo = None
@@ -113,18 +119,32 @@ class BugContentHandler(ContentHandler):
         self.bugCount = 0
             
 if __name__ == "__main__":
-    import sys
-    sys.path.append('/home/nernst/workspace/msr/src')
-    s = BugParser()
+    p = BugParser()
+    try:
+        options, args = getopt.getopt(sys.argv[1:], "f:p:")
+    except getopt.GetoptError, err:
+            # print help information and exit:
+            print str(err) # will print something like "option -a not recognized"
+            sys.exit(2)
+    file_name = None
+    product = None
+    for o,a in options:
+        if o == "-f":
+            file_name = a
+        elif o == "-p":
+            product = a
+        else:
+            assert False, "unhandled option"
+    if file_name != None and product != None:
+        p.set_product(product)
+        p.load_file(file_name)   
+        for data in p.get_data():
+            print unicode(data)
+    #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
+#    print len(s.get_data())
 #    fp = open('/home/nernst/workspaces/workspace-gany/msr/data/gb_clean.xml')
     #fp = open('/home/nernst/workspaces/workspace-gany/msr/data/out.xml')
 #    stripped = stripNonValidXMLCharacters(fp)
 #    s.load_file(stripped)
 #    r = detectXMLEncoding(fp)
 #    print r
-
-    #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
-    s.load_file('data/out3.xml') 
-#    print len(s.get_data())
-    for data in s.get_data():
-        print unicode(data)

@@ -1,10 +1,10 @@
-from Parser import Parser
 from MySQLdb.cursors import DictCursor,SSDictCursor
-import MySQLdb, getopt, sys
-from xml.dom import minidom
+import MySQLdb
+import getopt
+import sys
 from xml.etree import ElementTree
-from GnomeDataObject import GnomeDataObject
 from datetime import datetime
+from base_classes import Parser, GnomeDataObject
 
 class SVNParser(Parser):
     """ Parses SVN logs and creates GnomeDataObjects for each event"""
