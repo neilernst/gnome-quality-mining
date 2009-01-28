@@ -2,6 +2,7 @@ from Parser import Parser
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb, getopt, sys
 from xml.dom import minidom
+from xml.etree import ElementTree
 from GnomeDataObject import GnomeDataObject
 from datetime import datetime
 
@@ -13,19 +14,23 @@ class SVNParser(Parser):
     def load_file(self, filename):
         """ Parse an XML-formatted SVN output file"""
         svnfile = open(filename)
-        self.f = minidom.parse(svnfile)
+        #self.f = minidom.parse(svnfile)
+        self.f = ElementTree.parse(svnfile)
         svnfile.close()
          
     def parse_line(self):
         """ parse the entries in the log file, add them to the list of GDOs"""
-        entries = self.f.getElementsByTagName('logentry')
-        for entry in entries:
-            revNum = entry.attributes['revision'].value
-            if entry.childNodes[7].hasChildNodes():
-                strdate = entry.childNodes[3].childNodes[0].data
-                strdate = strdate[0:19] #this removes the milliseconds and TZ info
-                date = datetime.strptime(strdate, '%Y-%m-%dT%H:%M:%S') 
-                msg = entry.childNodes[7].childNodes[0].data # DOM TextNode containing log message. Hard-coding == bad
+        #entries = self.f.getElementsByTagName('logentry')
+        iter = self.f.getiterator('logentry')
+        for entry in iter:
+            revNum = entry.attrib.get('revision') 
+            strdate = entry.find('date').text
+            strdate = strdate[0:19] #this removes the milliseconds and TZ info
+            date = datetime.strptime(strdate, '%Y-%m-%dT%H:%M:%S') 
+            try: 
+                msg = entry.find('msg').text
+            except AttributeError:
+                msg = ""
             n = GnomeDataObject(GnomeDataObject.SVN)
             n.setDate(date)
             n.setRSN(revNum)
@@ -46,7 +51,7 @@ class SVNParser(Parser):
         #print node.getEvent()
         #store_query_string = "INSERT INTO %s (rsn, date, type, event) VALUES (%i, %s, %s, %s)" % \  (Parser.STORAGE_TABLE, node.getRSN(), node.getDate(), node.getType(), node.getEvent())
         try:
-            self.store_cursor.execute("INSERT INTO t_data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
+            self.store_cursor.execute("INSERT INTO data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
             (node.getRSN(), node.getDate(), node.getType(), node.getEvent(), self.product_name) )
         except (ValueError):
             print 'Error in query syntax'  
