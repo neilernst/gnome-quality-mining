@@ -1,7 +1,7 @@
 from datetime import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb, getopt, sys
-from xml.sax import ContentHandler, parse, parseString,SAXParseException
+import xml.sax #import ContentHandler, parse, parseString,SAXParseException
 import re, codecs
 from detect_encode import detectXMLEncoding
 #from stripInvalidChars import stripNonValidXMLCharacters
@@ -20,8 +20,7 @@ class BugParser(Parser):
         u = fileObj.read() # Returns a Unicode string from the UTF-8 bytes in the file
         # Strip the BOM from the beginning of the Unicode string, if it exists
         #u.lstrip( unicode( codecs.BOM_UTF8, "utf8" ) )
-
-    	parseString(u, self.ch)
+    	xml.sax.parseString(u, self.ch)
 
     def parse_line(self):
         pass
@@ -41,7 +40,7 @@ class BugParser(Parser):
         """allows us to specify which product we are parsing. Not used here, as bug list contains all products."""
         self.product_name = name
         
-class BugContentHandler(ContentHandler):
+class BugContentHandler(xml.sax.ContentHandler):
     """ a content handler for SAx that processes Gnome bugzilla xml events"""  
     
     def startDocument(self):
@@ -51,18 +50,18 @@ class BugContentHandler(ContentHandler):
         print "Parsing complete"
     
     def startElement(self, name, attrs):
-        #print "Starting: " + name
         self.current = name
-        if name == "bug": # the high-level element
-            pass
+        if name == "bug_id": # the high-level element
+            self.isBug = True
         if name == "comment":
-            self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
-            self.gdo.setRSN(-1)# no RSN in these events
             self.isComment = True
             self.saveLine = ""
-        
+       # if name == 'product':
+            #self.isProduct = False
+            
     def endElement(self, name):
-        if name == "bug":
+        if name == "bug_id":
+            self.isBug = False
             self.isProduct = False # reset if set to true from last bug 
         if name == "comment":
             self.isComment = False
@@ -77,15 +76,19 @@ class BugContentHandler(ContentHandler):
         # parse out whitespace
         white = re.compile('\S')
         autoComment = re.compile('\*\*\*.*\*\*\*')  
-        if self.current == "bug_id":
-#            if not white.match(content.lstrip()):
-            print content.strip().replace(' ', '') 
+        bugFormat = re.compile('[0-9]+')
+        if self.isBug:
+            bug_id = bugFormat.match(content)
+            if bug_id != None:
+                print bug_id
         if self.current == "product":
-            content = content.replace(' ', '') 
+            #content = content.replace(' ', '') 
             if upper(content) in self.products: 
                 self.isProduct = True            
         if self.isProduct: # only for our product of interest. 
             if self.isComment:
+                self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
+                self.gdo.setRSN(-1)# no RSN in these events
                 if self.current == "bug_when":
                     lines = content.splitlines()
                     for line in lines:
@@ -107,12 +110,13 @@ class BugContentHandler(ContentHandler):
                         self.gdo.setEvent(self.saveLine)
             
     def __init__(self):
-        ContentHandler.__init__(self)
+        xml.sax.ContentHandler.__init__(self)
         self.data = []
-        self.isProduct = False
+        self.isProduct = False 
+        self.isBug = False
+        self.isComment = False #SAX element flags
         self.products = ["EKIGA", "DESKBAR-APPLET", "TOTEM", \
                         "EVOLUTION", "METACITY", "EVINCE", "EMPATHY", "NAUTILUS"]
-        self.isComment = False
         self.current = "none"
         self.gdo = None
         self.saveLine = ""
@@ -137,9 +141,12 @@ if __name__ == "__main__":
             assert False, "unhandled option"
     if file_name != None and product != None:
         p.set_product(product)
-        p.load_file(file_name)   
+        p.load_file(file_name)  
+        print str(len(p.get_data())) + " data elements captured."
         for data in p.get_data():
             print unicode(data)
+            
+            
     #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
 #    print len(s.get_data())
 #    fp = open('/home/nernst/workspaces/workspace-gany/msr/data/gb_clean.xml')
