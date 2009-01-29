@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 import getopt
@@ -16,13 +16,13 @@ class BugParser(Parser):
         """ Parse an XML-formatted Bugzilla output file"""
         self.ch = BugContentHandler()
         #parseString(filename, self.ch)
-        #fileObj = codecs.open( filename, "r", "utf-8" )
-        fileObj = open(filename, "r")
-        u = fileObj.read() # Returns a Unicode string from the UTF-8 bytes in the file
+        #fileObj = codecs.open( filename, "r", "iso-8859-1", 'replace' )
+        #fileObj = open(filename, "r")
+        #u = fileObj.read() # Returns a Unicode string from the UTF-8 bytes in the file
         # Strip the BOM from the beginning of the Unicode string, if it exists
         #u.lstrip( unicode( codecs.BOM_UTF8, "utf8" ) )
-    	xml.sax.parseString(u, self.ch)
-        fileObj.close()
+    	xml.sax.parse(filename, self.ch)
+        #fileObj.close()
         
     def parse_line(self):
         pass
@@ -60,7 +60,7 @@ class BugContentHandler(xml.sax.ContentHandler):
             self.saveLine = ""
             if self.isProduct:
                 self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
-                self.gdo.setRSN(-1)# no RSN in these events
+                self.gdo.setRSN(self.bug_number)# approximate, might be off by a few
         if name == 'product':
             pass
         if name == 'text':
@@ -92,7 +92,7 @@ class BugContentHandler(xml.sax.ContentHandler):
             mat_obj = dateFormat.search(self.buffer) #has stuff in the middle, and ends with a digit. : or -
             if mat_obj != None:
                 try: 
-                    date = datetime.strptime(mat_obj.group(), '%Y-%m-%d %H:%M:%S')
+                    date = datetime.datetime.strptime(mat_obj.group(), '%Y-%m-%d %H:%M:%S')
                 except ValueError:
                     print 'Error on bug date in current bug'
                     date = datetime.date(1900, 01, 01) 
@@ -108,7 +108,8 @@ class BugContentHandler(xml.sax.ContentHandler):
         if self.isBugId:
             bug_id = bugFormat.search(content)
             if bug_id != None:
-                print "Parsing bug # " + bug_id.group()#.group(0)
+                self.bug_number = bug_id.group()
+                print "Parsing bug # " + str(self.bug_number)
         
         if self.current == 'product':
             prodFormat = re.compile('\w+.*\w') # a Gnome product name starts with a character and has anything else following and       
@@ -138,6 +139,7 @@ class BugContentHandler(xml.sax.ContentHandler):
         self.saveLine = ""
         self.bugCount = 0
         self.buffer = ''
+        self.bug_number = 0
             
 if __name__ == "__main__":
     p = BugParser()
