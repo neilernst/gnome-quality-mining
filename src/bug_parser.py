@@ -1,10 +1,11 @@
 from datetime import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
-import MySQLdb, getopt, sys
-import xml.sax #import ContentHandler, parse, parseString,SAXParseException
+import MySQLdb
+import getopt
+import sys
+import xml.sax
 import re, codecs
 from detect_encode import detectXMLEncoding
-#from stripInvalidChars import stripNonValidXMLCharacters
 from string import upper
 from base_classes import Parser, GnomeDataObject
 
@@ -21,7 +22,8 @@ class BugParser(Parser):
         # Strip the BOM from the beginning of the Unicode string, if it exists
         #u.lstrip( unicode( codecs.BOM_UTF8, "utf8" ) )
     	xml.sax.parseString(u, self.ch)
-
+        fileObj.close()
+        
     def parse_line(self):
         pass
             
@@ -77,15 +79,17 @@ class BugContentHandler(xml.sax.ContentHandler):
             self.isComment = False
             self.saveLine = ""
             if self.isProduct:
-                self.data.append(self.gdo) # we've parsed a bug, so add the completed bug event to our list....
+                out_string = unicode(self.gdo)
+                self.data.write("\n\n\n******************* new bug report *****************************\n\n\n")
+                self.data.write(out_string.encode('iso-8859-1', 'replace')) # we've parsed a bug, so add the completed bug event to our list....
                 
         if name == 'text' and self.isProduct and self.isComment:
             event = self.buffer.replace('\n', '').strip()
             self.gdo.setEvent(event)
             self.buffer = ''
         if name == 'bug_when' and self.isProduct and self.isComment:
-            dateFormat = re.compile('\d+.+\d') # a date is any word that starts with a digit, 
-            mat_obj = dateFormat.search(self.buffer) #has stuff in the middle, and ends with a digit
+            dateFormat = re.compile('[\d\-:]+.+[\d\-:]') # a date is any word that starts with a digit, : or -, 
+            mat_obj = dateFormat.search(self.buffer) #has stuff in the middle, and ends with a digit. : or -
             if mat_obj != None:
                 try: 
                     date = datetime.strptime(mat_obj.group(), '%Y-%m-%d %H:%M:%S')
@@ -107,12 +111,13 @@ class BugContentHandler(xml.sax.ContentHandler):
                 print "Parsing bug # " + bug_id.group()#.group(0)
         
         if self.current == 'product':
-            prodFormat = re.compile('\w+.*') # a Gnome product name starts with a character and has anything else following       
-            prodmatch = prodFormat.search(content)
+            prodFormat = re.compile('\w+.*\w') # a Gnome product name starts with a character and has anything else following and       
+            prodmatch = prodFormat.search(content) #ends with a alphanumeric
             if prodmatch != None:
-                prodname = prodmatch.group()
+                prodname = prodmatch.group()#.strip()
+                #print upper(prodname)
+                #print "EVOLUTION"
                 if upper(prodname) in self.products: 
-                    print prodname
                     self.isProduct = True    #TODO make sure this detects our product correctly 
                 else:
                     self.isProduct = False
@@ -122,12 +127,12 @@ class BugContentHandler(xml.sax.ContentHandler):
             
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
-        self.data = []
+        self.data = open('out.txt', 'w')
         self.isProduct = False 
         self.isBugId = False
         self.isComment = False #SAX element flags
-        self.products = ["EKIGA", "DESKBAR-APPLET", "TOTEM", \
-                        "EVOLUTION", "METACITY", "EVINCE", "EMPATHY", "NAUTILUS"]
+        self.products = [u'EKIGA', u'DESKBAR-APPLET', u'TOTEM', \
+                        u'EVOLUTION', u'METACITY', u'EVINCE', u'EMPATHY', u'NAUTILUS']
         self.current = "none"
         self.gdo = None
         self.saveLine = ""
@@ -154,9 +159,11 @@ if __name__ == "__main__":
     if file_name != None and product != None:
         p.set_product(product)
         p.load_file(file_name)  
-        print str(len(p.get_data())) + " data elements captured."
-        for data in p.get_data():
-            print unicode(data)
+        #print str(len(p.get_data())) + " data elements captured."
+        #for data in p.get_data():
+            
+            #out.write(data)
+            #print unicode(data)
             
             
     #s.load_file('/home/nernst/workspaces/workspace-gany/msr/data/out_gnome.xml')
