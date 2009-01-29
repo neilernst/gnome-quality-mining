@@ -52,68 +52,79 @@ class BugContentHandler(xml.sax.ContentHandler):
     def startElement(self, name, attrs):
         self.current = name
         if name == "bug_id": # the high-level element
-            self.isBug = True
+            self.isBugId = True
         if name == "comment":
             self.isComment = True
             self.saveLine = ""
-       # if name == 'product':
-            #self.isProduct = False
-            
+            if self.isProduct:
+                self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
+                self.gdo.setRSN(-1)# no RSN in these events
+        if name == 'product':
+            pass
+        if name == 'text':
+            self.buffer = '' #an empty buffer for each text element
+        if name == 'bug_when':
+            self.buffer = '' #an empty buffer for each text element
+                      
     def endElement(self, name):
         if name == "bug_id":
-            self.isBug = False
+            self.isBugId = False
+        if name == 'bug':
             self.isProduct = False # reset if set to true from last bug 
+        if name == 'product':
+            pass
         if name == "comment":
             self.isComment = False
             self.saveLine = ""
-            self.data.append(self.gdo) # we've parsed a bug, so add the completed bug event to our list....
+            if self.isProduct:
+                self.data.append(self.gdo) # we've parsed a bug, so add the completed bug event to our list....
+                
+        if name == 'text' and self.isProduct and self.isComment:
+            event = self.buffer.replace('\n', '').strip()
+            self.gdo.setEvent(event)
+            self.buffer = ''
+        if name == 'bug_when' and self.isProduct and self.isComment:
+            dateFormat = re.compile('\d+.+\d') # a date is any word that starts with a digit, 
+            mat_obj = dateFormat.search(self.buffer) #has stuff in the middle, and ends with a digit
+            if mat_obj != None:
+                try: 
+                    date = datetime.strptime(mat_obj.group(), '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    print 'Error on bug date in current bug'
+                    date = datetime.date(1900, 01, 01) 
+            self.gdo.setDate(date)
+            self.buffer = ''
     
-    def get_data(self):
-        return self.data
-    
-    def characters(self,content):
-        """ returns the characters inside an element, incl. whitespace"""
-        # parse out whitespace
-        white = re.compile('\S')
-        autoComment = re.compile('\*\*\*.*\*\*\*')  
-        bugFormat = re.compile('[0-9]+')
-        if self.isBug:
-            bug_id = bugFormat.match(content)
+    def characters(self, content):
+        if self.isProduct and (self.current == 'bug_when' or self.current == 'text'):
+        #if self.current == 'bug_when' or self.current == 'text' or self.current == 'product':
+            self.buffer = self.buffer + ' ' + content #performance: this is creating a lot of string objects
+
+        bugFormat = re.compile('\d+')
+        if self.isBugId:
+            bug_id = bugFormat.search(content)
             if bug_id != None:
-                print bug_id
-        if self.current == "product":
-            #content = content.replace(' ', '') 
-            if upper(content) in self.products: 
-                self.isProduct = True            
-        if self.isProduct: # only for our product of interest. 
-            if self.isComment:
-                self.gdo = GnomeDataObject(GnomeDataObject.BUG) # a new GDO 
-                self.gdo.setRSN(-1)# no RSN in these events
-                if self.current == "bug_when":
-                    lines = content.splitlines()
-                    for line in lines:
-                        line = line.lstrip()
-                        if white.match(line):
-                            try: 
-                                date = datetime.strptime(line, '%Y-%m-%d %H:%M:%S')
-                            except ValueError:
-                                print 'Error on bug date in bug: ' + str(self.bugCount)
-                                date = datetime.date(1900, 01, 01) 
-                            self.gdo.setDate(date)
-                if self.current == "text":
-                    lines = content.splitlines()
-                    for line in lines:
-                        line = line.lstrip()
-                        if white.match(line):
-                            if not autoComment.match(line):
-                                self.saveLine = self.saveLine + " " + line 
-                        self.gdo.setEvent(self.saveLine)
+                print "Parsing bug # " + bug_id.group()#.group(0)
+        
+        if self.current == 'product':
+            prodFormat = re.compile('\w+.*') # a Gnome product name starts with a character and has anything else following       
+            prodmatch = prodFormat.search(content)
+            if prodmatch != None:
+                prodname = prodmatch.group()
+                if upper(prodname) in self.products: 
+                    print prodname
+                    self.isProduct = True    #TODO make sure this detects our product correctly 
+                else:
+                    self.isProduct = False
+            
+    def get_data(self):
+        return self.data                    
             
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
         self.data = []
         self.isProduct = False 
-        self.isBug = False
+        self.isBugId = False
         self.isComment = False #SAX element flags
         self.products = ["EKIGA", "DESKBAR-APPLET", "TOTEM", \
                         "EVOLUTION", "METACITY", "EVINCE", "EMPATHY", "NAUTILUS"]
@@ -121,6 +132,7 @@ class BugContentHandler(xml.sax.ContentHandler):
         self.gdo = None
         self.saveLine = ""
         self.bugCount = 0
+        self.buffer = ''
             
 if __name__ == "__main__":
     p = BugParser()
