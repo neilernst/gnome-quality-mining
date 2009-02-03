@@ -6,7 +6,7 @@ class Parser(object):
     """this is an abstract parser object - it loads a text file
     parses the line and stores the tokens somehow"""
     
-    STORAGE_TABLE = "data"
+    STORAGE_TABLE = "t_data"
     STORAGE_DB = "data_objects"
 
     def load_file(self, filename):

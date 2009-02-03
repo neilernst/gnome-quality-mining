@@ -23,7 +23,7 @@ class BugParser(Parser):
         #u.lstrip( unicode( codecs.BOM_UTF8, "utf8" ) )
     	xml.sax.parse(filename, self.ch)
         #fileObj.close()
-        
+                                    
     def parse_line(self):
         pass
             
@@ -79,9 +79,8 @@ class BugContentHandler(xml.sax.ContentHandler):
             self.isComment = False
             self.saveLine = ""
             if self.isProduct:
-                out_string = unicode(self.gdo)
-                self.data.write("\n\n\n******************* new bug report *****************************\n\n\n")
-                self.data.write(out_string.encode('iso-8859-1', 'replace')) # we've parsed a bug, so add the completed bug event to our list....
+                self.write_db()
+                #write_text()
                 
         if name == 'text' and self.isProduct and self.isComment:
             event = self.buffer.replace('\n', '').strip()
@@ -124,7 +123,33 @@ class BugContentHandler(xml.sax.ContentHandler):
                     self.isProduct = False
             
     def get_data(self):
-        return self.data                    
+        return self.data   
+    
+    def write_db(self):
+        """store the data in the mysql db"""
+        self.store_tokens(self.gdo)
+        
+    def write_txt(self):
+        """store the data in a text file"""
+        out_string = unicode(self.gdo)
+        self.data.write("\n\n\n******************* new bug report *****************************\n\n\n")
+        self.data.write(out_string.encode('iso-8859-1', 'replace')) # we've parsed a bug, so add the completed bug event to our list....
+            
+    def connect_store(self, db_name):
+        """ connect to store the data"""
+        self.storedb = MySQLdb.connect(passwd="hello", db=db_name, cursorclass=DictCursor)
+        self.store_cursor = self.storedb.cursor()
+
+    def store_tokens(self, node):
+        """ store in the database"""
+        store_con = self.connect_store("t_data")
+        #print node.getEvent()
+        #store_query_string = "INSERT INTO %s (rsn, date, type, event) VALUES (%i, %s, %s, %s)" % \  (Parser.STORAGE_TABLE, node.getRSN(), node.getDate(), node.getType(), node.getEvent())
+        try:
+            self.store_cursor.execute("INSERT INTO data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
+            (node.getRSN(), node.getDate(), node.getType(), node.getEvent(), self.product_name) )
+        except (ValueError):
+            print 'Error in query syntax'                 
             
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
