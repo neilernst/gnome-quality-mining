@@ -63,6 +63,7 @@ class BugContentHandler(xml.sax.ContentHandler):
                 self.gdo.setRSN(self.bug_number)# approximate, might be off by a few
         if name == 'product':
             pass
+            
         if name == 'text':
             self.buffer = '' #an empty buffer for each text element
         if name == 'bug_when':
@@ -77,15 +78,15 @@ class BugContentHandler(xml.sax.ContentHandler):
             pass
         if name == "comment":
             self.isComment = False
-            self.saveLine = ""
+            self.saveLine = " "
             if self.isProduct:
                 self.write_db()
                 #write_text()
                 
         if name == 'text' and self.isProduct and self.isComment:
-            event = self.buffer.replace('\n', '').strip()
+            event = self.buffer.replace('\n', ' ').strip()
             self.gdo.setEvent(event)
-            self.buffer = ''
+            self.buffer = ' '
         if name == 'bug_when' and self.isProduct and self.isComment:
             dateFormat = re.compile('[\d\-:]+.+[\d\-:]') # a date is any word that starts with a digit, : or -, 
             mat_obj = dateFormat.search(self.buffer) #has stuff in the middle, and ends with a digit. : or -
@@ -119,6 +120,7 @@ class BugContentHandler(xml.sax.ContentHandler):
                 #print "EVOLUTION"
                 if upper(prodname) in self.products: 
                     self.isProduct = True    #TODO make sure this detects our product correctly 
+                    self.cur_product = prodname
                 else:
                     self.isProduct = False
             
@@ -142,12 +144,12 @@ class BugContentHandler(xml.sax.ContentHandler):
 
     def store_tokens(self, node):
         """ store in the database"""
-        store_con = self.connect_store("t_data")
+        store_con = self.connect_store("data_objects")
         #print node.getEvent()
         #store_query_string = "INSERT INTO %s (rsn, date, type, event) VALUES (%i, %s, %s, %s)" % \  (Parser.STORAGE_TABLE, node.getRSN(), node.getDate(), node.getType(), node.getEvent())
         try:
-            self.store_cursor.execute("INSERT INTO data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
-            (node.getRSN(), node.getDate(), node.getType(), node.getEvent(), self.product_name) )
+            self.store_cursor.execute("INSERT INTO t_data (rsn, msr_date, msr_type, event, product) VALUES (%s, %s, %s, %s, %s)", \
+            (node.getRSN(), node.getDate(), node.getType(), node.getEvent(), self.cur_product) )
         except (ValueError):
             print 'Error in query syntax'                 
             
@@ -160,6 +162,7 @@ class BugContentHandler(xml.sax.ContentHandler):
         self.products = [u'EKIGA', u'DESKBAR-APPLET', u'TOTEM', \
                         u'EVOLUTION', u'METACITY', u'EVINCE', u'EMPATHY', u'NAUTILUS']
         self.current = "none"
+        self.cur_product = ''
         self.gdo = None
         self.saveLine = ""
         self.bugCount = 0
