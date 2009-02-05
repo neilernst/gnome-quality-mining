@@ -102,7 +102,9 @@ class BugContentHandler(xml.sax.ContentHandler):
     def characters(self, content):
         if self.isProduct and (self.current == 'bug_when' or self.current == 'text'):
         #if self.current == 'bug_when' or self.current == 'text' or self.current == 'product':
-            self.buffer = self.buffer + ' ' + content #performance: this is creating a lot of string objects
+            stack_trace_re = re.compile("No symbol table info available|#[0-9]+ 0x[0-9]+.*")
+            if stack_trace_re.search(content) == None: # ignore the string if it matches this regex, which is stack trace
+                self.buffer = self.buffer + ' ' + content #performance: this is creating a lot of string objects
 
         bugFormat = re.compile('\d+')
         if self.isBugId:
