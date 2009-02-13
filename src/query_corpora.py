@@ -99,3 +99,8 @@ if __name__ == "__main__":
     sys.exit(main())
 #TODO divide by number of bugs per quarter (normalize?)
 #TODO account for misspelinges 
+
+class Taxonony():
+    """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
+    
+    usability = ()
