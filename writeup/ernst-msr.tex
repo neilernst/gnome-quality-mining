@@ -1,0 +1,98 @@
+% \documentclass[10pt,twocolumn]{article}
+% \usepackage{latex8}
+\documentclass[conference, compsoc]{IEEEtran}
+% \usepackage{times}
+
+\usepackage{amsmath,amssymb,amsthm,supertabular,booktabs,graphicx,rotating,semantic,subfigure,multirow,colortbl}
+\usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
+% \usepackage[all]{xy}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
+
+\begin{document}
+
+
+\bibliographystyle{plain}
+
+%\title{Techne: A(nother) Requirements Modeling Language}
+\title{Identifying quality evolution using concept location/extraction/...}
+\author{
+Neil A. Ernst\\Dept. of Computer Science\\University of Toronto\\nernst@cs.toronto.edu \and
+John Mylopoulos\\Dept. of Computer Science\\University of Toronto\\jm@cs.toronto.edu }
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+We describe a repository mining technique we call signifier extraction. We generate signifiers using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we search for the signifiers over three month, quarterly intervals. The occurrence of our signifiers forms an evolutionary pattern that we analyze statistically and historically. We show that it is possible to reconstruct the historical evolution of project responses to external forcings, such as release cycles and audits. [numbers?]
+\end{abstract}
+
+%\tableofcontents
+\vspace{-2mm}
+\section{Introduction}\label{sect:introduction}
+
+\section{Signifier extraction}
+In semiotics, Peirce first made the distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality taxonomy~\cite{iso9126}. We generate the signifiers from Wordnet, a [] that contains semantic relations between words, including meronymy, synonymy, and holonymy. We extract words using the following criteria: [insert criteria]. This gives us a linguistic bubble which we use to extensionally define the signifier.
+\vspace{-2mm}
+\begin{footnotesize}
+\bibliography{msr}
+\end{footnotesize}
+\end{document}
+% \begin{algorithm}[t]
+% \caption{Node Labeling}\label{algo:nodelabel}
+% {\footnotesize{
+% 	\renewcommand\algorithmicrequire{\textbf{Input:}}
+% 	\renewcommand\algorithmicensure{\textbf{Output:}}
+% 	\begin{algorithmic}[1]
+% 		\Require An attitude-free r-net $\bar{R}$ and a node $v \in V(\bar{R})$;
+% 		\Ensure Exactly one of the members of $\mathfrak{T} = \{\slbl{T}, \slbl{F}, \slbl{D}, \slbl{U} \}$;
+% %		\Statex
+% 		\Procedure{NodeLabel}{$\bar{R}, v$}
+% 			\Statex \textit{Collect values:}
+% 			\State Empty the collections $D_{\textbf{I}}$ and $D_{\textbf{C}}$
+% 			\State Empty the sets $D_{\textbf{I}}^{u}$ and $D_{\textbf{C}}^{u}$
+% 			\For{\textbf{each} $w \in V(\bar{R})$ s.t. $\exists wv \in L(\bar{R})$}
+% 				\If{$w = \textbf{I}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) = N$}				
+% 					\State Add $\slbl{U}$ to $D_{\textbf{I}}$
+% 				\ElsIf{$w = \textbf{I}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) \neq N$}
+% 					\State Add $\sqcap_{t}\textit{concl}(\textit{val}(\bigwedge_{\Psi \in Y}\Psi), \textit{val}(w))$ to $D_{\textbf{I}}$	
+% 				\ElsIf{$w = \textbf{C}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) = N$}	
+% 					\State Add $\slbl{U}$ to $D_{\textbf{C}}$
+% 				\ElsIf{$w = \textbf{C}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) \neq N$}
+% 					\State Add $\neg(\sqcap_{t}\textit{concl}(\textit{val}(\bigwedge_{\Psi \in Y}\Psi), \textit{val}(w)))$ to $D_{\textbf{C}}$	
+% 				\EndIf
+% 			\EndFor
+% 			\Statex \textit{Select a value:}
+% 			\State $D_{\textbf{I}}^{u} \gets \textit{deleteDuplicates}(D_{\textbf{I}})$
+% 			\State $D_{\textbf{C}}^{u} \gets \textit{deleteDuplicates}(D_{\textbf{C}})$
+% 			\If{$D_{\textbf{I}}^{u} \cup D_{\textbf{C}}^{u} = \emptyset$}
+% 				\If{$\textit{val}(v) \neq N$}
+% 					\State Return $\textit{val}(v)$ and stop.
+% 				\Else
+% 					\State Return $\slbl{U}$ and stop.
+% 				\EndIf
+% 			\Else
+% 				\State Return $\sqcap_{t}\{ \sqcup_{t}D_{\textbf{I}}^{u}, \sqcap_{t}D_{\textbf{C}}^{u} \}$ and stop.
+% 			\EndIf
+% 		\EndProcedure
+% 	\end{algorithmic}
+% }}
+% \end{algorithm}
+% 
+% 
+% \begin{figure*}[t]
+% \centering
+% 	\subfigure[][What is the truth value of $\textbf{g}(r)$?\label{fig:ex:evaluate:a}]{
+% 		\includegraphics[width=5cm]{figures/nodelabel-example}
+% 	}%
+% 	\subfigure[][\label{fig:ex:evaluate:b}]{
+% 		\includegraphics[width=4cm]{figures/hyp-example-labeled}
+% 	}%
+% 	\subfigure[][\label{fig:ex:evaluate:c}]{
+% 		\includegraphics[width=6cm]{figures/meeting-scheduler-labeled}
+% 	}%
+% \caption{Illustration of node labeling and evaluation.}\vspace{-5mm}
+% \label{fig:ex:evaluate}
+% \end{figure*}
+
+
