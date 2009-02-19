@@ -28,11 +28,12 @@ yearsFmt = mdates.DateFormatter('%Y')
 # the date column
 datafile = matplotlib.get_example_data('goog.npy')
 r = np.load(datafile).view(np.recarray)
-
+#print r
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(r.date, r.adj_close)
 
+line = matplotlib.lines.Line2D([2009,2009], [100,400], color='red', linestyle='-.')
 
 # format the ticks
 ax.xaxis.set_major_locator(years)
