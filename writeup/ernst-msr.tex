@@ -30,61 +30,6 @@ In semiotics, Peirce first made the distinction drawn between signifier, signifi
 \bibliography{msr}
 \end{footnotesize}
 \end{document}
-% \begin{algorithm}[t]
-% \caption{Node Labeling}\label{algo:nodelabel}
-% {\footnotesize{
-% 	\renewcommand\algorithmicrequire{\textbf{Input:}}
-% 	\renewcommand\algorithmicensure{\textbf{Output:}}
-% 	\begin{algorithmic}[1]
-% 		\Require An attitude-free r-net $\bar{R}$ and a node $v \in V(\bar{R})$;
-% 		\Ensure Exactly one of the members of $\mathfrak{T} = \{\slbl{T}, \slbl{F}, \slbl{D}, \slbl{U} \}$;
-% %		\Statex
-% 		\Procedure{NodeLabel}{$\bar{R}, v$}
-% 			\Statex \textit{Collect values:}
-% 			\State Empty the collections $D_{\textbf{I}}$ and $D_{\textbf{C}}$
-% 			\State Empty the sets $D_{\textbf{I}}^{u}$ and $D_{\textbf{C}}^{u}$
-% 			\For{\textbf{each} $w \in V(\bar{R})$ s.t. $\exists wv \in L(\bar{R})$}
-% 				\If{$w = \textbf{I}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) = N$}				
-% 					\State Add $\slbl{U}$ to $D_{\textbf{I}}$
-% 				\ElsIf{$w = \textbf{I}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) \neq N$}
-% 					\State Add $\sqcap_{t}\textit{concl}(\textit{val}(\bigwedge_{\Psi \in Y}\Psi), \textit{val}(w))$ to $D_{\textbf{I}}$	
-% 				\ElsIf{$w = \textbf{C}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) = N$}	
-% 					\State Add $\slbl{U}$ to $D_{\textbf{C}}$
-% 				\ElsIf{$w = \textbf{C}(\cdot, Y, X)$, $v \in X$, $\textit{val}(w) \neq N$}
-% 					\State Add $\neg(\sqcap_{t}\textit{concl}(\textit{val}(\bigwedge_{\Psi \in Y}\Psi), \textit{val}(w)))$ to $D_{\textbf{C}}$	
-% 				\EndIf
-% 			\EndFor
-% 			\Statex \textit{Select a value:}
-% 			\State $D_{\textbf{I}}^{u} \gets \textit{deleteDuplicates}(D_{\textbf{I}})$
-% 			\State $D_{\textbf{C}}^{u} \gets \textit{deleteDuplicates}(D_{\textbf{C}})$
-% 			\If{$D_{\textbf{I}}^{u} \cup D_{\textbf{C}}^{u} = \emptyset$}
-% 				\If{$\textit{val}(v) \neq N$}
-% 					\State Return $\textit{val}(v)$ and stop.
-% 				\Else
-% 					\State Return $\slbl{U}$ and stop.
-% 				\EndIf
-% 			\Else
-% 				\State Return $\sqcap_{t}\{ \sqcup_{t}D_{\textbf{I}}^{u}, \sqcap_{t}D_{\textbf{C}}^{u} \}$ and stop.
-% 			\EndIf
-% 		\EndProcedure
-% 	\end{algorithmic}
-% }}
-% \end{algorithm}
-% 
-% 
-% \begin{figure*}[t]
-% \centering
-% 	\subfigure[][What is the truth value of $\textbf{g}(r)$?\label{fig:ex:evaluate:a}]{
-% 		\includegraphics[width=5cm]{figures/nodelabel-example}
-% 	}%
-% 	\subfigure[][\label{fig:ex:evaluate:b}]{
-% 		\includegraphics[width=4cm]{figures/hyp-example-labeled}
-% 	}%
-% 	\subfigure[][\label{fig:ex:evaluate:c}]{
-% 		\includegraphics[width=6cm]{figures/meeting-scheduler-labeled}
-% 	}%
-% \caption{Illustration of node labeling and evaluation.}\vspace{-5mm}
-% \label{fig:ex:evaluate}
-% \end{figure*}
+
 
 
