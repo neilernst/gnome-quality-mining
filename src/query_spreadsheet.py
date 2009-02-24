@@ -71,11 +71,16 @@ class SimpleCRUD:
 
   def fix_dates(self, date_list):
       """ change dates from '01/03/2004' to datetime.date(2004,03,01)"""
-      import datetime
+      import datetime, re
       new_list = []
       for date in date_list:
-          print date
-          new_list.append(datetime.date(date))
+          parse_date = re.compile("(\d+)/(\d+)/(\d+)")
+          lstdate = parse_date.search(date).groups()
+          year = int(lstdate[2])
+          day = int(lstdate[1])
+          month = int(lstdate[0])
+          new_list.append(datetime.date(year, month, day))
+          print new_list
       print new_list
         
   def _InvalidCommandError(self, input):
