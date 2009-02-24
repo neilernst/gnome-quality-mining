@@ -57,18 +57,26 @@ class SimpleCRUD:
     return dict
   
   def _PrintFeed(self, feed):
-    for i, entry in enumerate(feed.entry):
-      if isinstance(feed, gdata.spreadsheet.SpreadsheetsListFeed):
-        #print '%s %s %s' % (i, entry.title.text, entry.content.text)
-        # Print this row's value for each column (the custom dictionary is
-        # built using the gsx: elements in the entry.)
-        #print 'Contents:'
-        for key in entry.custom:  
-          if key == 'start' or key == 'title':
-            print '  %s: %s' % (key, entry.custom[key].text) 
-        print '\n',
-      else:
-        print '%s %s\n' % (i, entry.title.text)
+        start_list = []
+        title_list = []
+        for i, entry in enumerate(feed.entry):
+            if isinstance(feed, gdata.spreadsheet.SpreadsheetsListFeed):
+                for key in entry.custom:  
+                    if key == 'start':
+                        start_list.append(entry.custom[key].text)
+                    if key == 'title':
+                        title_list.append(entry.custom[key].text)
+        self.fix_dates(start_list)
+        print start_list     
+
+  def fix_dates(self, date_list):
+      """ change dates from '01/03/2004' to datetime.date(2004,03,01)"""
+      import datetime
+      new_list = []
+      for date in date_list:
+          print date
+          new_list.append(datetime.date(date))
+      print new_list
         
   def _InvalidCommandError(self, input):
     print 'Invalid input: %s\n' % (input)
