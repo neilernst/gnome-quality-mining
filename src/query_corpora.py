@@ -85,9 +85,12 @@ def main(argv=None):
                 product = value
         
         for year in range(1998,2009):
+            result_lst = ()
             for quarter in ('q1', 'q2', 'q3', 'q4'):
                 result = get_counts(keyword, product, quarter, year)
-                print str(year) + ' ' + quarter + ': ' + result
+                result_lst
+                #print str(year) + ' ' + quarter + ': ' + 
+                print result_lst
                 
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
