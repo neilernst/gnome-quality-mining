@@ -83,14 +83,15 @@ def main(argv=None):
                 raise Usage(help_message)
             if option == "-p":
                 product = value
+
+        result_lst = []
         
         for year in range(1998,2009):
-            result_lst = ()
             for quarter in ('q1', 'q2', 'q3', 'q4'):
                 result = get_counts(keyword, product, quarter, year)
-                result_lst
+                result_lst.append(result)
                 #print str(year) + ' ' + quarter + ': ' + 
-                print result_lst
+        print result_lst
                 
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
