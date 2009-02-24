@@ -89,7 +89,17 @@ def main(argv=None):
         for year in range(1998,2009):
             for quarter in ('q1', 'q2', 'q3', 'q4'):
                 result = get_counts(keyword, product, quarter, year)
-                result_lst.append(result)
+                month = 0
+                if quarter == 'q1': 
+                    month = 3
+                elif quarter == 'q2':
+                    month = 6
+                elif quarter == 'q3':
+                    month = 9
+                elif quarter == 'q4':
+                    month = 12
+                res_tuple = (int(result), datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
+                result_lst.append(res_tuple)
                 #print str(year) + ' ' + quarter + ': ' + 
         print result_lst
                 
