@@ -33,7 +33,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(r.date, r.adj_close)
 
-line = matplotlib.lines.Line2D([2009,2009], [100,400], color='red', linestyle='-.')
+#line = matplotlib.lines.Line2D([2009,2009], [100,400], color='red', linestyle='-.')
 
 # format the ticks
 ax.xaxis.set_major_locator(years)
@@ -45,10 +45,10 @@ datemax = datetime.date(r.date.max().year+1, 1, 1)
 ax.set_xlim(datemin, datemax)
 
 # format the coords message box
-def price(x): return '$%1.2f'%x
-ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
-ax.format_ydata = price
-ax.grid(True)
+# def price(x): return '$%1.2f'%x
+# ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
+# ax.format_ydata = price
+# ax.grid(True)
 
 # rotates and right aligns the x labels, and moves the bottom of the
 # axes up to make room for them
