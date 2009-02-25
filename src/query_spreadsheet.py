@@ -67,6 +67,8 @@ class SimpleCRUD:
                     if key == 'title':
                         title_list.append(entry.custom[key].text)
         self.fix_dates(start_list)
+        print len(title_list)
+        print title_list
         
   def fix_dates(self, date_list):
       """ change dates from '01/03/2004' to datetime.date(2004,03,01)"""
@@ -82,6 +84,7 @@ class SimpleCRUD:
           day = int(lstdate[1])
           month = int(lstdate[0])
           new_list.append(datetime.date(year, month, day))
+      print len(new_list) 
       return new_list
         
   def _InvalidCommandError(self, input):
