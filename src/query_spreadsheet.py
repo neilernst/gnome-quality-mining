@@ -41,7 +41,7 @@ class SimpleCRUD:
     self.gd_client.source = 'Spreadsheets GData Sample'
     self.gd_client.ProgrammaticLogin()
     self.curr_key = 'ppLr8BAF-3ST9UCUc-d7tUw' #gnome-dates
-    self.curr_wksht_id = 'od6'
+    self.curr_wksht_id = 'od8' #'od8' -- major releases only 'od6' -- full version
     self.list_feed = None    
         
   def _ListGetAction(self):
@@ -84,7 +84,7 @@ class SimpleCRUD:
           day = int(lstdate[1])
           month = int(lstdate[0])
           new_list.append(datetime.date(year, month, day))
-      print len(new_list) 
+      print new_list 
       return new_list
         
   def _InvalidCommandError(self, input):
