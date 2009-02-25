@@ -50,11 +50,26 @@ def main():
     datemin = datetime.date(1998,1,1)
     datemax = datetime.date(2009,1,1)
 
+    add_trend(plt, dates, counts)
+    
     ax.set_xlim(datemin, datemax)
     add_metadata(ax, plt, fig)
     autolabel()
     plt.show()
 
+def add_trend(plt, x, y):
+    """Add the least-squares linear regression, and corr. coeff"""
+    #generate a list of integers for the dates
+    #new_x = []
+    #for i in len(x):
+      #  new_x.append(i)
+     # TODO : use list.index('item') to find the numeric equivalent of the date
+    int_corr = np.corrcoef(new_x, y) # of form     array([[ 1.        ,  0.09553632], [ 0.09553632,  1.        ]])
+    corr = int_corr[0][1]
+    z = np.polyfit(new_x, y, 1) # a 1-degree regression
+    p = np.poly1d(z)
+    plt.plot(x, y, '.', new_x, p(new_x), '-')
+    
 def autolabel():
     pass
 # format the coords message box
