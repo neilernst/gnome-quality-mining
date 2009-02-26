@@ -32,10 +32,12 @@ def main():
        total_counts.append(count)
        dates.append(date) 
        normal_counts.append(normal)
-
-    occur = plt.plot(dates, normal_counts, 'b.')#, bug_dates, art, 'go') 
+    
+    #date_index = np.arange(len(dates))
+    occur = plt.plot(dates, normal_counts, 'b.', label='Occurrences')#, bug_dates, art, 'go') 
+    #occur = plt.scatter(dates, date_index, 'b.', label='Occurrences')
     #plot the release dates for Gnome as dashed vertical lines
-    rel_lines = plt.vlines(bug_dates, 0, max(normal_counts), color='k', linestyles='dashed')
+    rel_lines = plt.vlines(bug_dates, 0, max(normal_counts), color='k', linestyles='dashed')#, label='Gnome release')
     
     # format the ticks
     ax.xaxis.set_major_locator(years)
@@ -49,7 +51,7 @@ def main():
     
     ax.set_xlim(datemin, datemax)
     add_metadata(ax)
-    add_label(corr)
+    add_label(corr, bug_dates,normal_counts, bug_descr)
     plt.show()
     #export()
     
@@ -63,16 +65,22 @@ def add_trend(x, y):
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     p = np.poly1d(z)
-    plt.plot(x, y, '.', x, p(new_x), '-')
+    plt.plot(x, p(new_x), '-', label='linear regression')
     return corr
     
-def add_label(corr):
+def add_label(corr, bug_dates, normal_counts, bug_descr):
     """ label the release lines, and add a legend. corr is the correlation coefficient"""
     r2 = corr * corr #r2 value, between 0-1
-
+    #plt.legend()
+    i = 0
+    for date in bug_dates:
+    #each date position, at the maximum height, add the text of that date's release, vertically rotated
+        plt.text(date,max(normal_counts), bug_descr[i], rotation='vertical')
+        i = i + 1
+    
 def add_metadata(ax):
     #ax.grid(True)
-    plt.ylabel("Frequency")
+    plt.ylabel('Frequency (events/total events * 1000)')#("Frequency")
     plt.xlabel("Date")
     plt.title("Frequency of signifier occurrence over time\n" + 'Product: ' + project + ", signifier: " + signifier, verticalalignment='bottom')
     # rotates and right aligns the x labels, and moves the bottom of the
