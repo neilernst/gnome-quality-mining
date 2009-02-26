@@ -22,20 +22,20 @@ def main():
     yearsFmt = mdates.DateFormatter('%Y-%m') # want the x-axis to have ticks labelled (2008-Jan)
 
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
-    df = [(0, datetime.date(1998, 3, 30)), (2, datetime.date(1998, 6, 30)), (0, datetime.date(1998, 9, 30)), (0, datetime.date(1998, 12, 30)), (0, datetime.date(1999, 3, 30)), (0, datetime.date(1999, 6, 30)), (0, datetime.date(1999, 9, 30)), (0, datetime.date(1999, 12, 30)), (1, datetime.date(2000, 3, 30)), (12, datetime.date(2000, 6, 30)), (6, datetime.date(2000, 9, 30)), (11, datetime.date(2000, 12, 30)), (9, datetime.date(2001, 3, 30)), (6, datetime.date(2001, 6, 30)), (5, datetime.date(2001, 9, 30)), (2, datetime.date(2001, 12, 30)), (2, datetime.date(2002, 3, 30)), (4, datetime.date(2002, 6, 30)), (1, datetime.date(2002, 9, 30)), (4, datetime.date(2002, 12, 30)), (14, datetime.date(2003, 3, 30)), (4, datetime.date(2003, 6, 30)), (11, datetime.date(2003, 9, 30)), (7, datetime.date(2003, 12, 30)), (7, datetime.date(2004, 3, 30)), (9, datetime.date(2004, 6, 30)), (4, datetime.date(2004, 9, 30)), (7, datetime.date(2004, 12, 30)), (2, datetime.date(2005, 3, 30)), (4, datetime.date(2005, 6, 30)), (5, datetime.date(2005, 9, 30)), (6, datetime.date(2005, 12, 30)), (8, datetime.date(2006, 3, 30)), (2, datetime.date(2006, 6, 30)), (0, datetime.date(2006, 9, 30)), (7, datetime.date(2006, 12, 30)), (13, datetime.date(2007, 3, 30)), (5, datetime.date(2007, 6, 30)), (4, datetime.date(2007, 9, 30)), (2, datetime.date(2007, 12, 30)), (0, datetime.date(2008, 3, 30)), (1, datetime.date(2008, 6, 30)), (0, datetime.date(2008, 9, 30)), (0, datetime.date(2008, 12, 30))]
+    df = [(0.0, 0, datetime.date(1998, 3, 30)), (103.09278350515464, 2, datetime.date(1998, 6, 30)), (0.0, 0, datetime.date(1998, 9, 30)), (0.0, 0, datetime.date(1998, 12, 30)), (0.0, 0, datetime.date(1999, 3, 30)), (0.0, 0, datetime.date(1999, 6, 30)), (0.0, 0, datetime.date(1999, 9, 30)), (0.0, 0, datetime.date(1999, 12, 30)), (12.594458438287154, 1, datetime.date(2000, 3, 30)), (60.090135202804206, 12, datetime.date(2000, 6, 30)), (24.824162184526273, 6, datetime.date(2000, 9, 30)), (41.462495288352805, 11, datetime.date(2000, 12, 30)), (29.239766081871345, 9, datetime.date(2001, 3, 30)), (27.459954233409611, 6, datetime.date(2001, 6, 30)), (14.021312394840157, 5, datetime.date(2001, 9, 30)), (7.2912869121399924, 2, datetime.date(2001, 12, 30)), (14.154281670205236, 2, datetime.date(2002, 3, 30)), (26.791694574681848, 4, datetime.date(2002, 6, 30)), (7.8616352201257858, 1, datetime.date(2002, 9, 30)), (14.466546112115733, 4, datetime.date(2002, 12, 30)), (49.071153172099542, 14, datetime.date(2003, 3, 30)), (13.149243918474689, 4, datetime.date(2003, 6, 30)), (53.191489361702125, 11, datetime.date(2003, 9, 30)), (24.458420684835779, 7, datetime.date(2003, 12, 30)), (27.047913446676972, 7, datetime.date(2004, 3, 30)), (27.04326923076923, 9, datetime.date(2004, 6, 30)), (21.085925144965735, 4, datetime.date(2004, 9, 30)), (30.567685589519652, 7, datetime.date(2004, 12, 30)), (7.8864353312302837, 2, datetime.date(2005, 3, 30)), (25.773195876288661, 4, datetime.date(2005, 6, 30)), (27.041644131963224, 5, datetime.date(2005, 9, 30)), (32.697547683923709, 6, datetime.date(2005, 12, 30)), (42.712226374799783, 8, datetime.date(2006, 3, 30)), (14.55604075691412, 2, datetime.date(2006, 6, 30)), (0.0, 0, datetime.date(2006, 9, 30)), (73.45225603357818, 7, datetime.date(2006, 12, 30)), (141.76663031624864, 13, datetime.date(2007, 3, 30)), (48.402710551790904, 5, datetime.date(2007, 6, 30)), (32.388663967611336, 4, datetime.date(2007, 9, 30)), (17.683465959328029, 2, datetime.date(2007, 12, 30)), (0.0, 0, datetime.date(2008, 3, 30)), (12.406947890818859, 1, datetime.date(2008, 6, 30)), (0.0, 0, datetime.date(2008, 9, 30)), (0, 0, datetime.date(2008, 12, 30))]
     bug_dates = [datetime.date(1997, 8, 1), datetime.date(1998, 3, 10), datetime.date(1998, 6, 7), datetime.date(1998, 12, 30), datetime.date(1999, 3, 1), datetime.date(1999, 10, 12), datetime.date(2000, 5, 25), datetime.date(2001, 4, 3), datetime.date(2002, 6, 26), datetime.date(2003, 2, 5), datetime.date(2003, 9, 11), datetime.date(2003, 11, 29), datetime.date(2004, 3, 31), datetime.date(2004, 9, 15), datetime.date(2005, 3, 9), datetime.date(2005, 9, 7), datetime.date(2006, 3, 15), datetime.date(2006, 9, 6), datetime.date(2007, 3, 14), datetime.date(2007, 9, 19), datetime.date(2008, 3, 12), datetime.date(2008, 9, 24), datetime.date(2009, 2, 4)]
     bug_descr = ['GNOME development announced', '0.13', '0.2', '0.91', '1.0.0', '1.0.53 ', '1.2', '1.4', '2', '2.2', '2.4', '2.5.0', '2.6', '2.8', '2.10,', '2.12', '2.14', '2.16', '2.18', '2.20,', '2.22', '2.24', '2.25.90']
-    counts = []
+    total_counts = []
     dates = []
-    
-    for count, date in df:
-       counts.append(count)
+    normal_counts = []
+    for normal, count, date in df:
+       total_counts.append(count)
        dates.append(date) 
+       normal_counts.append(normal)
 
-
-    occur = plt.plot(dates, counts, 'b.')#, bug_dates, art, 'go') 
+    occur = plt.plot(dates, normal_counts, 'b.')#, bug_dates, art, 'go') 
     #plot the release dates for Gnome as dashed vertical lines
-    rel_lines = plt.vlines(bug_dates, 0, max(counts), color='k', linestyles='dashed')
+    rel_lines = plt.vlines(bug_dates, 0, max(normal_counts), color='k', linestyles='dashed')
     
     # format the ticks
     ax.xaxis.set_major_locator(years)
@@ -45,13 +45,13 @@ def main():
     datemin = datetime.date(1998,1,1)
     datemax = datetime.date(2009,1,1)
 
-    corr = add_trend(dates, counts)
+    corr = add_trend(dates, normal_counts)
     
     ax.set_xlim(datemin, datemax)
     add_metadata(ax)
     add_label(corr)
-    #plt.show()
-    export()
+    plt.show()
+    #export()
     
 def add_trend(x, y):
     """Add the least-squares linear regression, and corr. coeff"""

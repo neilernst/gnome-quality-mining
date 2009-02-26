@@ -13,16 +13,13 @@ import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 
-
 help_message = '''
 Module to query a database of parsed bug, mail, and svn text
 '''
 
-
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
-
 
 def connect_corpus(db_name):
     """ connect to db"""
@@ -49,15 +46,22 @@ def get_counts(keyword, product, q, year):
       q_end = '10-01'
       q_start = '12-31'     
 
+    #this query determines number of events for the given keyword  
     query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
                         product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
                         cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
 
-    #print  query_string
+    #this query determines total events overall (to normalize against)               
+    totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
+                        cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+                        cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"product":product, "year":year, "q_start":q_start, "q_end":q_end}
     try:
-        pass
         store_cursor.execute(query_string)
-        return str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
+        key_num = str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
+        store_cursor.execute(totals_query)
+        total_val = store_cursor.fetchone().values()
+        total_num = int(str(total_val[0]))
+        return int(key_num), total_num
     except (ValueError):
         print 'Error in query syntax'
           
@@ -88,7 +92,7 @@ def main(argv=None):
         
         for year in range(1998,2009):
             for quarter in ('q1', 'q2', 'q3', 'q4'):
-                result = get_counts(keyword, product, quarter, year)
+                result, total = get_counts(keyword, product, quarter, year)
                 month = 0
                 if quarter == 'q1': 
                     month = 3
@@ -98,9 +102,11 @@ def main(argv=None):
                     month = 9
                 elif quarter == 'q4':
                     month = 12
-                res_tuple = (int(result), datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
+                normalized = 0
+                if total != 0:
+                    normalized = 10000*float(result)/float(total)
+                res_tuple = (normalized,result, datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
                 result_lst.append(res_tuple)
-                #print str(year) + ' ' + quarter + ': ' + 
         print result_lst
                 
     except Usage, err:
@@ -111,10 +117,8 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
-#TODO divide by number of bugs per quarter (normalize?)
 #TODO account for misspelinges 
 
-class Taxonony():
+class Taxonomy():
     """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
-    
     usability = ()
