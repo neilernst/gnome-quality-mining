@@ -35,10 +35,10 @@ def main():
     for count, date in df:
        counts.append(count)
        dates.append(date) 
-    print counts, len(counts)
+    #print counts, len(counts)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    occur = plt.plot(dates, counts, 'b-')#, bug_dates, art, 'go') 
+    occur = plt.plot(dates, counts, 'b.')#, bug_dates, art, 'go') 
     #plot the release dates for Gnome as dashed vertical lines
     rel_lines = plt.vlines(bug_dates, 0, max(counts), color='k', linestyles='dashed')
     
@@ -58,24 +58,22 @@ def main():
     plt.show()
 
 def add_trend(plt, x, y):
+    print x
     """Add the least-squares linear regression, and corr. coeff"""
     #generate a list of integers for the dates
-    #new_x = []
-    #for i in len(x):
-      #  new_x.append(i)
+    new_x = []
+    for i in range(len(x)):
+       new_x.append(i)
      # TODO : use list.index('item') to find the numeric equivalent of the date
     int_corr = np.corrcoef(new_x, y) # of form     array([[ 1.        ,  0.09553632], [ 0.09553632,  1.        ]])
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     p = np.poly1d(z)
-    plt.plot(x, y, '.', new_x, p(new_x), '-')
+    plt.plot(x, y, '.', x, p(new_x), '-')
     
 def autolabel():
     pass
-# format the coords message box
-#def price(x): return '$%1.2f'%x
-#ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
-#ax.format_ydata = price
+
 def add_metadata(ax, plt, fig):
     #ax.grid(True)
     plt.ylabel("Frequency")
