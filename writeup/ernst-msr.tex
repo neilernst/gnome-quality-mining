@@ -23,7 +23,7 @@ John Mylopoulos\\Dept. of Computer Science\\University of Toronto\\jm@cs.toronto
 We describe a repository mining technique we call signifier extraction. We generate signifiers using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we search for the signifiers over three month, quarterly intervals. The occurrence of our signifiers forms an evolutionary pattern that we analyze statistically and historically. We show that it is possible to reconstruct the historical evolution of project responses to external forcings, such as release cycles and audits. [numbers?]
 \end{abstract}
 
-\section{Introduction}\label{sect:introduction}
+\section{Introduction}\label{sect:introduction}%Aim
 \begin{quote}[My impression] is of a large project in a state of marginal returns, in which a larger and larger part of the effort goes to maintenance. -- Andy Wingo, Gnome developer, June 2008.\footnote{http://wingolog.org/archives/2008/06/07/gnome-in-the-age-of-decadence}\end{quote}
 	This quote, from a participant in the Gnome ecosystem (a developer), captures some of what this paper tries to elucidate. Is it the case that as projects mature the focus and effort of the developers turns to maintenance tasks? \cite{swanson} Certainly Lehman's conclusions \cite{lehman} is that this is the case (viz. Lehman's 2nd `law'). Can we demonstrate this empirically? To test this notion, we begin with a few assumptions. The first requirement we have is for some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, like the work of [who]. Our approach is focused on the conversations developers have (with each other or with `users') [refer to various players in OSS -- Scacchi?]. To identify when `effort goes to maintenance', we assume that a discussion that uses some signifiers for various maintenance properties -- defined as ISO9126 software quality model [not really maintenance, maintenance is more like bug fixes and incrementalism]
 	
@@ -35,8 +35,13 @@ We describe a repository mining technique we call signifier extraction. We gener
 \end{figure}
 	
 	
-\section{Signifier extraction}
+\section{Signifier extraction} %Method
 In semiotics, Peirce first made the distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet, a [] that contains semantic relations between words, including meronymy, synonymy, and holonymy. We extract words using the following criteria: [insert criteria]. This gives us a linguistic `bubble' which we use to extensionally define the signifier.
+
+\section{Observations}
+
+\subsection{Discussion}
+We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be the most useful 
 \section{Threats}
 missing words and phrases that are related to the signifier but don't contain it (e.g., ``can't find the submit button" vs. ``usability")). 
 mentions that aren't related to product
