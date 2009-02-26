@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 """
-Show how to make date plots in matplotlib using date tick locators and
-formatters.  See major_minor_demo1.py for more information on
-controlling major and minor ticks
-
-All matplotlib date plotting is done by converting date instances into
-days since the 0001-01-01 UTC.  The conversion, tick locating and
-formatting is done behind the scenes so this is most transparent to
-you.  The dates module provides several converter functions date2num
-and num2date
+Generate a plot, based on the query results (see query_corpora.py)
+Add a linear regression, Gnome release dats, and 
 
 """
 import datetime
@@ -17,10 +10,13 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.mlab as mlab
+
 project = 'Evolution'
+signifier = 'Usability'
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
 def main():
-    project = "Evolution"
-    
     years    = mdates.YearLocator()   # every year
     months   = mdates.MonthLocator(interval=3)  # every quarter
     yearsFmt = mdates.DateFormatter('%Y-%m') # want the x-axis to have ticks labelled (2008-Jan)
@@ -35,9 +31,8 @@ def main():
     for count, date in df:
        counts.append(count)
        dates.append(date) 
-    #print counts, len(counts)
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+
+
     occur = plt.plot(dates, counts, 'b.')#, bug_dates, art, 'go') 
     #plot the release dates for Gnome as dashed vertical lines
     rel_lines = plt.vlines(bug_dates, 0, max(counts), color='k', linestyles='dashed')
@@ -50,38 +45,43 @@ def main():
     datemin = datetime.date(1998,1,1)
     datemax = datetime.date(2009,1,1)
 
-    add_trend(plt, dates, counts)
+    corr = add_trend(dates, counts)
     
     ax.set_xlim(datemin, datemax)
-    add_metadata(ax, plt, fig)
-    autolabel()
-    plt.show()
-
-def add_trend(plt, x, y):
-    print x
+    add_metadata(ax)
+    add_label(corr)
+    #plt.show()
+    export()
+    
+def add_trend(x, y):
     """Add the least-squares linear regression, and corr. coeff"""
     #generate a list of integers for the dates
     new_x = []
     for i in range(len(x)):
        new_x.append(i)
-     # TODO : use list.index('item') to find the numeric equivalent of the date
     int_corr = np.corrcoef(new_x, y) # of form     array([[ 1.        ,  0.09553632], [ 0.09553632,  1.        ]])
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     p = np.poly1d(z)
     plt.plot(x, y, '.', x, p(new_x), '-')
+    return corr
     
-def autolabel():
-    pass
+def add_label(corr):
+    """ label the release lines, and add a legend. corr is the correlation coefficient"""
+    r2 = corr * corr #r2 value, between 0-1
 
-def add_metadata(ax, plt, fig):
+def add_metadata(ax):
     #ax.grid(True)
     plt.ylabel("Frequency")
     plt.xlabel("Date")
-    plt.title("Frequency of signifier occurrence over time: " + project)
+    plt.title("Frequency of signifier occurrence over time\n" + 'Product: ' + project + ", signifier: " + signifier, verticalalignment='bottom')
     # rotates and right aligns the x labels, and moves the bottom of the
     # axes up to make room for them
     fig.autofmt_xdate()
-    
+
+def export():
+    F = plt.gcf()
+    F.savefig('/Users/nernst/Desktop/'+ project + '-'+ signifier + '.png')
+        
 if __name__ == '__main__':
       main()
