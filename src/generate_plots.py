@@ -34,18 +34,18 @@ def main():
        normal_counts.append(normal)
     
     #date_index = np.arange(len(dates))
-    occur = plt.plot(dates, normal_counts, 'b.', label='Occurrences')#, bug_dates, art, 'go') 
+    occur = plt.plot(dates, normal_counts, 'r.', label='Occurrences')#, bug_dates, art, 'go') 
     #occur = plt.scatter(dates, date_index, 'b.', label='Occurrences')
     #plot the release dates for Gnome as dashed vertical lines
-    rel_lines = plt.vlines(bug_dates, 0, max(normal_counts), color='k', linestyles='dashed')#, label='Gnome release')
+    rel_lines = plt.vlines(bug_dates, 0, max(normal_counts), color='#616D7E', linestyles='dashed')#, label='Gnome release')
     
     # format the ticks
     ax.xaxis.set_major_locator(years)
     ax.xaxis.set_major_formatter(yearsFmt)
     ax.xaxis.set_minor_locator(months)
 
-    datemin = datetime.date(1998,1,1)
-    datemax = datetime.date(2009,1,1)
+    datemin = datetime.date(1997,1,1)
+    datemax = datetime.date(2009,5,1)
 
     corr = add_trend(dates, normal_counts)
     
@@ -64,20 +64,22 @@ def add_trend(x, y):
     int_corr = np.corrcoef(new_x, y) # of form     array([[ 1.        ,  0.09553632], [ 0.09553632,  1.        ]])
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
+    intercept, slope = z
     p = np.poly1d(z)
-    plt.plot(x, p(new_x), '-', label='linear regression')
+    trend_line = plt.plot(x, p(new_x), 'k-', label='linear regression, slope = '+ str(slope))
+    #plt.text()
     return corr
     
 def add_label(corr, bug_dates, normal_counts, bug_descr):
     """ label the release lines, and add a legend. corr is the correlation coefficient"""
     r2 = corr * corr #r2 value, between 0-1
-    #plt.legend()
+    plt.legend()
     i = 0
     for date in bug_dates:
     #each date position, at the maximum height, add the text of that date's release, vertically rotated
         plt.text(date,max(normal_counts), bug_descr[i], rotation='vertical')
         i = i + 1
-    plt.text(datetime.date(2005,03,02), max(normal_counts) - 20, 'R2={0:.2%}'.format(r2), bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(datetime.date(2005,03,02), max(normal_counts) - 20, 'R2={0:.2%}'.format(r2), zorder=1, bbox=dict(facecolor='red', alpha=0.5))
 def add_metadata(ax):
     #ax.grid(True)
     plt.ylabel('Frequency (events/total events * 1000)')#("Frequency")
