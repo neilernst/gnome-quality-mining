@@ -107,7 +107,11 @@ def main(argv=None):
                     normalized = 10000*float(result)/float(total)
                 res_tuple = (normalized,result, datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
                 result_lst.append(res_tuple)
-        print result_lst
+        #TODO first, summarize for that signifier (e.g. usability->useful, usable, utility) for each database (data, t_data)
+        #then generate the plot for each signifier and product
+        import generate_plots
+        generate_plots.main(result_lst, product, keyword, normalized=True) #create the plot
+        
                 
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
@@ -122,3 +126,4 @@ if __name__ == "__main__":
 class Taxonomy():
     """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
     usability = ()
+    performance = ()
