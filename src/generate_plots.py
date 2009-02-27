@@ -15,6 +15,10 @@ project = 'Evolution'
 signifier = 'Usability'
 fig = plt.figure()
 ax = fig.add_subplot(111)
+from matplotlib import rcParams
+rcParams['text.usetex']=True
+rcParams['text.latex.unicode']=True
+
 
 def main():
     years    = mdates.YearLocator()   # every year
@@ -79,7 +83,7 @@ def add_label(corr, bug_dates, normal_counts, bug_descr):
     #each date position, at the maximum height, add the text of that date's release, vertically rotated
         plt.text(date,max(normal_counts), bug_descr[i], rotation='vertical')
         i = i + 1
-    plt.text(datetime.date(2005,03,02), max(normal_counts) - 20, 'R2={0:.2%}'.format(r2), zorder=1, bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(datetime.date(2005,03,02), max(normal_counts) - 20, r'$R^2$={0:.2%}'.format(r2), zorder=1, bbox=dict(facecolor='red', alpha=0.5))
 def add_metadata(ax):
     #ax.grid(True)
     plt.ylabel('Frequency (events/total events * 1000)')#("Frequency")
