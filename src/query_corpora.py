@@ -110,7 +110,7 @@ def main(argv=None):
         #TODO first, summarize for that signifier (e.g. usability->useful, usable, utility) for each database (data, t_data)
         #then generate the plot for each signifier and product
         import generate_plots
-        generate_plots.main(result_lst, product, keyword, normalized=True) #create the plot
+        generate_plots.main(result_lst, product, keyword, normalized=False) #create the plot
         
                 
     except Usage, err:
@@ -125,5 +125,9 @@ if __name__ == "__main__":
 
 class Taxonomy():
     """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
-    usability = ()
+    usability_spell = ['usbility', 'useability',]
+    usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
+    usability_hyper = ['utility', 'usefulness']
+    usability_deriv = [serviceable, usable, useable]
+    usability = usability_spell + usability_syn + usability_hyper + usability_hypo + usability
     performance = ()
