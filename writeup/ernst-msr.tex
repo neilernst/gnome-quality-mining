@@ -4,6 +4,7 @@
 %\usepackage{amsmath,amssymb,amsthm,supertabular,booktabs,rotating,semantic,subfigure,multirow,colortbl}
 \usepackage{graphicx, url}
 \usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
+\usepackage{algorithmic}
 \usepackage{xunicode}
 \usepackage{xltxtra}
 \defaultfontfeatures{Mapping=tex-text}
@@ -37,7 +38,11 @@ We describe a repository mining technique we call signifier extraction. We gener
 	
 \section{Signifier extraction} %Method
 In semiotics, Peirce first made the distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the following criteria: 
-\begin{algorithm}
+\begin{algorithmic}
+	\FOR{all top-level terms in ISO9126 model}
+	\STATE query it in wordnet
+	\STATE for each sub-term in ISO9126 
+	\ENDFOR
 take the term in the ISO9126 model
 query it in wordnet
 for each occurrence, take its immediate synset
@@ -46,7 +51,7 @@ add those to the bubble
 query corpus for each term in the bubble
 	add those events to the overall events for the signified
 
-\end{algorithm}
+\end{algorithmic}
 These criteria give us a linguistic `bubble' which we use to extensionally define the signified.
 
 \section{Observations}
