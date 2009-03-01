@@ -128,6 +128,51 @@ class Taxonomy():
     usability_spell = ['usbility', 'useability',]
     usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
     usability_hyper = ['utility', 'usefulness']
-    usability_deriv = [serviceable, usable, useable]
-    usability = usability_spell + usability_syn + usability_hyper + usability_hypo + usability
+    usability_deriv = ['serviceable', 'usable', 'useable']
+    usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    usability =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+    
+    functionality_spell = []
+    functionality_syn = []
+    functionality_hyper = []
+    functionality_deriv = ['serviceable', 'usable', 'useable']
+    functionality_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    functionality =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+       
+    reliability_spell = ['usbility', 'useability',]
+    reliability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
+    reliability_hyper = ['utility', 'usefulness']
+    reliability_deriv = ['serviceable', 'usable', 'useable']
+    reliability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    reliability =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+      
+    maintainability_spell = ['usbility', 'useability',]
+    maintainability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
+    maintainability_hyper = ['utility', 'usefulness']
+    maintainability_deriv = ['serviceable', 'usable', 'useable']
+    maintainability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    maintainability =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+
+    maintainability_spell = ['usbility', 'useability',]
+    maintainability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
+    maintainability_hyper = ['utility', 'usefulness']
+    maintainability_deriv = ['serviceable', 'usable', 'useable']
+    maintainability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    maintainability =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+
+    portability_spell = ['usbility', 'useability',]
+    portability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
+    portability_hyper = ['utility', 'usefulness']
+    portability_deriv = ['serviceable', 'usable', 'useable']
+    portability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    portability =  usability_syn + usability_hyper + usability_hypo + usability_meronym #+ usability_spell
+
+    functionality
+
+        * Suitability
+        * Accuracy
+        * Interoperability
+        * Compliance
+        * Security
+    
     performance = ()
