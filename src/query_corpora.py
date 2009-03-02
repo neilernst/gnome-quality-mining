@@ -12,6 +12,7 @@ import getopt
 import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
+import generate_plots
 
 help_message = '''
 Module to query a database of parsed bug, mail, and svn text
@@ -88,29 +89,15 @@ def main(argv=None):
             if option == "-p":
                 product = value
 
-        result_lst = []
-        
-        for year in range(1998,2009):
-            for quarter in ('q1', 'q2', 'q3', 'q4'):
-                result, total = get_counts(keyword, product, quarter, year)
-                month = 0
-                if quarter == 'q1': 
-                    month = 3
-                elif quarter == 'q2':
-                    month = 6
-                elif quarter == 'q3':
-                    month = 9
-                elif quarter == 'q4':
-                    month = 12
-                normalized = 0
-                if total != 0:
-                    normalized = 10000*float(result)/float(total)
-                res_tuple = (normalized,result, datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
-                result_lst.append(res_tuple)
+        t = Taxonomy()
         #TODO first, summarize for that signifier (e.g. usability->useful, usable, utility) for each database (data, t_data)
-        #then generate the plot for each signifier and product
-        import generate_plots
-        generate_plots.main(result_lst, product, keyword, normalized=False) #create the plot
+        #then generate the plot for each signifier and product        
+        for signified in t.get_products():
+            for signifier in signified:
+                one_result = query_database(signifier)
+                result_signifier = one_result + result_signifier
+                #sum the various lists returned, maintaining the dates associated.
+            generate_plots.main(result_signifier, signifier, keyword, normalized=False) #create the plot
         
                 
     except Usage, err:
@@ -118,6 +105,27 @@ def main(argv=None):
         print >> sys.stderr, "\t for help use --help"
         return 2
 
+def query_database(product):
+    """Sends the query"""
+    result_lst = []
+    for year in range(1998,2009):
+        for quarter in ('q1', 'q2', 'q3', 'q4'):
+            result, total = get_counts(keyword, product, quarter, year)
+            month = 0
+            if quarter == 'q1': 
+                month = 3
+            elif quarter == 'q2':
+                month = 6
+            elif quarter == 'q3':
+                month = 9
+            elif quarter == 'q4':
+                month = 12
+            normalized = 0
+            if total != 0:
+                normalized = 10000*float(result)/float(total)
+            res_tuple = (normalized,result, datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
+            result_lst.append(res_tuple)
+    return result_lst
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -160,6 +168,8 @@ class Taxonomy():
     portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
     self.portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
+    def return_products(self):
+        return [self.portability, self.maintainability, self.reliability, self.functionality, self.usability]
     # efficiency_spell = []
     #  efficiency_syn = []
     #  efficiency_hyper = []
