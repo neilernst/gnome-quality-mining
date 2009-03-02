@@ -133,9 +133,9 @@ class Taxonomy():
     usability =  usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
     
     functionality_spell = []
-    functionality_syn = []
-    functionality_hyper = []
-    functionality_deriv = []
+    functionality_syn = ['functionality']
+    functionality_hyper = ['practicality']
+    functionality_deriv = ['functional']
     functionality_meronym = ['Suitability', 'Interoperability', 'Accuracy', 'Compliance', 'Security'] #as defined in iso9126
     functionality =  functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
        
