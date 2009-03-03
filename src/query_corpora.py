@@ -37,12 +37,12 @@ def get_counts(keyword, product, q, year):
       q_end = '10-01'
       q_start = '12-31'     
     #this query determines number of events for the given keyword  
+    #in boolean mode match is case-insensitive and uses simple boolean keywords, e.g. no modifier = OR, + = AND, - = NOT
     query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
                         product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
                         cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
 
     #TODO: query both tables, and add all keywords e.g. select count(*) from data where match(event) against ('usability useful' in boolean mode) and product = 'nautilus' and  msr_date between cast('2001-01' as Datetime) and cast('2004-03' as Datetime)
-    # see delicious bookmark
     
     #trim results that have initial zero values -- assume these are because there is no data in those time frames
     #this query determines total events overall (to normalize against)               
@@ -59,15 +59,16 @@ def get_counts(keyword, product, q, year):
     except (ValueError):
         print 'Error in query syntax'
         
-def query_database(product):
+def query_database(product, signifiers):
     """Sends the query"""
     result_lst = []
-    for signifier in t.get
-    signifier_list = signifier + ' ' + product_list
+    signifier_list = ''
+    for signifier in signifiers:
+        signifier_list = signifier + ' ' + product_list
     
     for year in range(1998,2009):
         for quarter in ('q1', 'q2', 'q3', 'q4'):
-            result, total = get_counts(keyword, product, quarter, year)
+            result, total = get_counts(signifier_list, product, quarter, year)
             month = 0
             if quarter == 'q1': 
                 month = 3
@@ -86,12 +87,10 @@ def query_database(product):
           
 def main():
     t = Taxonomy()     
-    for signified in t.get_signified(): # e.g. usabiity, performance, etc
+    for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
-#sum the various lists returned, maintaining the dates associated.
-            result = query_database(product)
+            result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
             generate_plots.main(result, product, signified, normalized=False) #create the plot
-
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -144,40 +143,11 @@ class Taxonomy():
     #efficiency = time/resource behaviour == performance
     self.signifier_dict = {'Portability': self.portability, 'Maintainability': self.maintainability, 'Reliability': self.reliability, 'Functionality', 'Usability'}
     
-    def get_signifiers(self):
-        return [self.portability, self.maintainability, self.reliability, self.functionality, self.usability]
+    def get_signifiers(self, key):
+        return self.signifier_dict.get(key)
     
     def get_signified(self):
         return self.signifier_dict.keys()
         
     def get_products(self):
         return ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
-
-
- 
-        # 
-        # except Usage, err:
-        #     print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
-        #     print >> sys.stderr, "\t for help use --help"
-        #     return 2
-        #            # product = ''
-        # keyword = ''
-        # quarter = 'q1'
-        # year = 2010
-        # 
-        # if argv is None:
-        #     argv = sys.argv
-        # try:
-        #     try:
-        #         opts, args = getopt.getopt(argv[1:], "hk:p:")
-        #     except getopt.error, msg:
-        #         raise Usage(msg)
-        # 
-        #     # option processing
-        #     for option, value in opts:
-        #         if option == "-k":
-        #             keyword = value
-        #         if option in ("-h", "--help"):
-        #             raise Usage(help_message)
-        #         if option == "-p":
-        #             product = value
