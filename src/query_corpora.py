@@ -90,7 +90,8 @@ def main():
     for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
             result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
-            generate_plots.main(result, product, signified, normalized=False) #create the plot
+            print 'finished ' + product + ' ' + signified
+            #generate_plots.main(result, product, signified, normalized=False) #create the plot
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -104,35 +105,35 @@ class Taxonomy():
     usability_hyper = ['utility', 'usefulness']
     usability_deriv = ['serviceable', 'usable', 'useable']
     usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
-    self.usability =  usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
+    usability =  usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
     
     functionality_spell = []
     functionality_syn = ['functionality']
     functionality_hyper = ['practicality']
     functionality_deriv = ['functional']
     functionality_meronym = ['Suitability', 'Interoperability', 'Accuracy', 'Compliance', 'Security'] #as defined in iso9126
-    self.functionality =  functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
+    functionality =  functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
        
     reliability_spell = []
     reliability_syn = ['dependability', 'dependableness', 'reliability', 'reliableness']
     reliability_hyper = ['responsibility', 'responsibleness']
     reliability_deriv = ['dependable', 'reliable']
     reliability_meronym = ['Maturity', 'Recoverability', 'Fault Tolerance'] #as defined in iso9126
-    self.reliability =  reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
+    reliability =  reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
     
     maintainability_spell = []
     maintainability_syn = ['maintainable']
     maintainability_hyper = []
     maintainability_deriv = ['maintain']
     maintainability_meronym = ['Stability', 'Analyzability', 'Changeability', 'Testability'] #as defined in iso9126
-    self.maintainability =  maintainability_syn + maintainability_hyper + maintainability_deriv + maintainability_meronym #+ _spell
+    maintainability =  maintainability_syn + maintainability_hyper + maintainability_deriv + maintainability_meronym #+ _spell
     
     portability_spell = []
     portability_syn = ['portability']
     portability_hyper = ['movability', 'movableness']
     portability_deriv = ['portable']
     portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
-    self.portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
+    portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
     # efficiency_spell = []
     #  efficiency_syn = []
