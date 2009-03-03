@@ -54,6 +54,8 @@ def get_counts(keyword, product, q, year):
 
     #TODO: query both tables, and add all keywords e.g. select count(*) from data where match(event) against ('usability useful' in boolean mode) and product = 'nautilus' and  msr_date between cast('2001-01' as Datetime) and cast('2004-03' as Datetime)
     # see delicious bookmark
+    
+    #trim results that have initial zero values -- assume these are because there is no data in those time frames
     #this query determines total events overall (to normalize against)               
     totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
                         cast(\'%(year)s-%(q_end)s\' as Datetime) and 
