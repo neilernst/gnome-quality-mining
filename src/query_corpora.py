@@ -10,8 +10,7 @@ import getopt
 import datetime
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
-import generate_plots
-
+from names import Taxonomy
 
 def connect_corpus(db_name):
     """ connect to db"""
@@ -64,10 +63,11 @@ def query_database(product, signifiers):
     result_lst = []
     signifier_list = ''
     for signifier in signifiers:
-        signifier_list = signifier + ' ' + product_list
+        signifier_list = signifier + ' ' + signifier_list
     
     for year in range(1998,2009):
         for quarter in ('q1', 'q2', 'q3', 'q4'):
+            print "Getting counts for: " + signifier_list, product
             result, total = get_counts(signifier_list, product, quarter, year)
             month = 0
             if quarter == 'q1': 
@@ -91,64 +91,10 @@ def main():
         for product in t.get_products():
             result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
             print 'finished ' + product + ' ' + signified
-            #generate_plots.main(result, product, signified, normalized=False) #create the plot
+            import generate_plots
+            generate_plots.main(result, product, signified, normalized=False) #create the plot
 
 if __name__ == "__main__":
     sys.exit(main())
 
-class Taxonomy():
-    """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
-    #TODO account for misspelinges 
 
-    usability_spell = ['usbility', 'useability',]
-    usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
-    usability_hyper = ['utility', 'usefulness']
-    usability_deriv = ['serviceable', 'usable', 'useable']
-    usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
-    usability =  usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
-    
-    functionality_spell = []
-    functionality_syn = ['functionality']
-    functionality_hyper = ['practicality']
-    functionality_deriv = ['functional']
-    functionality_meronym = ['Suitability', 'Interoperability', 'Accuracy', 'Compliance', 'Security'] #as defined in iso9126
-    functionality =  functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
-       
-    reliability_spell = []
-    reliability_syn = ['dependability', 'dependableness', 'reliability', 'reliableness']
-    reliability_hyper = ['responsibility', 'responsibleness']
-    reliability_deriv = ['dependable', 'reliable']
-    reliability_meronym = ['Maturity', 'Recoverability', 'Fault Tolerance'] #as defined in iso9126
-    reliability =  reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
-    
-    maintainability_spell = []
-    maintainability_syn = ['maintainable']
-    maintainability_hyper = []
-    maintainability_deriv = ['maintain']
-    maintainability_meronym = ['Stability', 'Analyzability', 'Changeability', 'Testability'] #as defined in iso9126
-    maintainability =  maintainability_syn + maintainability_hyper + maintainability_deriv + maintainability_meronym #+ _spell
-    
-    portability_spell = []
-    portability_syn = ['portability']
-    portability_hyper = ['movability', 'movableness']
-    portability_deriv = ['portable']
-    portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
-    portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
-    
-    # efficiency_spell = []
-    #  efficiency_syn = []
-    #  efficiency_hyper = []
-    #  efficiency_deriv = []
-    #  efficiency_meronym = [] #as defined in iso9126
-    #  efficiency =  _syn + _hyper + _deriv + _meronym #+ usability_spell
-    #efficiency = time/resource behaviour == performance
-    self.signifier_dict = {'Portability': self.portability, 'Maintainability': self.maintainability, 'Reliability': self.reliability, 'Functionality': self.functionality, 'Usability': self.usability}
-    
-    def get_signifiers(self, key):
-        return self.signifier_dict.get(key)
-    
-    def get_signified(self):
-        return self.signifier_dict.keys()
-        
-    def get_products(self):
-        return ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
