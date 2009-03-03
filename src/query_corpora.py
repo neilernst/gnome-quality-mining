@@ -141,7 +141,7 @@ class Taxonomy():
     #  efficiency_meronym = [] #as defined in iso9126
     #  efficiency =  _syn + _hyper + _deriv + _meronym #+ usability_spell
     #efficiency = time/resource behaviour == performance
-    self.signifier_dict = {'Portability': self.portability, 'Maintainability': self.maintainability, 'Reliability': self.reliability, 'Functionality', 'Usability'}
+    self.signifier_dict = {'Portability': self.portability, 'Maintainability': self.maintainability, 'Reliability': self.reliability, 'Functionality': self.functionality, 'Usability': self.usability}
     
     def get_signifiers(self, key):
         return self.signifier_dict.get(key)
