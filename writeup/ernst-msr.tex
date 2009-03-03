@@ -38,32 +38,36 @@ We describe a repository mining technique we call signifier extraction. We gener
 	
 \section{Signifier extraction} %Method
 In semiotics, Peirce first made the distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the following criteria: 
+\renewcommand{\algorithmiccomment}[1]{// #1}
 \begin{algorithm}[H]
-	\caption{Defining signified terms extensionally}
+\caption{Defining signified terms extensionally}
   \label{alg1}
 \begin{algorithmic}
-	\FOR{all top-level terms in ISO9126 model}
-		\COMMENT{case-insensitively}
-		\STATE define it as a wordnet noun
-		\STATE query its synset in wordnet
-		\STATE identify its direct h
-		\STATE for each sub-term (meronym) in ISO9126 
-		\COMMENT{ a meronym is the sub-part of a greater whole (e.g., partonymy)}
-	\ENDFOR
-	\RETURN the list of `events' per signified term
-	
-take the term in the ISO9126 model
-query it (upper/lower case), in wordnet. Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate).
-for each occurrence, take its uses
-add those to the bubble
-query corpus for each term in the bubble
-	add those events to the overall events for the signified
-	an event is any row in the table which contains at least one term in the bubble (i.e., don't double count)
-
+  \FORALL{top level terms in ISO9126}
+	\STATE $S \rightarrow []$
+    \STATE define it as a wordnet noun
+\STATE query its synset in wordnet
+\STATE identify its direct hypernyms (sub-parts)
+\STATE do query for each member of S
+	\COMMENT ignore case
+  \ENDFOR
+\RETURN the list of `events' per signified term
+% \FOR{all top-level terms in ISO9126 model}
+% \STATE 
+%   \ENDFOR
+% 
+  
+% %   \STATE for each sub-term (meronym) in ISO9126
+% %   \COMMENT{ a meronym is the sub-part of a greater whole (e.g., partonymy)}
+% 
 \end{algorithmic}
 \end{algorithm}
+Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate).
 
-These criteria give us a linguistic `bubble' which we use to extensionally define the signified.
+		add those events to the overall events for the signified
+		an event is any row in the table which contains at least one term in the bubble (i.e., don't double count)
+
+This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term.
 
 \section{Observations}
 [The graphs]
