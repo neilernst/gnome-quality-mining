@@ -2,9 +2,7 @@
 # encoding: utf-8
 """
 query_corpora.py
-
 Created by Neil Ernst on 2009-02-06.
-Copyright (c) 2009 __MyCompanyName__. All rights reserved.
 """
 
 import sys
@@ -14,13 +12,6 @@ from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 import generate_plots
 
-help_message = '''
-Module to query a database of parsed bug, mail, and svn text
-'''
-
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
 
 def connect_corpus(db_name):
     """ connect to db"""
@@ -30,7 +21,6 @@ def connect_corpus(db_name):
     
 def get_counts(keyword, product, q, year):
     """ store in the database"""
-
     store_cursor = connect_corpus("data_objects")
 
     #Define the start and end of yearly quarters"""
@@ -46,7 +36,6 @@ def get_counts(keyword, product, q, year):
     if q == 'q4':
       q_end = '10-01'
       q_start = '12-31'     
-
     #this query determines number of events for the given keyword  
     query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
                         product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
@@ -69,49 +58,13 @@ def get_counts(keyword, product, q, year):
         return int(key_num), total_num
     except (ValueError):
         print 'Error in query syntax'
-          
-def main(argv=None):
-    product = ''
-    keyword = ''
-    quarter = 'q1'
-    year = 2010
-    
-    if argv is None:
-        argv = sys.argv
-    try:
-        try:
-            opts, args = getopt.getopt(argv[1:], "hk:p:")
-        except getopt.error, msg:
-            raise Usage(msg)
-    
-        # option processing
-        for option, value in opts:
-            if option == "-k":
-                keyword = value
-            if option in ("-h", "--help"):
-                raise Usage(help_message)
-            if option == "-p":
-                product = value
-
-        t = Taxonomy()
-        #TODO first, summarize for that signifier (e.g. usability->useful, usable, utility) for each database (data, t_data)
-        #then generate the plot for each signifier and product        
-        for signified in t.get_products():
-            for signifier in signified:
-                one_result = query_database(signifier)
-                result_signifier = one_result + result_signifier
-                #sum the various lists returned, maintaining the dates associated.
-            generate_plots.main(result_signifier, signifier, keyword, normalized=False) #create the plot
         
-                
-    except Usage, err:
-        print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
-        print >> sys.stderr, "\t for help use --help"
-        return 2
-
 def query_database(product):
     """Sends the query"""
     result_lst = []
+    for signifier in t.get
+    signifier_list = signifier + ' ' + product_list
+    
     for year in range(1998,2009):
         for quarter in ('q1', 'q2', 'q3', 'q4'):
             result, total = get_counts(keyword, product, quarter, year)
@@ -130,13 +83,23 @@ def query_database(product):
             res_tuple = (normalized,result, datetime.date(year,month,30)) #a quarter's date representation is the end of the quarter
             result_lst.append(res_tuple)
     return result_lst
+          
+def main():
+    t = Taxonomy()     
+    for signified in t.get_signified(): # e.g. usabiity, performance, etc
+        for product in t.get_products():
+#sum the various lists returned, maintaining the dates associated.
+            result = query_database(product)
+            generate_plots.main(result, product, signified, normalized=False) #create the plot
+
 
 if __name__ == "__main__":
     sys.exit(main())
-#TODO account for misspelinges 
 
 class Taxonomy():
     """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
+    #TODO account for misspelinges 
+
     usability_spell = ['usbility', 'useability',]
     usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
     usability_hyper = ['utility', 'usefulness']
@@ -172,8 +135,6 @@ class Taxonomy():
     portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
     self.portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
-    def return_products(self):
-        return [self.portability, self.maintainability, self.reliability, self.functionality, self.usability]
     # efficiency_spell = []
     #  efficiency_syn = []
     #  efficiency_hyper = []
@@ -181,3 +142,42 @@ class Taxonomy():
     #  efficiency_meronym = [] #as defined in iso9126
     #  efficiency =  _syn + _hyper + _deriv + _meronym #+ usability_spell
     #efficiency = time/resource behaviour == performance
+    self.signifier_dict = {'Portability': self.portability, 'Maintainability': self.maintainability, 'Reliability': self.reliability, 'Functionality', 'Usability'}
+    
+    def get_signifiers(self):
+        return [self.portability, self.maintainability, self.reliability, self.functionality, self.usability]
+    
+    def get_signified(self):
+        return self.signifier_dict.keys()
+        
+    def get_products(self):
+        return ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
+
+
+ 
+        # 
+        # except Usage, err:
+        #     print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
+        #     print >> sys.stderr, "\t for help use --help"
+        #     return 2
+        #            # product = ''
+        # keyword = ''
+        # quarter = 'q1'
+        # year = 2010
+        # 
+        # if argv is None:
+        #     argv = sys.argv
+        # try:
+        #     try:
+        #         opts, args = getopt.getopt(argv[1:], "hk:p:")
+        #     except getopt.error, msg:
+        #         raise Usage(msg)
+        # 
+        #     # option processing
+        #     for option, value in opts:
+        #         if option == "-k":
+        #             keyword = value
+        #         if option in ("-h", "--help"):
+        #             raise Usage(help_message)
+        #         if option == "-p":
+        #             product = value

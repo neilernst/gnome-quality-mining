@@ -19,7 +19,7 @@ from matplotlib import rcParams
 rcParams['text.usetex']=True
 rcParams['text.latex.unicode']=True
 
-def main(df,product, keyword, normalized=True):
+def main(df, product, keyword, normalized=True):
     
     global project, signifier #is this evil?
     project = product
