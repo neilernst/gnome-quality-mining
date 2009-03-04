@@ -37,13 +37,14 @@ class Taxonomy():
     portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
     portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
-    # efficiency_spell = []
-    #  efficiency_syn = []
-    #  efficiency_hyper = []
-    #  efficiency_deriv = []
-    #  efficiency_meronym = [] #as defined in iso9126
-    #  efficiency =  _syn + _hyper + _deriv + _meronym #+ usability_spell
+    efficiency_spell = []
+    efficiency_syn = ['performance'] # added from personal experience...
+    efficiency_hyper = ['ratio']
+    efficiency_deriv = ['efficient']
+    efficiency_meronym = ['time behaviour', 'resource behaviour'] #as defined in iso9126
+    efficiency =  _syn + _hyper + _deriv + _meronym #+ _spell
     #efficiency = time/resource behaviour == performance
+    
     global signifier_dict
     signifier_dict = {'Portability': portability, 'Maintainability': maintainability, 'Reliability': reliability, 'Functionality': functionality, 'Usability': usability}
     

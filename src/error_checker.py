@@ -16,9 +16,12 @@ def get_counts(keyword):
     """ store in the database"""
     store_cursor = connect_corpus("data_objects")
 
-    
+    total = 100 
     query_string = """select event from data_objects.data where match(event) 
-                    against (\'%(key)s\' in boolean mode) order by rand() limit 20"""  % {"key":keyword}
+                    against (\'%(key)s\' in boolean mode) UNION 
+                    select event from data_objects.data where match(event) 
+                    against (\'%(key)s\' in boolean mode) 
+                    order by rand() limit 20  order by rand() limit %(total)d"""  % {"key":keyword, "total":total}
     
     try:
         store_cursor.execute(query_string)
@@ -34,7 +37,8 @@ def get_counts(keyword):
                 yes = yes + 1.0
             else:
                 no = no + 1.0
-        rate = yes/20.0
+        rate = yes/float(total)
+        print "Number of negatives was %s" % (no)
         print "Error rate for term %s was: %s" % (keyword, str(rate))
     except (ValueError):
         print 'Error in query syntax'   
