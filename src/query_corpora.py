@@ -67,7 +67,7 @@ def query_database(product, signifiers):
     
     for year in range(1998,2009):
         for quarter in ('q1', 'q2', 'q3', 'q4'):
-            print "Getting counts for: " + signifier_list, product
+            print "Getting counts for: " + signifier_list, product, str(year)
             result, total = get_counts(signifier_list, product, quarter, year)
             month = 0
             if quarter == 'q1': 
