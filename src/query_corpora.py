@@ -86,18 +86,19 @@ def query_database(product, signifiers):
     return result_lst
           
 def save_file(result, product, signified):
-    f = file('/Users/nernst/Desktop/'+product+'-'+ signified, 'w')
-    f.write(str(result))
-    f.close
+    f = file('/Users/nernst/Desktop/'+product+'-'+ signified, 'wb')
+    import pickle
+    pickle.dump(result, f)
+    f.close()
     
 def main():
     t = Taxonomy()     
     for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
             result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
-            print result
+            #print result
             save_file(result, product, signified)
-            print 'finished ' + product + ' ' + signified
+            #print 'finished ' + product + ' ' + signified
             #import generate_plots
             #generate_plots.main(result, product, signified, normalized=False) #create the plot
 
