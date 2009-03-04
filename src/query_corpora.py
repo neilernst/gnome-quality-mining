@@ -39,12 +39,18 @@ def get_counts(keyword, product, q, year):
     #in boolean mode match is case-insensitive and uses simple boolean keywords, e.g. no modifier = OR, + = AND, - = NOT
     query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
                         product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+                        cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
+                        select count(*) from t_data where match(event) against (\'%(key)s\' in boolean mode) and 
+                        product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
                         cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
 
     #TODO: query both tables,
     #e.g. select count(*) from data where match(event) against ('usability useful' in boolean mode) and product = 'nautilus' and  msr_date between cast('2001-01' as Datetime) and cast('2004-03' as Datetime)
     #this query determines total events overall (to normalize against)               
     totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
+                        cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+                        cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
+                        select count(*) from t_data where product = \'%(product)s\' and  msr_date between 
                         cast(\'%(year)s-%(q_end)s\' as Datetime) and 
                         cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"product":product, "year":year, "q_start":q_start, "q_end":q_end}
     try:

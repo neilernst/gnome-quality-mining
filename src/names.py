@@ -20,7 +20,7 @@ class Taxonomy():
     reliability_syn = ['dependability', 'dependableness', 'reliability', 'reliableness']
     reliability_hyper = ['responsibility', 'responsibleness']
     reliability_deriv = ['dependable', 'reliable']
-    reliability_meronym = ['Maturity', 'Recoverability', 'Fault Tolerance'] #as defined in iso9126
+    reliability_meronym = ['Maturity', 'Recoverability', '"Fault Tolerance"'] #as defined in iso9126
     reliability =  reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
     
     maintainability_spell = []
@@ -41,12 +41,12 @@ class Taxonomy():
     efficiency_syn = ['performance'] # added from personal experience...
     efficiency_hyper = ['ratio']
     efficiency_deriv = ['efficient']
-    efficiency_meronym = ['time behaviour', 'resource behaviour'] #as defined in iso9126
-    efficiency =  _syn + _hyper + _deriv + _meronym #+ _spell
+    efficiency_meronym = ['"time behaviour"', '"resource behaviour"'] #as defined in iso9126
+    efficiency =  efficiency_syn + efficiency_hyper + efficiency_deriv + efficiency_meronym #+ _spell
     #efficiency = time/resource behaviour == performance
     
     global signifier_dict
-    signifier_dict = {'Portability': portability, 'Maintainability': maintainability, 'Reliability': reliability, 'Functionality': functionality, 'Usability': usability}
+    signifier_dict = {'Efficiency': efficiency, 'Portability': portability, 'Maintainability': maintainability, 'Reliability': reliability, 'Functionality': functionality, 'Usability': usability}
     
     def get_signifiers(self, key):
         return signifier_dict.get(key)

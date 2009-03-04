@@ -18,21 +18,22 @@ def get_counts(keyword):
 
     total = 100 
     query_string = """select event from data_objects.data where match(event) 
-                    against (\'%(key)s\' in boolean mode) UNION 
-                    select event from data_objects.data where match(event) 
+                    against (\'%(key)s\' in boolean mode) UNION ALL
+                    select event from data_objects.t_data where match(event) 
                     against (\'%(key)s\' in boolean mode) 
-                    order by rand() limit 20  order by rand() limit %(total)d"""  % {"key":keyword, "total":total}
+                    order by rand() limit %(total)d"""  % {"key":keyword, "total":total}
     
     try:
+        print query_string
         store_cursor.execute(query_string)
+        yes = 0.0
+        no = 0.0
         for result in store_cursor.fetchall():
         #result = str(store_cursor.fetchall().values()[0]) #{'count(*)': 6L} dict
             print result.values()[0]
             answer = raw_input("******\nRelevant (y/n): ")
             #wait for user input
             #y for relevant, N for irrelevant
-            yes = 0.0
-            no = 0.0
             if answer == 'y':
                 yes = yes + 1.0
             else:
@@ -44,7 +45,13 @@ def get_counts(keyword):
         print 'Error in query syntax'   
                
 def main():
-   get_counts('usability')
+   from names import Taxonomy
+   t = Taxonomy()
+   signifiers = t.get_signifiers('Efficiency')
+   signifier_list = ''
+   for signifier in signifiers:
+       signifier_list = signifier + ' ' + signifier_list
+   get_counts(signifier_list)
 
 if __name__ == "__main__":
     sys.exit(main())
