@@ -85,14 +85,21 @@ def query_database(product, signifiers):
             result_lst.append(res_tuple)
     return result_lst
           
+def save_file(result, product, signified):
+    f = file('/Users/nernst/Desktop/'+product+'-'+ signified, 'w')
+    f.write(str(result))
+    f.close
+    
 def main():
     t = Taxonomy()     
     for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
             result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
+            print result
+            save_file(result, product, signified)
             print 'finished ' + product + ' ' + signified
-            import generate_plots
-            generate_plots.main(result, product, signified, normalized=False) #create the plot
+            #import generate_plots
+            #generate_plots.main(result, product, signified, normalized=False) #create the plot
 
 if __name__ == "__main__":
     sys.exit(main())
