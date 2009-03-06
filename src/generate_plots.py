@@ -44,6 +44,7 @@ def main(df, product, keyword, normalized=True):
     else: 
         counts = total_counts
     
+    min_x = 0
     for x in range(len(counts)):
         if counts[x] != 0: # find the first non-zero value and that becomes our start date (may miss some non-zero dates)
              min_x = x
@@ -53,7 +54,7 @@ def main(df, product, keyword, normalized=True):
     dates = dates[min_x:]
     
     #then, set the y height by the greatest value of Y + some padding.    
-    
+    plt.clf() # clear the figure...
     occur = plt.plot(dates, counts, 'r.', label='Occurrences')#, bug_dates, art, 'go') 
         #occur = plt.scatter(dates, date_index, 'b.', label='Occurrences')
     #plot the release dates for Gnome as dashed vertical lines
@@ -67,15 +68,15 @@ def main(df, product, keyword, normalized=True):
     datemin = min(dates)
     datemax = datetime.date(2009,5,1)
 
-    corr = add_trend(dates, counts)
+    corr, slope, intercept = add_trend(dates, counts)
     
     ax.set_xlim(datemin, datemax)
     ax.set_ylim(0, max(counts)+30)
-    add_metadata(ax,corr)
+    r2 = add_metadata(ax,corr)
     add_label(dates, bug_dates, counts, bug_descr)
     #plt.show()
     export()
-    return 
+    return r2, slope, intercept
     
 def add_trend(x, y):
     """Add the least-squares linear regression, and corr. coeff"""
@@ -87,14 +88,16 @@ def add_trend(x, y):
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     slope, intercept = z
-    print slope
+    #print slope
     p = np.poly1d(z)
     trend_line = plt.plot(x, p(new_x), 'k-', label='\^{{y}} = {0:.2f} + {1:.2f} x '.format(intercept,slope))
     #plt.text()
-    return corr
+    return corr, slope, intercept
     
 def add_label(dates, bug_dates, counts, bug_descr):
     """ label the release lines, and add a legend. corr is the correlation coefficient"""
+    
+    min_date = 0
     for x in range(len(bug_dates)):
         if bug_dates[x] >= dates[0]:
             min_date = x
@@ -118,10 +121,11 @@ def add_metadata(ax,corr):
     # rotates and right aligns the x labels, and moves the bottom of the
     # axes up to make room for them
     fig.autofmt_xdate()
-
+    return r2
+    
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Desktop/'+ project + '-'+ signifier + '.png')
+    F.savefig('/Users/nernst/Documents/projects/msr/writeup/figures/'+ project + '-'+ signifier + '.png')
         
 if __name__ == '__main__':
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
@@ -131,20 +135,21 @@ if __name__ == '__main__':
     t  = Taxonomy()
     products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
     #products = ['Totem']
-    #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
-    keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
+    keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
+    #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
     #keywords = ['Reliability']
     data_dict = {}
-    save_file = open('/Users/nernst/Desktop/data_file.csv', 'w')
-    
+    save_file = open('/Users/nernst/Documents/projects/msr/writeup/data_file.csv', 'w')
+    save_file.write('File-Keyword, r2, slope, intercept')
     for product in products:
         for key in keywords:
             filename = product + '-' + key
-            f = open('/Users/nernst/Desktop/'+ filename)
+            print filename
+            f = open('/Users/nernst/Documents/projects/msr/data/pickles/'+ filename)
             df = pickle.load(f)
             f.close()
             #save the r2 and slope/intercept numbers externally
             r2, slope, intercept = main(df, product, key)
             data_store = [r2,slope,intercept]
-            data_dict[filename] = data_store
-            save_file.write(filename,)
+            #data_dict[filename] = data_store
+            save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + '\n')
