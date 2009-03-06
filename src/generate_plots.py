@@ -43,7 +43,17 @@ def main(df, product, keyword, normalized=True):
         counts = normal_counts
     else: 
         counts = total_counts
-        
+    
+    for x in range(len(counts)):
+        if counts[x] != 0: # find the first non-zero value and that becomes our start date (may miss some non-zero dates)
+             min_x = x
+             break
+    
+    counts = counts[min_x:]
+    dates = dates[min_x:]
+    
+    #then, set the y height by the greatest value of Y + some padding.    
+    
     occur = plt.plot(dates, counts, 'r.', label='Occurrences')#, bug_dates, art, 'go') 
         #occur = plt.scatter(dates, date_index, 'b.', label='Occurrences')
     #plot the release dates for Gnome as dashed vertical lines
@@ -54,13 +64,13 @@ def main(df, product, keyword, normalized=True):
     ax.xaxis.set_major_formatter(yearsFmt)
     ax.xaxis.set_minor_locator(months)
 
-    datemin = datetime.date(1997,1,1)
+    datemin = min(dates)
     datemax = datetime.date(2009,5,1)
 
     corr = add_trend(dates, counts)
     
     ax.set_xlim(datemin, datemax)
-    ax.set_ylim(0, max(counts))
+    ax.set_ylim(0, max(counts)+30)
     add_metadata(ax,corr)
     add_label(bug_dates, counts, bug_descr)
     #plt.show()
@@ -76,6 +86,7 @@ def add_trend(x, y):
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     slope, intercept = z
+    print slope
     p = np.poly1d(z)
     trend_line = plt.plot(x, p(new_x), 'k-', label='\^{{y}} = {0:.2} + {1:.2%} x '.format(intercept,slope))
     #plt.text()
@@ -112,12 +123,16 @@ if __name__ == '__main__':
     import pickle
     from names import Taxonomy
     t  = Taxonomy()
-    products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
+    #products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
+    products = ['Totem']
     #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
-    keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
-    
-    filename = 'Totem-Reliability'
-    f = open('/Users/nernst/Desktop/'+ filename)
-    df = pickle.load(f)
-    #save the r2 and slope/intercept numbers externally
-    main(df)
+    #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
+    keywords = ['Reliability']
+    for product in products:
+        for key in keywords:
+            filename = product + '-' + key
+            f = open('/Users/nernst/Desktop/'+ filename)
+            df = pickle.load(f)
+            f.close()
+            #save the r2 and slope/intercept numbers externally
+            main(df, product, key)
