@@ -55,7 +55,7 @@ def main(df, product, keyword, normalized=True):
     
     #then, set the y height by the greatest value of Y + some padding.    
     plt.clf() # clear the figure...
-    occur = plt.plot(dates, counts, 'r.', label='Occurrences')#, bug_dates, art, 'go') 
+    occur = plt.plot(dates, counts, 'r-', label='Occurrences')#, bug_dates, art, 'go') 
         #occur = plt.scatter(dates, date_index, 'b.', label='Occurrences')
     #plot the release dates for Gnome as dashed vertical lines
     rel_lines = plt.vlines(bug_dates, 0, max(counts), color='#616D7E', linestyles='dashed', label='_nolegend_')
@@ -125,7 +125,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Documents/projects/msr/writeup/figures/'+ project + '-'+ signifier + '.png')
+    F.savefig('/Users/nernst/Documents/projects/msr/writeup/figures/'+ project + '-'+ signifier + 'line.png')
         
 if __name__ == '__main__':
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
@@ -139,8 +139,8 @@ if __name__ == '__main__':
     #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
     #keywords = ['Reliability']
     data_dict = {}
-    save_file = open('/Users/nernst/Documents/projects/msr/writeup/data_file.csv', 'w')
-    save_file.write('File-Keyword, r2, slope, intercept')
+    #save_file = open('/Users/nernst/Documents/projects/msr/writeup/data_file.csv', 'w')
+    #save_file.write('File-Keyword, r2, slope, intercept')
     for product in products:
         for key in keywords:
             filename = product + '-' + key
@@ -150,6 +150,6 @@ if __name__ == '__main__':
             f.close()
             #save the r2 and slope/intercept numbers externally
             r2, slope, intercept = main(df, product, key)
-            data_store = [r2,slope,intercept]
+            #data_store = [r2,slope,intercept]
             #data_dict[filename] = data_store
-            save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + '\n')
+            #save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + '\n')
