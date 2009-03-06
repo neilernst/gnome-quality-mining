@@ -2,7 +2,7 @@
 \documentclass[conference, compsoc]{IEEEtran}
 \usepackage{fontspec}
 %\usepackage{amsmath,amssymb,amsthm,supertabular,booktabs,rotating,semantic,subfigure,multirow,colortbl}
-\usepackage{graphicx, url}
+\usepackage{graphicx, url, subfigure}
 \usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
 \usepackage{algorithmic,algorithm}
 \usepackage{xunicode}
@@ -36,7 +36,10 @@ This paper describes a software repository mining technique we call signifier ex
 \label{fig:syngraph}
 \end{figure}
 	
-\section{Signifier extraction}
+\section{Methodology}
+Our dataset is a selection of eight Gnome projects (listed on the Gnome wiki), shown in Fig. \ref{tbl:projects}. The projects were selected to represent a variety of lifespans (from 18 months to 11 years) and code sizes. For each project we extracted text-based datasets: that project's mailing list (except for Ekiga and Empathy which have no apparent mailing list); that project's subversion logs; and finally, the bug comments for the project. We extracted the date, text (which we term an `event'), and source, and placed this information into a MySQL database.
+
+\subsection{Signifier extraction}
 \label{sec:Method}
 \begin{table}
 	\caption{Selected Gnome ecosystem products}
@@ -90,11 +93,25 @@ In semiotics, Peirce drew a distinction drawn between signifier, signified, and 
 \end{algorithm}
 Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term.
 
+Our MySQL queries produced a set of unique events (e.g., a subversion commit message), averaged over a quarter of a year, and the associated time and project. From this we conducted our observations and statistical tests.
+
 \section{Observations}
 \label{sec:observations}
-[The graphs]
+Fig. \ref{fig:ev-line} show two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of mailing list volume changes or commit log volumes. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a first-order regression line, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+ 
+\begin{figure*}[h]
+\centering
+	\subfigure[][Evolution product, Functionality quality. Trend is positive, with some clear spikes before major releases.\label{fig:ev-funct-line:a}]{
+		\includegraphics[width=0.7\textwidth]{figures/Evolution-Functionalityline.png}
+	}
+	\subfigure[][Evolution product, Efficiency quality. Trend is negative, with some clear spikes after major releases.\label{fig:ev-eff-line:b}]{
+	\includegraphics[width=0.4\textwidth]{figures/Evolution-Efficiencyline.png}
+	}
+\label{fig:ev-line}
+\end{figure*}
 
-[Compare excerpt text to events, eg the usability event in Evolution]
+%[Compare excerpt text to events, eg the usability event in Evolution]
+%[where the quarter is ended is important...]
 \subsection{Discussion}
 We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates (plotted as vertical gray lines, above); developer illness, and many others. In many ways this is the purpose of this set of experiments. Nonetheless, one of the key questions this research project initially proposed was `does quality become of greater interest as a project matures', which is shown by the linear regression line. To measure the significance of this relationship, we also measure the squared correlation value, $r^2$, which ranges from 0--1, where 1 indicated perfect correlation.
 %Multi-level modeling
