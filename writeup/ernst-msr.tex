@@ -22,13 +22,13 @@ John Mylopoulos\\Dept. of Computer Science\\University of Toronto\\jm@cs.toronto
 \maketitle
 
 \begin{abstract}
-We describe a repository mining technique we call signifier extraction. We generate signifiers using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we search for the signifiers over three month, quarterly intervals. The occurrence of our signifiers forms an evolutionary pattern that we analyze statistically and historically. We show that it is possible to reconstruct the historical evolution of project responses to external forcings, such as release cycles and audits. [numbers?]
+This paper describes a software repository mining technique we call signifier extraction. Signifiers are keywords about software quality that we generate using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we search for the signifiers over three month, quarterly intervals. The occurrence of our signifiers forms an evolutionary pattern that we analyze statistically and historically. We show that it is possible to reconstruct the historical evolution of software qualities as responses to external forcings, such as release cycles and usability audits. %[numbers?]
 \end{abstract}
 
 \section{Introduction}\label{sect:introduction}%Aim
 \begin{quote}[My impression] is of a large project in a state of marginal returns, in which a larger and larger part of the effort goes to maintenance. -- Andy Wingo, Gnome developer, June 2008.\footnote{http://wingolog.org/archives/2008/06/07/gnome-in-the-age-of-decadence}\end{quote}
-	This quote, from a participant in the Gnome ecosystem (a developer), captures some of what this paper tries to elucidate. Is it the case that as projects mature the focus and effort of the developers must turn to maintenance tasks\cite{Swanson1976}? Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first requirement we have is for some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, like the work of [who]. Our approach is focused on the conversations developers have (with each other or with `users') [refer to various players in OSS -- Scacchi?]. To identify when `effort goes to maintenance', we assume that a discussion that uses some signifiers for various maintenance properties -- defined as ISO9126 software quality model [not really maintenance, maintenance is more like bug fixes and incrementalism]
-	
+	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explain. Is it the case that as projects mature the focus and effort of the developers must turn to maintenance tasks\cite{Swanson1976}? Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first is that there is some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, using, for example, formal concept analysis~\cite{breu06msr}. Our approach, by contrast, is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we begin by assuming that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
+
 \begin{figure}[b]
 \centering
 \includegraphics[width=0.4\textwidth]{synonym-graph.png}
@@ -36,7 +36,8 @@ We describe a repository mining technique we call signifier extraction. We gener
 \label{fig:syngraph}
 \end{figure}
 	
-\section{Signifier extraction} %Method
+\section{Signifier extraction}
+\label{sec:Method}
 \begin{table}
 	\caption{Selected Gnome ecosystem products}
 	\centering
@@ -59,7 +60,7 @@ Empathy &C & 55 & 1.5\\
 \end{tabular}
 \end{table}
 
-In semiotics, Peirce first made the distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain (Wordnet is not domain-specific). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
+In semiotics, Peirce drew a distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain (Wordnet is not domain-specific). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
 
 \renewcommand{\algorithmiccomment}[1]{// #1}
 \begin{algorithm}[H]
@@ -90,7 +91,10 @@ In semiotics, Peirce first made the distinction drawn between signifier, signifi
 Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term.
 
 \section{Observations}
+\label{sec:observations}
 [The graphs]
+
+[Compare excerpt text to events, eg the usability event in Evolution]
 \subsection{Discussion}
 We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates (plotted as vertical gray lines, above); developer illness, and many others. In many ways this is the purpose of this set of experiments. Nonetheless, one of the key questions this research project initially proposed was `does quality become of greater interest as a project matures', which is shown by the linear regression line. To measure the significance of this relationship, we also measure the squared correlation value, $r^2$, which ranges from 0--1, where 1 indicated perfect correlation.
 %Multi-level modeling
@@ -107,7 +111,7 @@ We performed some (simple) error checking on our results. What we wanted to veri
 Signified quality & F.P. Rate  \\
 \hline
 \hline
-Usability & 0.01\\ \hline
+Usability & 0.06\\ \hline
 Portability & \\ \hline
 Maintainability & \\ \hline
 Reliability & \\ \hline
@@ -116,18 +120,22 @@ Functionality & \\ \hline
 \end{tabular}
 \end{table}
 
-\section{Threats}
-missing words and phrases that are related to the signifier but don't contain it (e.g., ``can't find the submit button" vs. ``usability")). 
-mentions that aren't related to product
-normalize? We don't, because we are interested in absolute numbers. For example, suppose that in the month prior to the release we get a huge spike in mailing list traffic, as the developers work out the features to be frozen. We want to retain the absolute number of events, not relative. Maybe not, maybe we want both.
-Some words are not well-defined in general purpose ways like Wordnet or general dictionaries.
-Some signified terms are defined by more signifiers, which should skew their occurrence counts.
+\subsection{Threats to validity}
+missing words and phrases that are related to the signifier but don't contain it (e.g., ``can't find the submit button" vs. ``usability")). \\
+normalize? We don't, because we are interested in absolute numbers. For example, suppose that in the month prior to the release we get a huge spike in mailing list traffic, as the developers work out the features to be frozen. We want to retain the absolute number of events, not relative. Maybe not, maybe we want both.\\
+Some words are not well-defined in general purpose ways like Wordnet or general dictionaries.\\
+Some signified terms are defined by more signifiers, which should skew their occurrence counts.\\
+\subsection{Related Work}
+Part of our efforts with this project is to reconstruct a history of the software product's evolution, a notion we first discussed in \ref{ernst07icsm}. That idea is derived from, in part, work on that narratives of software systems shown in, for example, academic work like \cite{Anton2001} or more general-purpose works like \cite{box93c++}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
+
 \section{Future work and conclusions}
 [did we see a trend]
-[social element: who is doing what, new people come in.. case study?]
+
+[social element: who is doing what, new people come in case study?] ~\cite{Scacchi2002} on requirements for developing OSS software.
+
 [other sources, eg Gnome usability mailing list] %http://mail.gnome.org/mailman/listinfo/usability]
 \section{Appendix}
-Source code, data, and related discussions are available at \url{http://neilernst.net/msr09/}.
+Source code, processed data, and related discussions are available at \url{http://neilernst.net/archives/tag/msr/}.
 \begin{footnotesize}
 \bibliography{msr}
 \end{footnotesize}
