@@ -72,7 +72,7 @@ def main(df, product, keyword, normalized=True):
     ax.set_xlim(datemin, datemax)
     ax.set_ylim(0, max(counts)+30)
     add_metadata(ax,corr)
-    add_label(bug_dates, counts, bug_descr)
+    add_label(dates, bug_dates, counts, bug_descr)
     #plt.show()
     export()
     
@@ -88,22 +88,26 @@ def add_trend(x, y):
     slope, intercept = z
     print slope
     p = np.poly1d(z)
-    trend_line = plt.plot(x, p(new_x), 'k-', label='\^{{y}} = {0:.2} + {1:.2%} x '.format(intercept,slope))
+    trend_line = plt.plot(x, p(new_x), 'k-', label='\^{{y}} = {0:.2f} + {1:.2f} x '.format(intercept,slope))
     #plt.text()
     return corr
     
-def add_label(bug_dates, counts, bug_descr):
+def add_label(dates, bug_dates, counts, bug_descr):
     """ label the release lines, and add a legend. corr is the correlation coefficient"""
-    plt.legend(loc=10,numpoints=1,shadow=True)
+    for x in range(len(bug_date)):
+        if bug_date[x] >= date[x]:
+            min_date = x
+            break
+    
+    plt.legend(loc=0,numpoints=1,shadow=True) #10 is middle
     i = 0
-    for date in bug_dates:
+    for bug_date in bug_dates:
     #each date position, at the maximum height, add the text of that date's release, vertically rotated
-        plt.text(date,max(counts), bug_descr[i], rotation='vertical')
+        plt.text(bug_date,max(counts), bug_descr[i], rotation='vertical')
         i = i + 1
     #plt.text(datetime.date(2005,03,02), max(normal_counts) - 20, r'$r^2$={0:.2%}'.format(r2), zorder=3, bbox=dict(facecolor='red', alpha=0.5))
     
 def add_metadata(ax,corr):
-    #ax.grid(True)
     r2 = corr * corr #r2 value, between 0-1
     plt.ylabel('Frequency (events/total events * 1000)')#("Frequency")
     plt.xlabel("Date")
