@@ -75,6 +75,7 @@ def main(df, product, keyword, normalized=True):
     add_label(dates, bug_dates, counts, bug_descr)
     #plt.show()
     export()
+    return 
     
 def add_trend(x, y):
     """Add the least-squares linear regression, and corr. coeff"""
@@ -94,11 +95,12 @@ def add_trend(x, y):
     
 def add_label(dates, bug_dates, counts, bug_descr):
     """ label the release lines, and add a legend. corr is the correlation coefficient"""
-    for x in range(len(bug_date)):
-        if bug_date[x] >= date[x]:
+    for x in range(len(bug_dates)):
+        if bug_dates[x] >= dates[0]:
             min_date = x
             break
-    
+    bug_dates = bug_dates[min_date:]
+    bug_descr = bug_descr[min_date:] # align these dates with the start date of the project
     plt.legend(loc=0,numpoints=1,shadow=True) #10 is middle
     i = 0
     for bug_date in bug_dates:
@@ -127,11 +129,14 @@ if __name__ == '__main__':
     import pickle
     from names import Taxonomy
     t  = Taxonomy()
-    #products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
-    products = ['Totem']
+    products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
+    #products = ['Totem']
     #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
-    #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
-    keywords = ['Reliability']
+    keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
+    #keywords = ['Reliability']
+    data_dict = {}
+    save_file = open('/Users/nernst/Desktop/data_file.csv', 'w')
+    
     for product in products:
         for key in keywords:
             filename = product + '-' + key
@@ -139,4 +144,7 @@ if __name__ == '__main__':
             df = pickle.load(f)
             f.close()
             #save the r2 and slope/intercept numbers externally
-            main(df, product, key)
+            r2, slope, intercept = main(df, product, key)
+            data_store = [r2,slope,intercept]
+            data_dict[filename] = data_store
+            save_file.write(filename,)
