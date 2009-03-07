@@ -6,7 +6,7 @@
 \usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
 \usepackage{algorithmic,algorithm}
 \usepackage{xunicode}
-\usepackage{colortbl}
+\usepackage{colortbl,longtable}
 \usepackage{xltxtra}
 \defaultfontfeatures{Mapping=tex-text}
 \setmainfont{Times New Roman}
@@ -27,7 +27,11 @@ This paper describes a software repository mining technique we call signifier ex
 
 \section{Introduction}\label{sect:introduction}%Aim
 \begin{quote}[My impression] is of a large project in a state of marginal returns, in which a larger and larger part of the effort goes to maintenance. -- Andy Wingo, Gnome developer, June 2008.\footnote{http://wingolog.org/archives/2008/06/07/gnome-in-the-age-of-decadence}\end{quote}
-	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explain. Is it the case that as projects mature the focus and effort of the developers must turn to maintenance tasks\cite{Swanson1976}? Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first is that there is some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, using, for example, formal concept analysis~\cite{breu06msr}. Our approach, by contrast, is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we begin by assuming that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
+	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explain. Is it the case that as projects mature the focus and effort of the developers must turn to maintenance tasks\cite{Swanson1976}? Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first is that there is some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, using, for example, formal concept analysis~\cite{breu06msr}. Our approach, by contrast, is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we begin by assuming that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. 
+
+[some mention of how this is an exploratory study]	
+	
+Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
 
 \begin{figure}[b]
 \centering
@@ -37,10 +41,10 @@ This paper describes a software repository mining technique we call signifier ex
 \end{figure}
 	
 \section{Methodology}
-Our dataset is a selection of eight Gnome projects (listed on the Gnome wiki), shown in Fig. \ref{tbl:projects}. The projects were selected to represent a variety of lifespans (from 18 months to 11 years) and code sizes. For each project we extracted text-based datasets: that project's mailing list (except for Ekiga and Empathy which have no apparent mailing list); that project's subversion logs; and finally, the bug comments for the project. We extracted the date, text (which we term an `event'), and source, and placed this information into a MySQL database.
+\label{sec:Method}
+Our dataset is a selection of eight Gnome projects (listed on the Gnome wiki), shown in Table \ref{tbl:projects}. The projects were selected to represent a variety of lifespans (from 18 months to 11 years) and code sizes. For each project we extracted text-based datasets: that project's mailing list (except for Ekiga and Empathy which have no apparent mailing list); that project's subversion logs; and finally, the bug comments for the project. We extracted the date, text (which we term an `event'), and source, and placed this information into a MySQL database.
 
 \subsection{Signifier extraction}
-\label{sec:Method}
 \begin{table}
 	\caption{Selected Gnome ecosystem products}
 	\centering
@@ -91,13 +95,13 @@ In semiotics, Peirce drew a distinction drawn between signifier, signified, and 
 
 \end{algorithmic}
 \end{algorithm}
-Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term.
+Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term, as shown in Fig. \ref{fig:syngraph}. An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). 
 
-Our MySQL queries produced a set of unique events (e.g., a subversion commit message), averaged over a quarter of a year, and the associated time and project. From this we conducted our observations and statistical tests.
+Our MySQL queries produced a set of unique events (e.g., a subversion commit message), averaged over quarters of years, and the associated time and project. From this we conducted our observations and statistical tests.
 
 \section{Observations}
 \label{sec:observations}
-Fig. \ref{fig:ev-eff-line} and Fig. \ref{fig:ev-eff-line} show two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of mailing list volume changes or commit log volumes. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a first-order regression line, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+Fig. \ref{fig:ev-func-line} and Fig. \ref{fig:ev-eff-line} show two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of mailing list volume changes or commit log volumes. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a first-order regression line, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
  
 % \begin{figure*}[h]
 % \centering
@@ -130,6 +134,37 @@ Fig. \ref{fig:ev-eff-line} and Fig. \ref{fig:ev-eff-line} show two examples of o
 \subsection{Discussion}
 We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates (plotted as vertical gray lines, above); developer illness, and many others. In many ways this is the purpose of this set of experiments. Nonetheless, one of the key questions this research project initially proposed was `does quality become of greater interest as a project matures', which is shown by the linear regression line. To measure the significance of this relationship, we also measure the squared correlation value, $r^2$, in percentage, where 100\% indicated perfect correlation.
 %Multi-level modeling
+
+\begin{table}
+	\caption{Selected summary statistics}
+	\centering
+	\label{tbl:projects}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor[gray]{.9} 
+File-Keyword &  $r^2$ &  slope \\
+Evolution-Efficiency & 0.07 & -0.38 \\
+Evolution-Portability & 0.12 & -0.36 \\
+Evolution-Maintainability & 0.05 & -0.27 \\
+Evolution-Reliability & 0.08 & -0.29 \\
+Evolution-Functionality & 0.05 & 0.92 \\
+Evolution-Usability & 0.12 & -1.38 \\
+Nautilus-Efficiency & 0.19 & -4.77 \\
+Nautilus-Portability & 0.11 & -0.51 \\
+Nautilus-Maintainability & 0.37 & -1.49 \\
+Nautilus-Reliability & 0.38 & -1.00 \\
+Nautilus-Functionality & 0.26 & -4.22 \\
+Nautilus-Usability & 0.23 & -7.96 \\
+Totem-Efficiency & 0.03 & -1.86 \\
+Totem-Portability & 0.06 & -0.35 \\
+Totem-Maintainability & 0.00 & 0.02 \\
+Totem-Reliability & 0.02 & 0.19 \\
+Totem-Functionality & 0.16 & -1.87 \\
+Totem-Usability & 0.33 & -1.97 \\
+\hline
+\end{tabular}
+\end{table}
+
 \paragraph{Explanatory theories}
 One possible explanation for the behaviour of our datasets, which are only loosely correlated with time, is that events are dictated by a change in release cycle. For example, the conjecture is that as a major Gnome release gets closer, more discussion occurs of efficiency, for example. \\
 \emph{Set windows at each release to see what is happening prior and after the release (e.g., unit of analysis becomes the release period, not `quarters')\\
