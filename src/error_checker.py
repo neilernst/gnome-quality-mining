@@ -28,26 +28,28 @@ def get_counts(keyword):
         store_cursor.execute(query_string)
         yes = 0.0
         no = 0.0
+        i = 0
         for result in store_cursor.fetchall():
         #result = str(store_cursor.fetchall().values()[0]) #{'count(*)': 6L} dict
             print result.values()[0]
-            answer = raw_input("******\nRelevant (y/n): ")
+            i = i + 1
+            answer = raw_input("\n******\n"+ str(i) + "/100 Relevant (y/n): ")
             #wait for user input
             #y for relevant, N for irrelevant
             if answer == 'y':
                 yes = yes + 1.0
             else:
                 no = no + 1.0
-        rate = yes/float(total)
-        print "Number of negatives was %s" % (no)
-        print "Error rate for term %s was: %s" % (keyword, str(rate))
+        rate = no/float(total)
+        print "Number of matches was %s" % (yes)
+        print "False positive rate for term %s was: %s" % (keyword, str(rate))
     except (ValueError):
         print 'Error in query syntax'   
                
 def main():
    from names import Taxonomy
    t = Taxonomy()
-   signifiers = t.get_signifiers('Efficiency')
+   signifiers = t.get_signifiers('Maintainability')
    signifier_list = ''
    for signifier in signifiers:
        signifier_list = signifier + ' ' + signifier_list

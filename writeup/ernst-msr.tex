@@ -67,7 +67,7 @@ Empathy &C & 55 & 1.5\\
 \end{tabular}
 \end{table}
 
-In semiotics, Peirce drew a distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain (Wordnet is not domain-specific). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
+In semiotics, Peirce drew a distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain (Wordnet is not domain-specific). A complete list is available online (see Section \ref{appendix}). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
 
 \renewcommand{\algorithmiccomment}[1]{// #1}
 \begin{algorithm}[H]
@@ -98,6 +98,8 @@ In semiotics, Peirce drew a distinction drawn between signifier, signified, and 
 Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term, as shown in Fig. \ref{fig:syngraph}. An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). 
 
 Our MySQL queries produced a set of unique events (e.g., a subversion commit message), averaged over quarters of years, and the associated time and project. From this we conducted our observations and statistical tests.
+
+%Usability $\rightarrow$ Operability Understandability Learnability useable usable serviceable usefulness utility useableness usableness serviceableness serviceability usability
 
 \section{Observations}
 \label{sec:observations}
@@ -188,11 +190,12 @@ We performed error analysis on our results. What we wanted to verify was the per
 Signified quality & F.P. Rate  \\
 \hline
 \hline
-Usability & 0.06\\ \hline
-Portability & \\ \hline
+Usability & 0.19\\ \hline
+Portability & 0.29\\ \hline
 Maintainability & \\ \hline
 Reliability & \\ \hline
 Functionality & \\ \hline
+Efficiency & 0.41\\ \hline
 \hline
 \end{tabular}
 \end{table}
@@ -212,8 +215,11 @@ Our ultimate goal is to be able to extract, from available sources, a list of re
 
 A secondary direction is related to the social aspect of software development. Each event in our database is initiated by somebody and involves other contributors. It would be interesting to see whether certain individuals are responsible solely for particular software qualities. Hindle et al., in \cite{hindle09icpc}, showed that such information contains a high degree of signal.
 
-\section{Appendix}
+\section{Appendix and acknowledgements}
+\label{appendix}
 Source code, processed data, and related discussions are available at \url{http://neilernst.net/archives/tag/msr/}.
+
+Thanks to the comments of the software engineering group at the University of Toronto.
 \begin{footnotesize}
 \bibliography{msr}
 \end{footnotesize}
