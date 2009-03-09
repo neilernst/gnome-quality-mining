@@ -38,7 +38,7 @@ class Taxonomy():
     portability =  portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
     efficiency_spell = []
-    efficiency_syn = ['performance'] # added from personal experience...
+    efficiency_syn = ['performance', 'efficiency'] # added from personal experience...
     efficiency_hyper = ['ratio']
     efficiency_deriv = ['efficient']
     efficiency_meronym = ['"time behaviour"', '"resource behaviour"'] #as defined in iso9126
