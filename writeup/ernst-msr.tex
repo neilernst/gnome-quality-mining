@@ -179,7 +179,7 @@ Our approach allows us to target our historical analysis more precisely. (Error 
 %TODO Expand this. Use a series of checks, starting with Gnome release/project release date, mailing list threads, source code, wider events (Sept 11)
 \emph{Analysis of key peaks in selected graphs}
 \subsection{Accuracy}
-We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged less than 25\% of the events.
+We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events.
 
 \begin{table}
 	\caption{False positive rates}
@@ -194,7 +194,7 @@ Usability & 0.19\\ \hline
 Portability & 0.29\\ \hline
 Maintainability & 0.13\\ \hline
 Reliability & 0.23\\ \hline
-Functionality & \\ \hline
+Functionality & 0.14 \\ \hline
 Efficiency & 0.41\\ \hline
 \hline
 \end{tabular}
