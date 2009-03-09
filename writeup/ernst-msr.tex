@@ -132,11 +132,11 @@ Fig. \ref{fig:ev-func-line} and Fig. \ref{fig:ev-eff-line} show two examples of 
 %[Compare excerpt text to events, eg the usability event in Evolution]
 %[where the quarter is ended is important...]
 \subsection{Discussion}
-We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates (plotted as vertical gray lines, above); developer illness, and many others. In many ways this is the purpose of this set of experiments. Nonetheless, one of the key questions this research project initially proposed was `does quality become of greater interest as a project matures', which is shown by the linear regression line. To measure the significance of this relationship, we also measure the squared correlation value, $r^2$, in percentage, where 100\% indicated perfect correlation.
+We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:ev-eff-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. We determined that projects with fewer than five years of lifespan simply lacked the data to make any useful judgements. Accordingly, Table \ref{tbl:projects} lists the three longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) numbers for each quality. We ended up with largely 
 %Multi-level modeling
 
 \begin{table}
-	\caption{Selected summary statistics}
+	\caption{Selected summary statistics, normalized}
 	\centering
 	\label{tbl:projects}
 \begin{tabular}{|c|c|c|}
@@ -198,14 +198,15 @@ normalize? We don't, because we are interested in absolute numbers. For example,
 Some words are not well-defined in general purpose ways like Wordnet or general dictionaries.\\
 Some signified terms are defined by more signifiers, which should skew their occurrence counts.\\
 \subsection{Related Work}
-Part of our efforts with this project is to reconstruct a history of the software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001} or more general-purpose works like \cite{waldo93}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}. Hindle et al., in \cite{hindle09icpc}, use machine learning to classify code commits into maintenance categories. It would be interesting to extend this system with pre-determined concepts.
+Part of our efforts with this project is to reconstruct a history of the software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001} or more general-purpose works like \cite{waldo93}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
 
-\section{Future work and conclusions}
-[did we see a trend]
+\section{Conclusions and future work}
+In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained some of the larger spikes by examining the external events that might be causative. These conclusions are qualitative, but draw on historiographical techniques for support.
 
-[social element: who is doing what, new people come in case study?] ~\cite{Scacchi2002} on requirements for developing OSS software.
+Our ultimate goal is to be able to extract, from available sources, a list of requirements for a project, so that we can trace not just the `physical' changes in the codebase, but also the evolving features and goals inherent in a project. We plan to continue our experiments with repository mining with this in mind. In all likelihood, we will need to expand both our taxonomy (to be more software development specific) and our data sources (including source code comments or wiki pages, for example).
 
-[other sources, eg Gnome usability mailing list] %http://mail.gnome.org/mailman/listinfo/usability]
+A secondary direction is related to the social aspect of software development. Each event in our database is initiated by somebody and involves other contributors. It would be interesting to see whether certain individuals are responsible solely for particular software qualities. Hindle et al., in \cite{hindle09icpc}, showed that such information contains a high degree of signal.
+
 \section{Appendix}
 Source code, processed data, and related discussions are available at \url{http://neilernst.net/archives/tag/msr/}.
 \begin{footnotesize}
