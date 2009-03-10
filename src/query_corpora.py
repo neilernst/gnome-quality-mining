@@ -44,7 +44,10 @@ def get_counts(keyword, product, q, year):
                         product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
                         cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
 
-    #TODO: query both tables,
+# much better query, use yearweek(function)
+# select yearweek(msr_date) as 'year-week', count(*) from data_objects.t_data where product = 'Nautilus' and match(event) against ('"resource behaviour" "time behaviour" efficient ratio efficiency performance' in boolean mode)
+# UNION ALL 
+# select yearweek(msr_date) as 'year-week',count(*) from data_objects.data where product = 'Nautilus' and match(event) against ('"resource behaviour" "time behaviour" efficient ratio efficiency performance' in boolean mode) group by yearweek(msr_date) order by 'year-week' asc
     #e.g. select count(*) from data where match(event) against ('usability useful' in boolean mode) and product = 'nautilus' and  msr_date between cast('2001-01' as Datetime) and cast('2004-03' as Datetime)
     #this query determines total events overall (to normalize against)               
     totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
