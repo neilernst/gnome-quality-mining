@@ -103,7 +103,7 @@ Our MySQL queries produced a set of unique events (e.g., a subversion commit mes
 
 \section{Observations}
 \label{sec:observations}
-Fig. \ref{fig:ev-func-line} and Fig. \ref{fig:ev-eff-line} show two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of mailing list volume changes or commit log volumes. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a first-order regression line, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+Fig. \ref{fig:naut-use-line} and Fig. \ref{fig:ev-eff-line} shows two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
  
 % \begin{figure*}[h]
 % \centering
@@ -120,15 +120,15 @@ Fig. \ref{fig:ev-func-line} and Fig. \ref{fig:ev-eff-line} show two examples of 
 \begin{minipage}[b]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png} %\textwidth
-\label{fig:ev-eff-line}
-\caption{Nautilus product, Usability quality. Trend is negative, with some clear spikes after major releases.}
+\label{fig:naut-use-line}
+\caption{Product: Nautilus, Quality: Usability}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Evolution-Efficiencyline.png}
-\label{fig:ev-func-line}
-\caption{Evolution product, Efficiency quality. Trend is positive, with some clear spikes before major releases.}
+\label{fig:ev-eff-line}
+\caption{Product: Evolution, Quality: Efficiency}
 \end{minipage}
 \end{figure*}
 
@@ -175,9 +175,11 @@ One possible explanation for the behaviour of our datasets, which are only loose
 \emph{Set windows at each release to see what is happening prior and after the release (e.g., unit of analysis becomes the release period, not `quarters')}\\
 The second explanation is that the data are independent of software age, or release cycle, and are instead responding to external events. For example, there may be a usability audit, or a review by a major news source of the performance of the project, etc. Accordingly, we chose two products -- Evolution, a calendar and email application, and Nautilus, a web browser and file manager, for more detailed analysis. We examined Efficency (including performance) and Usability events for each, choosing two major peaks for each to attempt some historical analysis. 
 
+\paragraph{Using release windows} -- One possibility reason for variance in the event curves is that we are using the wrong time windows. It is possible that the peak event occurrences are more strongly correlated with the time prior to a major release. In the left side of Fig. \ref{naut-use-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release.
+
 Our approach allows us to target our historical analysis more precisely. (Error check the non-peaks if this is to be true)
 %TODO Expand this. Use a series of checks, starting with Gnome release/project release date, mailing list threads, source code, wider events (Sept 11)
-\emph{Analysis of key peaks in selected graphs}
+\paragraph{Analysis of key peaks in selected graphs} - 
 \subsection{Accuracy}
 We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events.
 
