@@ -36,7 +36,7 @@ for release in releases:
 # print release_map.pop(199941).get_release_name()
     
 #this is a bin for dates of events AFTER that particular date but prior to the next event   
-reader = csv.reader(open(ev_eff, 'rb'))
+reader = csv.reader(open(naut_eff, 'rb'))
 ev_eff_list = [x for x in reader] # a list of lists of format [yearweeknum, occur_count
 
 tmp = gnome_dates_dict.keys()
@@ -69,11 +69,11 @@ for window in tmp2:
                 for i in range(len(dates)):
                    new_x.append(i)
                 int_corr = np.corrcoef(new_x, values)
-                corr = int_corr[0][1]
-                print release_map[window].get_release_name(), str(corr)
+                corr = int_corr[0][1] #note, not r^2 value
                 y = [float(x) for x in values]
                 z = np.polyfit(new_x, y, 1) # a 1-degree regression
                 slope, intercept = z
-                print slope
+                print len(values)
+                #print release_map[window].get_release_name() + ', '+ str(corr) + ', ' + str(slope) + ', ' + str(len(values))
 
             
