@@ -22,21 +22,23 @@ John Mylopoulos\\Dept. of Computer Science\\University of Toronto\\jm@cs.toronto
 \maketitle
 
 \begin{abstract}
+	%TODO rewrite
+	
 This paper describes a software repository mining technique we call signifier extraction. Signifiers are keywords about software quality that we generate using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we search for the signifiers over three month, quarterly intervals. The occurrence of our signifiers forms an evolutionary pattern that we analyze statistically and historically. We show that it is possible to reconstruct the historical evolution of software qualities as responses to external forcings, such as release cycles and usability audits. %[numbers?]
 \end{abstract}
 \vspace{-2mm}
 \section{Introduction}\label{sect:introduction}%Aim
 \vspace{-2mm}
 \begin{quote}[My impression] is of a large project in a state of marginal returns, in which a larger and larger part of the effort goes to maintenance. -- Andy Wingo, Gnome developer, June 2008.\footnote{http://wingolog.org/archives/2008/06/07/gnome-in-the-age-of-decadence}\end{quote}
-	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explore. Is it the case that as projects mature the focus and effort of the developers turns to maintenance tasks, and in particular, software quality? %\cite{Swanson1976}? %Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). 
-We are interested in the way in which participants in a project ecosystem conceive of and discuss software qualities, such as usability or performance. Software quality can be seen as a global taxonomy, independent of a specific domain, differing among projects only in degree of interest. The issue of usability, for example, is a concern in both safety-critical software and desktop widgets. 
+	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explore. Is it the case that as projects mature the focus and effort of the developers turns to maintenance tasks and software quality? 
+%\cite{Swanson1976}? %Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). 
+We are interested in the way in which participants in a project ecosystem conceive of and discuss software qualities, such as usability or performance. The components of software quality form a global taxonomy, independent of a specific domain, differing among projects only in degree of interest. The issue of usability, for example, is a concern in both safety-critical software and desktop widgets. 
 
-This paper describes two exploratory experiments designed to see whether we can better understand the role software quality plays in project discussions. Our approach is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we further assume that discussion about software quality is an effort spent on maintenance, and moreover, that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. 
+This paper describes two exploratory experiments designed to see whether empirical data can cast light on the role software quality plays in project discussions. Our approach is focused on the conversations developers have (with each other, or with `users'). We seek to identify when project discussions are about software quality. We assume that these discussions involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. We then conduct two experiments. In one, we examine the relationship between time and signifier occurrence. In the second, we examine the role different signifiers play in different projects. 
 	
 Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
 
-\noindent\textbf{Related Work}
-Part of our efforts with this project is to reconstruct a history of the software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001} or more general-purpose works like \cite{waldo93}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
+\noindent\textbf{Related Work} -- Part of our effort with this project is to reconstruct a history of a software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001} or more general-purpose works like \cite{waldo93}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
 	
 \vspace{-2mm}
 \section{Methodology}
@@ -67,10 +69,10 @@ Empathy &C & 55 & 1.5\\
 \end{tabular}
 \end{table}
 
-In semiotics, Peirce drew a distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain.% (Wordnet is not domain-specific). %A complete list is available online (see Section \ref{appendix}). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
+In semiotics, Peirce drew a distinction drawn between signifier, signified, and sign~\cite{atkin2006}. In this work, we make use of signifiers -- words like `usability' and `usable' -- to capture the occurrence in our corpora of the signified -- in this example, the concept `usability'. We extract our signified, concept words from the ISO 9126 quality model~\cite{iso9126}. There is some debate about the significance and importance of the terms in this model. However, it is ``an international standard and thus provides an internationally accepted terminology for software quality~\cite[p. 58]{Boegh2008},'' which is sufficient for the purposes of this research. Whether this taxonomy mirrors that of individual developers is an open research question. The model is used to refer to both external and internal views of quality (for example, bugs filed by users would be external qualities, whereas an email discussion of features to come would be internal). We generate the signifiers from Wordnet~\cite{Fellbaum1998}, an English-language `lexical database' that contains semantic relations between words, including meronymy and synonymy. We extract words using the procedure defined in \ref{alg1}. The only deviation we made was to add the term `performance' to the synonyms for `efficiency', since this seems like a common synonym in this domain.% (Wordnet is not domain-specific). %A complete list is available online (see Section \ref{appendix}). %This factor shows up in the higher error rates, particulary for two word terms like time behaviour.
 
 \renewcommand{\algorithmiccomment}[1]{// #1}
-\begin{algorithm}[H]
+\begin{algorithm}[ht]
 \caption{Defining signified terms extensionally}
   \label{alg1}
 \begin{algorithmic}
@@ -95,20 +97,41 @@ In semiotics, Peirce drew a distinction drawn between signifier, signified, and 
 
 \end{algorithmic}
 \end{algorithm}
-Note, we do not currently look for common misspellings or other languages (the primary language is English, at any rate). This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term, as shown in Fig. \ref{fig:syngraph}. An event is any row in the table which contains at least one term in the bubble (i.e., don't double count). Our MySQL queries produced a set of unique events (e.g., a subversion commit message), averaged over quarters of years, and the associated time and project. From this we conducted our observations and statistical tests.
+We do not look for common misspellings or other languages. This algorithm gives us a linguistic `bubble' which we use to extensionally define the signified term, as shown in Fig. \ref{fig:syngraph}. An event is any row in the table which contains at least one term in the bubble (i.e., we don't double count). Our MySQL queries produced a set of unique events (e.g., a subversion commit message), per week, and the associated time and project. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. From this we conducted our observations and statistical tests.
 
-\begin{figure}[b]
+\begin{figure}[]
 \centering
 \includegraphics[width=0.4\textwidth]{synonym-graph.pdf}
 \caption{An extensional definition of usability, showing in dashed lines those concepts outside our signifier `bubble'.}
 \label{fig:syngraph}
 \end{figure}
 
-\section{Observations}
-\label{sec:observations}
-Fig. \ref{fig:naut-usa-line} and Fig. \ref{fig:ev-eff-line} shows two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+\noindent\textbf{Accuracy} -- We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events.
 
-\begin{figure*}[ht]
+\begin{table}
+	\caption{False positive rates}
+	\centering
+	\label{tbl:error}
+\begin{tabular}{|c|c|}
+\hline
+Signified quality & F.P. Rate  \\
+\hline
+\hline
+Usability & 0.19\\ \hline
+Portability & 0.29\\ \hline
+Maintainability & 0.13\\ \hline
+Reliability & 0.23\\ \hline
+Functionality & 0.14 \\ \hline
+Efficiency & 0.41\\ \hline
+\hline
+\end{tabular}
+\end{table}
+
+\section{Observations and dicussion}
+\label{sec:observations}
+Fig. \ref{fig:naut-usa-line} and Fig. \ref{fig:ev-eff-line} plot quality events vs. time for two products and qualities. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+
+\begin{figure*}[]
 \begin{minipage}[]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png} 
@@ -124,10 +147,9 @@ Fig. \ref{fig:naut-usa-line} and Fig. \ref{fig:ev-eff-line} shows two examples o
 \end{minipage}
 \end{figure*}
 
-\vspace{-2mm}
-\subsection{Discussion}
-\vspace{-2mm}
-
+% \vspace{-2mm}
+% \subsection{}
+% \vspace{-2mm}
 We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:ev-eff-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. Due to space constraints, Table \ref{tbl:summary} lists only the two longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) values for each quality. We ended up with largely conflicting numbers. 
 
 \begin{table}
@@ -137,7 +159,7 @@ We include a linear regression of the number of occurrences against the date. Th
 \begin{tabular}{|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-File-Keyword &  $r^2$ &  slope \\ \hline
+Project-Quality &  $r^2$ &  slope \\ \hline
 Evolution-Efficiency & 0.07 & -0.38 \\
 Evolution-Portability & 0.12 & -0.36 \\
 Evolution-Maintainability & 0.05 & -0.27 \\
@@ -163,13 +185,13 @@ Nautilus-Usability & 0.23 & -7.96 \\
 We therefore sought alternative explanations for the patterns seen in our data. We first investigated smaller event windows, based around the period between major Gnome releases; secondly, we used the identified peaks in the data to explore possible causative events. We chose the Efficiency (performance) and Usability qualities for further exploration.
 
 \begin{table}
-	\caption{Normalized statistics for release window technique}
+	\caption{Release window technique (normalized)}
 	\centering
 	\label{tbl:windows}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-File-Keyword & Release \# & $r^2$ & slope & N\\ \hline
+Project-Quality & Release \# & $r^2$ & slope & N\\ \hline
 Evolution-Eff. & 2.8 & 0.04 & -0.13 & 20 \\
  & 2.24 & 0.62 & -1.13 & 7\\ \hline
 Evolution-Usab. & 2.8 & 0.04 & 1.32 & 24\\
@@ -178,43 +200,42 @@ Nautilus-Eff. & 2.8 & 0.00 & -0.23 & 14 \\
  & 2.24 & 0.75 & -6.64 & 4 \\ \hline
 Nautilus-Usability & 2.8 & 0.38 & 1.07 & 26\\
  & 2.24 & 0.01 & 0.97 & 14\\
-
 \hline
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Using release windows} -- It's possible that the peak event occurrences are more strongly correlated with the time period prior to a major release, that is, cyclical. In Fig. \ref{fig:naut-usa-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases (starting with release 2.8, in which Evolution was synchronized with Gnome). For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are not predictive. 
+\noindent\textbf{Using release windows} -- It is possible that the peak event occurrences are more strongly correlated with the time period prior to a major release, that is, cyclical. In Fig. \ref{fig:naut-usa-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases (starting with release 2.8, in which Evolution was synchronized with Gnome). For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are not predictive. 
 
 \noindent\textbf{Analysis of key peaks in selected graphs} - The final explanation we explore is that the data are independent of software age, or release cycle, and are instead responding to external events. For example, there may be a usability audit, or a review by a major news source of the performance of the project, etc. Accordingly, we chose two products -- Evolution, a calendar and email application, and Nautilus, a web browser and file manager, for more detailed analysis. We examined Efficency (including performance) and Usability events for each, choosing a major peak for each to attempt some historical analysis. Our approach allows us to target our historical analysis more precisely. We looked at the peaks
-
 %TODO Expand this. Use a series of checks, starting with Gnome release/project release date, mailing list threads, source code, wider events (Sept 11)
-\noindent\textbf{Accuracy} -- We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events.
+
+\noindent\textbf{Quality importance and project} -- We hypothesized that certain projects would be more concerned with particular qualities than others. We attempted to characterize the importance of a quality to a project by calculating the mean occurrences of the term over time. We compared the same two projects and terms as above. Table \ref{tbl:quality-project} lists our results. There seems to be a significant difference in the number of times both qualities were mentioned in the Nautilus project. We intend to do further testing to explore this.
+%TODO significance test that doesn't assume a distribution (not t-test) -- log normal?
+%We conducted tests of significance on the data and show that
+
+\noindent\textbf{Threats to validity} -- The main threat to construct validity is that our signifiers omit relevant terms or phrases., e.g., ``can't find the submit button" vs. ``usability". Furthermore, we are assuming that projects share the notions of software quality expressed in the quality model. A more domain-specific taxonomy would be useful. Our data originated from open-source projects, less than ten years old, from the Gnome ecosystem, primarily using \texttt{C} code, so these are threats to external validity.
 
 \begin{table}
-	\caption{False positive rates}
+	\caption{Quality per project}
 	\centering
-	\label{tbl:error}
-\begin{tabular}{|c|c|}
+	\label{tbl:windows}
+\begin{tabular}{|c|c|c|}
 \hline
-Signified quality & F.P. Rate  \\
-\hline
-\hline
-Usability & 0.19\\ \hline
-Portability & 0.29\\ \hline
-Maintainability & 0.13\\ \hline
-Reliability & 0.23\\ \hline
-Functionality & 0.14 \\ \hline
-Efficiency & 0.41\\ \hline
+\rowcolor[gray]{.9} 
+Project & Quality & Avg. Occurrences\\ \hline
+Efficiency & Evolution & 5.3\\
+Efficiency & Nautilus & 12.3\\
+Usability & Evolution & 7.4\\
+Usability & Nautilus & 19.3\\
 \hline
 \end{tabular}
 \end{table}
-
-\noindent\textbf{Threats to validity} -- The main threat to construct validity is that our signifiers omit relevant terms or phrases., e.g., ``can't find the submit button" vs. ``usability". Furthermore, we may want to use the term `User friendly' in relation to `usability'. A more domain-specific taxonomy would be useful. Our data originated from open-source projects, less than ten years old, from the Gnome ecosystem, primarily using \texttt{C} code, so these are threats to external validity.
 
 \vspace{-2mm}
 \section{Conclusions and future work}
 \vspace{-2mm}
-In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained a few of the more significant events by examining the possible external causes. These conclusions are qualitative, but draw on historiographical techniques for support.
+%TODO rewrite
+[In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures]. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained a few of the more significant events by examining the possible external causes. These conclusions are qualitative, but draw on historiographical techniques for support.
 
 Our ultimate goal is to be able to extract, from available sources, a list of requirements for a project, so that we can trace not just the `physical' changes in the codebase, but also the evolving features and goals inherent in a project. We plan to continue our experiments with repository mining with this in mind. In all likelihood, we will need to expand both our taxonomy (to be more software development specific) and our data sources (including source code comments or wiki pages, for example).
 
