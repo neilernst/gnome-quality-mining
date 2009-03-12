@@ -28,8 +28,10 @@ This paper describes a software repository mining technique we call signifier ex
 \section{Introduction}\label{sect:introduction}%Aim
 \vspace{-2mm}
 \begin{quote}[My impression] is of a large project in a state of marginal returns, in which a larger and larger part of the effort goes to maintenance. -- Andy Wingo, Gnome developer, June 2008.\footnote{http://wingolog.org/archives/2008/06/07/gnome-in-the-age-of-decadence}\end{quote}
-	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explore. Is it the case that as projects mature the focus and effort of the developers must turn to maintenance tasks\cite{Swanson1976}? %Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). 
-This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first is that there is some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, using, for example, formal concept analysis~\cite{breu06msr}. Our approach, by contrast, is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we further assume that discussion about software quality is an effort spent on maintenance, and moreover, that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. 
+	This quote, from a developer in the Gnome ecosystem, captures some of what this paper tries to explore. Is it the case that as projects mature the focus and effort of the developers turns to maintenance tasks, and in particular, software quality? %\cite{Swanson1976}? %Certainly Lehman's conclusion~\cite{lehman_software_2006} is that this is the case (viz. Lehman's 7th `law'). 
+We are interested in the way in which participants in a project ecosystem conceive of and discuss software qualities, such as usability or performance. Software quality can be seen as a global taxonomy, independent of a specific domain, differing among projects only in degree of interest. The issue of usability, for example, is a concern in both safety-critical software and desktop widgets. 
+
+This paper describes two exploratory experiments designed to see whether we can better understand the role software quality plays in project discussions. Our approach is focused on the conversations developers have (with each other, or with `users'). To identify when `effort goes to maintenance', we further assume that discussion about software quality is an effort spent on maintenance, and moreover, that discussions about maintenance often involve a set of common terms, which we call signifiers. We define these using the ISO 9126-1 software quality model \cite{iso9126} as a starting point. 
 	
 Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
 
@@ -242,3 +244,7 @@ A secondary direction is related to the social aspect of software development. E
 
 %Objection: all you've done is take the data and run a simple Grep on it. 
 %Well, Abram just used existing ML tools to look at his data
+
+
+% 
+% This paper takes up the question as to whether this can be empirically demonstrated. To test this notion, we begin with a few assumptions. The first is that there is some sort of signal we can capture that will signify that `maintenance' is being done. One approach is to scan code for maintenance activity, using, for example, formal concept analysis~\cite{breu06msr}.
