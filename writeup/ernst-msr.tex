@@ -3,7 +3,7 @@
 \usepackage{fontspec}
 %\usepackage{amsmath,amssymb,amsthm,supertabular,booktabs,rotating,semantic,subfigure,multirow,colortbl}
 \usepackage{graphicx, url}
-\usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
+%\usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,urlcolor=black,bookmarks=false,pdfstartview=FitH]{hyperref}
 \usepackage{algorithmic,algorithm}
 \usepackage{xunicode}
 \usepackage{colortbl}
@@ -104,16 +104,16 @@ Note, we do not currently look for common misspellings or other languages (the p
 
 \section{Observations}
 \label{sec:observations}
-Fig. \ref{fig:n-use-line} and Fig. \ref{fig:ev-eff-line} shows two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
+Fig. \ref{fig:naut-usa-line} and Fig. \ref{fig:ev-eff-line} shows two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
 
 \begin{figure*}[ht]
 \begin{minipage}[]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png} 
-\label{fig:n-use-line}
+\label{fig:naut-usa-line}
 \caption{Product: Nautilus, Quality: Usability}
 \end{minipage}%
-%\hspace{0.2cm}
+\hspace{0.2cm}
 \begin{minipage}[]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Evolution-Efficiencyline.png}
@@ -181,7 +181,7 @@ Nautilus-Usability & 1.4 & 0.14 & 0.79 & 31\\
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Using release windows} -- It's possible that the peak event occurrences are more strongly correlated with the time period prior to a major release, that is, cyclical. In the left side of Fig. \ref{naut-use-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases. For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are not predictive. 
+\noindent\textbf{Using release windows} -- It's possible that the peak event occurrences are more strongly correlated with the time period prior to a major release, that is, cyclical. In Fig. \ref{fig:naut-usa-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases. For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are not predictive. 
 
 \noindent\textbf{Analysis of key peaks in selected graphs} - The final explanation we explore is that the data are independent of software age, or release cycle, and are instead responding to external events. For example, there may be a usability audit, or a review by a major news source of the performance of the project, etc. Accordingly, we chose two products -- Evolution, a calendar and email application, and Nautilus, a web browser and file manager, for more detailed analysis. We examined Efficency (including performance) and Usability events for each, choosing a major peak for each to attempt some historical analysis. Our approach allows us to target our historical analysis more precisely. We looked at the peaks
 
