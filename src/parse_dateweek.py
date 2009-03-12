@@ -68,18 +68,23 @@ for window in tmp2:
         if gnome_dates_dict[window] != []:
             # print 'Key is ' + str(window) + ' values are: ' + str(gnome_dates_dict[window])
             for lst in gnome_dates_dict[window]:
+                # normalize
+                normal = float(lst[1]) / float(n_all_dict[lst[0]]) * 1000
+                #print normal
                 dates.append(lst[0])
-                values.append(lst[1])
+                #values.append(lst[1])
+                values.append(normal)
             if len(values) > 3: #don't bother with those smaller than 4, not significant
                 new_x = []
                 for i in range(len(dates)):
                    new_x.append(i)
                 int_corr = np.corrcoef(new_x, values)
                 corr = int_corr[0][1] #note, not r^2 value
+                r2 = corr*corr
                 y = [float(x) for x in values]
                 z = np.polyfit(new_x, y, 1) # a 1-degree regression
                 slope, intercept = z
-                print len(values)
-                #print release_map[window].get_release_name() + ', '+ str(corr) + ', ' + str(slope) + ', ' + str(len(values))
+                #print len(values)
+                print release_map[window].get_release_name() + ', '+ str(r2) + ', ' + str(slope) + ', ' + str(len(values))
 
             
