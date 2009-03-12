@@ -107,14 +107,14 @@ Note, we do not currently look for common misspellings or other languages (the p
 Fig. \ref{fig:n-use-line} and Fig. \ref{fig:ev-eff-line} shows two examples of our queries. The red line connects a number of events for that particular quarter. For example, in the third quarter of 2000, there were approximately 80 normalized events in the Evolution project for Efficiency. We normalize the extracted event numbers to remove the effect of changes in mailing list volume or commit log activity. The calculation takes the extracted events, divides by the total events, and multiplies by 1000. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized.
 
 \begin{figure*}[ht]
-\begin{minipage}[b]{0.5\textwidth}
+\begin{minipage}[]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png} 
 \label{fig:n-use-line}
 \caption{Product: Nautilus, Quality: Usability}
-\end{minipage}
-\hspace{0.2cm}
-\begin{minipage}[b]{0.5\textwidth}
+\end{minipage}%
+%\hspace{0.2cm}
+\begin{minipage}[]{0.5\textwidth}
 \centering
 \includegraphics[width=\textwidth]{figures/Evolution-Efficiencyline.png}
 \label{fig:ev-eff-line}
@@ -126,10 +126,7 @@ Fig. \ref{fig:n-use-line} and Fig. \ref{fig:ev-eff-line} shows two examples of o
 \subsection{Discussion}
 \vspace{-2mm}
 
-We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:ev-eff-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. We determined that projects with fewer than five years of lifespan simply lacked the data to make any useful judgements. Accordingly, Table \ref{tbl:summary} lists the three longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) numbers for each quality. We ended up with largely conflicting numbers. 
-
-%TODO: compare to non-normalized numbers
-%Multi-level modeling
+We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:ev-eff-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. Due to space constraints, Table \ref{tbl:summary} lists only the two longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) values for each quality. We ended up with largely conflicting numbers. 
 
 \begin{table}
 	\caption{Selected summary statistics, normalized}
@@ -138,7 +135,7 @@ We include a linear regression of the number of occurrences against the date. Th
 \begin{tabular}{|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-File-Keyword &  $r^2$ &  slope \\
+File-Keyword &  $r^2$ &  slope \\ \hline
 Evolution-Efficiency & 0.07 & -0.38 \\
 Evolution-Portability & 0.12 & -0.36 \\
 Evolution-Maintainability & 0.05 & -0.27 \\
@@ -151,34 +148,40 @@ Nautilus-Maintainability & 0.37 & -1.49 \\
 Nautilus-Reliability & 0.38 & -1.00 \\
 Nautilus-Functionality & 0.26 & -4.22 \\
 Nautilus-Usability & 0.23 & -7.96 \\
-Totem-Efficiency & 0.03 & -1.86 \\
-Totem-Portability & 0.06 & -0.35 \\
-Totem-Maintainability & 0.00 & 0.02 \\
-Totem-Reliability & 0.02 & 0.19 \\
-Totem-Functionality & 0.16 & -1.87 \\
-Totem-Usability & 0.33 & -1.97 \\
+% Totem-Efficiency & 0.03 & -1.86 \\
+% Totem-Portability & 0.06 & -0.35 \\
+% Totem-Maintainability & 0.00 & 0.02 \\
+% Totem-Reliability & 0.02 & 0.19 \\
+% Totem-Functionality & 0.16 & -1.87 \\
+% Totem-Usability & 0.33 & -1.97 \\
 \hline
 \end{tabular}
 \end{table}
 
-We therefore sought alternative explanations for the patterns seen in our data. We first investigated smaller event windows, based around the period between major Gnome releases; secondly, we used the identified peaks in the data to explore possible causative events. 
+We therefore sought alternative explanations for the patterns seen in our data. We first investigated smaller event windows, based around the period between major Gnome releases; secondly, we used the identified peaks in the data to explore possible causative events. We chose the Efficiency (performance) and Usability qualities for further exploration.
 
 \begin{table}
-	\caption{Selected summary statistics, normalized}
+	\caption{Normalized statistics for release window technique}
 	\centering
 	\label{tbl:windows}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-File-Keyword & Release \# & $r^2$ &  slope \\
-Evolution-Efficiency & 0.07 & -0.38 \\
-Evolution-Portability & 0.12 & -0.36 \\
+File-Keyword & Release \# & $r^2$ & slope & N\\ \hline
+Evolution-Eff. & 1.4 & 0.23 & -0.67 & 20 \\
+ & 2.24 & 0.62 & -1.13 & 7\\ \hline
+Evolution-Usab. & 1.4 & 0.01 & -0.11 & 32\\
+ & 2.24 & 0.04 & -0.52 & 10 \\ \hline
+Nautilus-Eff. & 1.4 & 0.04 & 0.52 & 25 \\
+ & 2.24 & 0.75 & -6.64 & 4 \\ \hline
+Nautilus-Usability & 1.4 & 0.14 & 0.79 & 31\\
+ & 2.24 & 0.01 & 0.97 & 14\\
 
 \hline
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Using release windows} -- One possible reason for variance in the event curves is that we are using the wrong time windows, and that the peak event occurrences are more strongly correlated with the time prior to a major release. In the left side of Fig. \ref{naut-use-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases. For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are fairly random. 
+\noindent\textbf{Using release windows} -- It's possible that the peak event occurrences are more strongly correlated with the time period prior to a major release, that is, cyclical. In the left side of Fig. \ref{naut-use-line}, there seems to be a major upward trend prior to the release of Gnome 2.0, a co-ordinated release. We defined release windows to investigate whether there was higher correlation between number of events and time for selected projects and keywords. Table \ref{tbl:windows} shows our results for selected products and releases. For some release dates, we see a high degree of correlation; however, the pattern is not seen in other dates, suggesting the results are not predictive. 
 
 \noindent\textbf{Analysis of key peaks in selected graphs} - The final explanation we explore is that the data are independent of software age, or release cycle, and are instead responding to external events. For example, there may be a usability audit, or a review by a major news source of the performance of the project, etc. Accordingly, we chose two products -- Evolution, a calendar and email application, and Nautilus, a web browser and file manager, for more detailed analysis. We examined Efficency (including performance) and Usability events for each, choosing a major peak for each to attempt some historical analysis. Our approach allows us to target our historical analysis more precisely. We looked at the peaks
 
@@ -204,12 +207,12 @@ Efficiency & 0.41\\ \hline
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Threats to validity} -- The main threat to construct validity is that our signifiers omit relevant terms or phrases., e.g., ``can't find the submit button" vs. ``usability". Furthermore, we may want to use the term `User friendly' in relation to `usability'. A more domain-specific taxonomy would be useful (but possibly make controversial decisions). Our data originated from open-source projects, less than ten years old, from the Gnome ecosystem, primarily using \texttt{C} code, so these are threats to external validity.
+\noindent\textbf{Threats to validity} -- The main threat to construct validity is that our signifiers omit relevant terms or phrases., e.g., ``can't find the submit button" vs. ``usability". Furthermore, we may want to use the term `User friendly' in relation to `usability'. A more domain-specific taxonomy would be useful. Our data originated from open-source projects, less than ten years old, from the Gnome ecosystem, primarily using \texttt{C} code, so these are threats to external validity.
 
 \vspace{-2mm}
 \section{Conclusions and future work}
 \vspace{-2mm}
-In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained some of the larger spikes by examining the external events that might be causative. These conclusions are qualitative, but draw on historiographical techniques for support.
+In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained a few of the more significant events by examining the possible external causes. These conclusions are qualitative, but draw on historiographical techniques for support.
 
 Our ultimate goal is to be able to extract, from available sources, a list of requirements for a project, so that we can trace not just the `physical' changes in the codebase, but also the evolving features and goals inherent in a project. We plan to continue our experiments with repository mining with this in mind. In all likelihood, we will need to expand both our taxonomy (to be more software development specific) and our data sources (including source code comments or wiki pages, for example).
 

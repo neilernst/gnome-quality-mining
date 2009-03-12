@@ -36,7 +36,7 @@ for release in releases:
 # print release_map.pop(199941).get_release_name()
     
 #this is a bin for dates of events AFTER that particular date but prior to the next event   
-reader = csv.reader(open(naut_eff, 'rb'))
+reader = csv.reader(open(ev_usable, 'rb'))
 ev_eff_list = [x for x in reader] # a list of lists of format [yearweeknum, occur_count
 
 tmp = gnome_dates_dict.keys()
@@ -69,7 +69,7 @@ for window in tmp2:
             # print 'Key is ' + str(window) + ' values are: ' + str(gnome_dates_dict[window])
             for lst in gnome_dates_dict[window]:
                 # normalize
-                normal = float(lst[1]) / float(n_all_dict[lst[0]]) * 1000
+                normal = float(lst[1]) / float(e_all_dict[lst[0]]) * 1000
                 #print normal
                 dates.append(lst[0])
                 #values.append(lst[1])
