@@ -51,6 +51,12 @@ for lst in ev_eff_list:
 
 #repeat for each iteration
 
+#load the overall event data, per yearweek
+n_all = csv.reader(open('/Users/nernst/Documents/projects/msr/data/nautilus-totals.csv', 'rb'))
+e_all = csv.reader(open('/Users/nernst/Documents/projects/msr/data/evolution-all.csv', 'rb'))
+e_all_dict = dict([x for x in e_all])
+n_all_dict = dict([x for x in n_all])
+
 #generate arrays of data for each and plot the trends.
 # a release window is the weeks following a release but before the next release. We want to see what effects there are.
 # for each window, measure the slope and r2 values and store them
