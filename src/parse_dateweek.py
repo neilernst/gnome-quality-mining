@@ -18,17 +18,17 @@ class DateReleaseObj():
         return self.date
         
         
-gnome_dates = '/Users/nernst/Documents/projects/msr/yearweek.csv'
-ev_eff = '/Users/nernst/Documents/projects/msr/evolution-efficiency-week.csv'
-ev_usable = '/Users/nernst/Documents/projects/msr/evolution-usability-week.csv'
-naut_eff = '/Users/nernst/Documents/projects/msr/nautilus-efficiency-week.csv'
-naut_usable = '/Users/nernst/Documents/projects/msr/nautilus-usability-week.csv'
+gnome_dates = '/Users/nernst/Documents/projects/msr/data/yearweek.csv'
+ev_eff = '/Users/nernst/Documents/projects/msr/data/evolution-efficiency-week.csv'
+ev_usable = '/Users/nernst/Documents/projects/msr/data/evolution-usability-week.csv'
+naut_eff = '/Users/nernst/Documents/projects/msr/data/nautilus-efficiency-week.csv'
+naut_usable = '/Users/nernst/Documents/projects/msr/data/nautilus-usability-week.csv'
 
 reader = csv.reader(open(gnome_dates, 'rb'))
 gnome_dates_list = [int(x[0]) for x in reader]
 gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
 
-dr = csv.reader(open('/Users/nernst/Documents/projects/msr/dates-releases.csv', 'rb'))
+dr = csv.reader(open('/Users/nernst/Documents/projects/msr/data/dates-releases.csv', 'rb'))
 release_map = gnome_dates_dict.copy() #shallow copy
 releases = [x for x in dr]
 for release in releases:
