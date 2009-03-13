@@ -208,7 +208,7 @@ Nautilus-Usability & 2.8 & 0.38 & 1.07 & 26\\
 \noindent\textbf{Analysis of key peaks in selected graphs} - The final explanation we explore is that the data are independent of software age, or release cycle, and are instead responding to external events. For example, there may be a usability audit, or a review by a major news source of the performance of the project, etc. Accordingly, we chose two products -- Evolution, a calendar and email application, and Nautilus, a web browser and file manager, for more detailed analysis. We examined Efficency (including performance) and Usability events for each, choosing a major peak for each to attempt some historical analysis. Our approach allows us to target our historical analysis more precisely. We looked at the peaks
 %TODO Expand this. Use a series of checks, starting with Gnome release/project release date, mailing list threads, source code, wider events (Sept 11)
 
-\noindent\textbf{Quality importance and project} -- We hypothesized that certain projects would be more concerned with particular qualities than others. We attempted to characterize the importance of a quality to a project by calculating the mean occurrences of the term over time. We compared the same two projects and terms as above. Table \ref{tbl:quality-project} lists our results. There seems to be a significant difference in the number of times both qualities were mentioned in the Nautilus project. We intend to do further testing to explore this.
+\noindent\textbf{Quality importance and project} -- We hypothesized that certain projects would be more concerned with particular qualities than others. We attempted to characterize the importance of a quality to a project by calculating the mean occurrences of the term over time. We compared the same two projects and terms as above. Table \ref{tbl:quality-project} lists our results. We show the average number of occurrences per week, and then normalize that by dividing by the total number of `events' (eliminating the effect of volume). After considering volume of events, the Nautilus community discusses qualities three times as often as the Evolution community. We intend to do further testing to explore this.
 %TODO significance test that doesn't assume a distribution (not t-test) -- log normal?
 %We conducted tests of significance on the data and show that
 
@@ -217,15 +217,15 @@ Nautilus-Usability & 2.8 & 0.38 & 1.07 & 26\\
 \begin{table}
 	\caption{Quality per project}
 	\centering
-	\label{tbl:windows}
-\begin{tabular}{|c|c|c|}
+	\label{tbl:quality-project}
+\begin{tabular}{|c|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-Project & Quality & Avg. Occurrences\\ \hline
-Efficiency & Evolution & 5.3\\
-Efficiency & Nautilus & 12.3\\
-Usability & Evolution & 7.4\\
-Usability & Nautilus & 19.3\\
+	Quality & Project & Avg. occurrences & Norm. occurrences\\ \hline
+Efficiency & Evolution & 1.51 & \textbf{2.65}\\
+ & Nautilus & 1.62 &\textbf{ 6.55}\\\hline
+Usability & Evolution & 2.96 & \textbf{5.17}\\
+ & Nautilus & 3.52 & \textbf{14.22}\\
 \hline
 \end{tabular}
 \end{table}
@@ -234,7 +234,7 @@ Usability & Nautilus & 19.3\\
 \section{Conclusions and future work}
 \vspace{-2mm}
 %TODO rewrite
-[In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures]. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained a few of the more significant events by examining the possible external causes. These conclusions are qualitative, but draw on historiographical techniques for support.
+In the introduction we mentioned our hypothesis that software qualities ought to be of more interest to a community as the project matures. Our data provided mixed evidence for this hypothesis. We found some positive correlation between age and qualities, but in general, the correlations were too weak to draw strong conclusions this way. Instead, we explained a few of the more significant events by examining the possible external causes. These conclusions are qualitative, but draw on historiographical techniques for support.
 
 Our ultimate goal is to be able to extract, from available sources, a list of requirements for a project, so that we can trace not just the `physical' changes in the codebase, but also the evolving features and goals inherent in a project. We plan to continue our experiments with repository mining with this in mind. In all likelihood, we will need to expand both our taxonomy (to be more software development specific) and our data sources (including source code comments or wiki pages, for example).
 
