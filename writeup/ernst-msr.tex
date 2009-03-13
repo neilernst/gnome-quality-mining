@@ -23,7 +23,7 @@
 
 \begin{abstract}
 % TODO rewrite	
-This paper describes a software repository mining technique we call signifier extraction. Signifiers are keywords about software quality that we generate using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we extract the signifiers over weekly intervals. We analyze the signifier occurrence pattern statistically and historically. We show that qualities are discussed differently in different projects, and that these occurrences provide a roadmap to reconstruct the historical evolution of software qualities as responses to external forcings, such as release cycles and usability audits. %[numbers?]
+This paper describes a software repository mining technique we call signifier extraction. Signifiers are keywords about software quality that we generate using Wordnet and the ISO quality taxonomy. Using corpora created from eight Gnome projects -- their mailing lists, subversion comments, and bug comments -- we extract the signifiers over weekly intervals. We analyze the signifier occurrence pattern statistically and historically. We show that qualities are discussed differently in different projects, and that these occurrences provide a roadmap to reconstruct the historical changes of software qualities as responses to external forcings, such as release cycles and usability audits. %[numbers?]
 \end{abstract}
 \vspace{-2mm}
 \section{Introduction}\label{sect:introduction}%Aim
@@ -37,7 +37,8 @@ This paper describes two exploratory experiments designed to see whether empiric
 	
 Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
 
-\noindent\textbf{Related Work} -- Part of our effort with this project is to reconstruct a history of a software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001} or more general-purpose works like \cite{waldo93}. Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
+\noindent\textbf{Related Work} -- Part of our effort with this project is to reconstruct a history of a software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001}.% or more general-purpose works like \cite{waldo93}. 
+Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
 	
 \vspace{-2mm}
 \section{Methodology}
@@ -105,7 +106,7 @@ We do not look for common misspellings or other languages. This algorithm gives 
 % \label{fig:syngraph}
 % \end{figure}
 
-\noindent\textbf{Accuracy} -- We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events.
+\noindent\textbf{Error analysis} -- We performed error analysis on our results. What we wanted to verify was the percentage of terms retrieved that were unrelated to a software quality. For example, we encountered some mail messages from individuals whose email signature included the words ``Usability Engineer''. If the body of the message wasn't obviously about usability, we coded this as a false-positive. We did not assess the rate of false-negatives (as mentioned above). Our tests involved randomly selecting messages from the corpora and coding them as relevant or irrelevant. We assessed 100 events per signified term to generate our rates. Table \ref{tbl:error} presents the results of this test. In general, false-positives averaged 23\% of events (i.e., precision was 77\%). \emph{Efficiency} was very high due to the inclusion of the term `ratio' in crash report forms. Recall was 100\%, since the search engine returns all results, but as mentioned, this is a trivial definition, since true recall should be calculated using all events that had that quality as a topic, which we did not assess.
 
 \begin{table}
 	\caption{False positive rates}
@@ -121,7 +122,6 @@ Maintainability & 0.13\\ \hline
 Reliability & 0.23\\ \hline
 Functionality & 0.14 \\ \hline
 Efficiency & 0.41\\ \hline
-\hline
 \end{tabular}
 \end{table}
 
@@ -244,9 +244,8 @@ A secondary direction is related to the social aspect of software development. E
 
 %Thanks to the comments of the software engineering group at the University of Toronto.
 \begin{footnotesize}
-	\vspace{-2mm}
-
-\bibliography{msr}
+\vspace{-2mm}
+\bibliography{IEEEabrv,msr}
 \vspace{-2mm}
 \end{footnotesize}
 \end{document}
