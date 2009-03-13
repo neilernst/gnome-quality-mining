@@ -58,13 +58,11 @@ class BugContentHandler(xml.sax.ContentHandler):
             prodmatch = prodFormat.search(content) #ends with a alphanumeric
             if prodmatch != None:
                 prodname = prodmatch.group()#.strip()
-                #print upper(prodname)
-                #print "EVOLUTION"
                 if found:
                     #this is a bug whose product we wish to change.
                     pass
                 if upper(prodname) in self.products: 
-                    self.isProduct = True    #TODO make sure this detects our product correctly 
+                    self.isProduct = True    
                     self.cur_product = prodname
                 else:
                     self.isProduct = False                
