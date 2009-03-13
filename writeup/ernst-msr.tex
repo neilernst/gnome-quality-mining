@@ -37,7 +37,7 @@ This paper describes two exploratory experiments designed to see whether empiric
 	
 Section \ref{sec:Method} describes how we derive these signifiers and how we built our corpora and toolset for extracting the signifiers. We then present our observations and a discussion about significance in Section \ref{sec:observations}. Finally, we examine some threats to our approach and discuss related work. 
 
-\noindent\textbf{Related Work} -- Part of our effort with this project is to reconstruct a history of a software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001}.% or more general-purpose works like \cite{waldo93}. 
+\noindent\textbf{Related Work} -- Part of our effort with this project is to reconstruct a history of a software product's evolution, a notion we first discussed in \cite{Ernst07icsm}. That idea is derived from, in part, work on narratives of software systems shown in academic work like \cite{Anton2001}. % or more general-purpose works like \cite{waldo93}. 
 Software mining of the type we do, a type of reverse formal concept analysis, is less common. Similarities exist with approaches that begin with structured taxonomies, as with the Hismo software ontology \cite{Girba2006}.
 	
 \vspace{-2mm}
@@ -127,27 +127,27 @@ Efficiency & 0.41\\ \hline
 
 \section{Observations and discussion}
 \label{sec:observations}
-Fig. \ref{fig:naut-usa-line} plots quality events vs. time for two products and qualities. The red line connects a number of events for that particular quarter. For example, in the first quarter of 2003, there were approximately 0.6 normalized events in the Nautilus project for usability. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized. Fig. \ref{fig:ev-hist} shows the Pareto-like frequency distribution for the same product.
+Fig. \ref{fig:naut-usa} plots quality events vs. time for two products and qualities. The red line connects a number of events for that particular quarter. For example, in the first quarter of 2003, there were approximately 0.6 normalized events in the Nautilus project for usability. The black line is a linear regression, and the dashed vertical lines represent Gnome project milestones, with which most of the projects we study are synchronized. Fig. \ref{fig:ev-hist} shows the frequency distribution for the same product.
 \begin{figure*}[]
 \begin{minipage}[]{0.5\textwidth}
 \centering
-\includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png}%
-\label{fig:naut-usa-line}
-\caption{Product: Nautilus, Quality: Usability}
+\includegraphics[width=\textwidth]{figures/Nautilus-Usabilityline.png}
+\label{fig:naut-usa}
+\caption{Occurrences per week}
 \end{minipage}%
 \hspace{0.2cm}
 \begin{minipage}[]{0.5\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../data/ev-usab-hist.png}%
+\includegraphics[width=\textwidth]{../data/ev-usab-hist.png}
 \label{fig:ev-hist}
-\caption{Distribution plot for product: Evolution, quality: usability}
+\caption{Frequency distribution}
 \end{minipage}
 \end{figure*}
 
 % \vspace{-2mm}
 % \subsection{}
 % \vspace{-2mm}
-We include a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:naut-usa-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. Due to space constraints, Table \ref{tbl:summary} lists only the two longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) values for each quality. We ended up with largely conflicting numbers. 
+We performed a linear regression of the number of occurrences against the date. The equation of the regression line shows the average value of the number of occurrences as the date increases. A linear relationship may not be a good model of the actual pattern. For example, the number of occurrences may be changing in response to some other variable, such as co-ordinated release dates, which we show in Fig. \ref{fig:naut-usa-line} as vertical gray lines, and which we discuss below; or by things such as developer illness. Due to space constraints, Table \ref{tbl:summary} lists only the two longest-lived projects, and $r^2$  -- squared correlation value -- and slope (trend) values for each quality. We ended up with largely conflicting numbers. 
 
 \begin{table}
 	\caption{Selected summary statistics, normalized}
@@ -211,14 +211,14 @@ Nautilus-Usability & 2.8 & 0.38 & 1.07 & 26\\
 
 \noindent\textbf{Threats to validity} -- The main threat to construct validity is that our signifiers omit relevant terms or phrases., e.g., ``can't find the submit button" vs. ``usability". Furthermore, we are assuming that projects share the notions of software quality expressed in the quality model. A more domain-specific taxonomy would be useful. Our data originated from open-source projects, less than ten years old, from the Gnome ecosystem, primarily using \texttt{C} code, so these are threats to external validity.
 
-\begin{table}
+\begin{table}[b]
 	\caption{Quality per project}
 	\centering
 	\label{tbl:quality-project}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \rowcolor[gray]{.9} 
-	Quality & Project & Avg. occur. & Norm. occur.\\ \hline
+Quality & Project & Avg. occur. & Norm. occur.\\ \hline
 Efficiency & Evolution & 1.51 & \textbf{2.65}\\
  & Nautilus & 1.62 &\textbf{ 6.55}\\\hline
 Usability & Evolution & 2.96 & \textbf{5.17}\\
