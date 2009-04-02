@@ -1,9 +1,8 @@
 from MySQLdb.cursors import DictCursor,SSDictCursor
 import MySQLdb
 import _mysql_exceptions
-from Parser import Parser
+from base_classes import GnomeDataObject, Parser
 import getopt,sys
-from GnomeDataObject import GnomeDataObject
 
 # the Mail data is in MySql dumps. We will use the subject and body as our corpus, and the date of sending as the date. We can't directly determine 
 # RSN.
