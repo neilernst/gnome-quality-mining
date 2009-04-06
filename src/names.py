@@ -7,6 +7,7 @@ class Taxonomy():
     usability_hyper = ['utility', 'usefulness']
     usability_deriv = ['serviceable', 'usable', 'useable']
     usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
+    usability_user = ['screen', 'user', 'friendly', 'convention', ]
     usability =  usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
     
     functionality_spell = []

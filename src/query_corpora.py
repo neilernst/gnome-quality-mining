@@ -24,39 +24,50 @@ def get_counts(keyword, product, q, year):
     store_cursor = connect_corpus(db_name)
 
     #Define the start and end of yearly quarters"""
-    if q == 'q1':
-      q_end = '01-01'
-      q_start = '03-31'
-    if q == 'q2':
-      q_end = '04-01'     #note, these are backward, too lazy to change var name
-      q_start = '06-30'
-    if q == 'q3':
-      q_end = '07-01'
-      q_start = '09-30'
-    if q == 'q4':
-      q_end = '10-01'
-      q_start = '12-31'     
+    # if q == 'q1':
+    #       q_end = '01-01'
+    #       q_start = '03-31'
+    #     if q == 'q2':
+    #       q_end = '04-01'     #note, these are backward, too lazy to change var name
+    #       q_start = '06-30'
+    #     if q == 'q3':
+    #       q_end = '07-01'
+    #       q_start = '09-30'
+    #     if q == 'q4':
+    #       q_end = '10-01'
+    #       q_start = '12-31'     
     #this query determines number of events for the given keyword  
     #in boolean mode match is case-insensitive and uses simple boolean keywords, e.g. no modifier = OR, + = AND, - = NOT
-    query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
-                        product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-                        cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
-                        select count(*) from t_data where match(event) against (\'%(key)s\' in boolean mode) and 
-                        product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-                        cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
+    # query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
+    #                     product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+    #                     cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
+    #                     select count(*) from t_data where match(event) against (\'%(key)s\' in boolean mode) and 
+    #                     product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+    #                     cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
 
+    query_string = """SELECT yearweek(msr_date), COUNT(*) FROM t_data WHERE product = \'%(product)s\' 
+                        AND MATCH(event) AGAINST (\'%(key)s\' in boolean mode) GROUP BY yearweek(msr_date)
+                        UNION ALL 
+                        SELECT yearweek(msr_date), COUNT(*) FROM data WHERE product = \'%(product)s\' 
+                        AND MATCH(event) AGAINST (\'%(key)s\' in boolean mode)
+                        GROUP BY yearweek(msr_date) ASC """ % {"key":keyword, "product":product}
 # much better query, use yearweek(function)
 # select yearweek(msr_date) as 'year-week', count(*) from data_objects.t_data where product = 'Nautilus' and match(event) against ('"resource behaviour" "time behaviour" efficient ratio efficiency performance' in boolean mode)
 # UNION ALL 
 # select yearweek(msr_date) as 'year-week',count(*) from data_objects.data where product = 'Nautilus' and match(event) against ('"resource behaviour" "time behaviour" efficient ratio efficiency performance' in boolean mode) group by yearweek(msr_date) order by 'year-week' asc
     #e.g. select count(*) from data where match(event) against ('usability useful' in boolean mode) and product = 'nautilus' and  msr_date between cast('2001-01' as Datetime) and cast('2004-03' as Datetime)
     #this query determines total events overall (to normalize against)               
-    totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
-                        cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-                        cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
-                        select count(*) from t_data where product = \'%(product)s\' and  msr_date between 
-                        cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-                        cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"product":product, "year":year, "q_start":q_start, "q_end":q_end}
+    # totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
+    #                     cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+    #                     cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
+    #                     select count(*) from t_data where product = \'%(product)s\' and  msr_date between 
+    #                     cast(\'%(year)s-%(q_end)s\' as Datetime) and 
+    #                     cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"product":product, "year":year, "q_start":q_start, "q_end":q_end}
+                        
+    totals_query = """SELECT yearweek(msr_date), COUNT(*) FROM t_data WHERE product = \'%(product)s\' GROUP BY yearweek(msr_date)
+                        UNION ALL 
+                      select yearweek(msr_date), count(*) from data WHERE product = \'%(product)s\' 
+                      group by yearweek(msr_date) ASC """ % {"product":product}
     try:
         store_cursor.execute(query_string)
         key_num = str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
@@ -95,7 +106,7 @@ def query_database(product, signifiers):
     return result_lst
           
 def save_file(result, product, signified):
-    f = file('/Users/nernst/Desktop/'+product+'-'+ signified, 'wb')
+    f = file('/u/nernst/msr/data/icsm-pickles/'+product+'-'+ signified + '.pcl', 'wb')
     import pickle
     pickle.dump(result, f)
     f.close()
