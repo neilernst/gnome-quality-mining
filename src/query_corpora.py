@@ -70,7 +70,10 @@ def get_counts(keyword, product, q, year):
                       group by yearweek(msr_date) ASC """ % {"product":product}
     try:
         store_cursor.execute(query_string)
-        key_num = str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
+        try:
+            key_num = str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
+        except (AttributeError):
+            key_num = 0 # no result
         store_cursor.execute(totals_query)
         total_val = store_cursor.fetchone().values()
         total_num = int(str(total_val[0]))
