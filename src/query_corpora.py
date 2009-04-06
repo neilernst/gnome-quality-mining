@@ -14,13 +14,14 @@ from names import Taxonomy
 
 def connect_corpus(db_name):
     """ connect to db"""
-    storedb = MySQLdb.connect(passwd="hello", db=db_name, cursorclass=DictCursor)
+    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor, unix_socket='/u/nernst/mysqld.socket')
     store_cursor = storedb.cursor()
     return store_cursor
     
 def get_counts(keyword, product, q, year):
     """ store in the database"""
-    store_cursor = connect_corpus("data_objects")
+    db_name = 'msr_data'
+    store_cursor = connect_corpus(db_name)
 
     #Define the start and end of yearly quarters"""
     if q == 'q1':
