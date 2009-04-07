@@ -64,48 +64,50 @@ def query_database(product, signifiers):
     
     print "Getting counts for: " + signifier_list, product
     result, total = get_counts(signifier_list, product)#, quarter, year)
-    normalize(result, total)
-
-    normalized = 0
-    if total != 0:
-        normalized = 10000*float(result)/float(total)
-    res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
-    result_lst.append(res_tuple)
-    return result_lst
+    return normalize(result, total)
 
 def normalize(result, total):
     """Takes a dictionary with absolute counts and a dictionary with message frequency.
-     Returns a tuple with the dateweek, absolute value, and normalized value"""
-     #Mysql yearweek() function has default mode of 0, weeks start Sunday and week 1 is first week with sunday in the year.
-     complete_year_weeks = []
-     years = [199800,199900,200000,200100,200200,200300,200400,200500,200600,200700,200800]
-     weeks = [i for i in range(0,54)]
-     for y in years:
-         for w in weeks:
+    Returns a tuple with the dateweek, absolute value, and normalized value"""
+    normal_multiplier = 1000 #set appropriately to get results between 0 and 1000
+    #Mysql yearweek() function has default mode of 0, weeks start Sunday and week 1 is first week with sunday in the year.
+    complete_year_weeks = []
+    years = [199800,199900,200000,200100,200200,200300,200400,200500,200600,200700,200800]
+    weeks = [i for i in range(0,54)]
+    for y in years:
+        for w in weeks:
              complete_year_weeks.append(y+w)
      
-     result_dict = {}
-     for r in result:
+    result_dict = {}
+    for r in result:
          k = r.keys()
          v = r.values()
          result_dict[k[0]] = v[0]
      
-     total_dict = {}
-     for t in total:
+    total_dict = {}
+    for t in total:
          k = r.keys()
          v = r.values()
          total_dict[k[0]] = v[0]
          
-     # for each element in total
-     result_lst = []
-     for c in complete_year_weeks:
+    # for each element in total
+    result_lst = []
+    for c in complete_year_weeks:
          try:
              res_value = result_dict[c]  # find that year week in result
+         except(KeyError):
+             res_value = 0
+         try:
              total_value = total_dict[c] 
          except(KeyError):
-             #there was no value for that year
-     # generate the normalized result
-     # add that, plus the value of the year week result, and the year week itself to a tuple
+             total_value = 0 #there was no value for that year
+         normal = 0.0
+         if total_value != 0:
+             normal = normal_multiplier*float(res_value)/float(total_value)
+         res_tuple = (c, normal, res_value) # e.g., (200803, 3.3, 55)
+         result_lst.append(res_tuple)
+    print result_lst     
+    return result_lst
          
 def save_file(result, product, signified):
     f = file('/u/nernst/msr/data/icsm-pickles/'+product+'-'+ signified + '.pcl', 'wb')
@@ -166,4 +168,10 @@ if __name__ == "__main__":
      #  elif quarter == 'q3':
      #      month = 9
      #  elif quarter == 'q4':
-     #      month = 12
+     #      month = 12     # 
+          # normalized = 0
+          # if total != 0:
+          #     normalized = 10000*float(result)/float(total)
+          # res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
+          # result_lst.append(res_tuple)
+          # return result_lst
