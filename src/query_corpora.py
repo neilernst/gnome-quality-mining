@@ -64,7 +64,7 @@ def query_database(product, signifiers):
     
     print "Getting counts for: " + signifier_list, product
     result, total = get_counts(signifier_list, product)#, quarter, year)
-    print result, total
+    normalize(result, total)
 
     normalized = 0
     if total != 0:
@@ -72,7 +72,41 @@ def query_database(product, signifiers):
     res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
     result_lst.append(res_tuple)
     return result_lst
-          
+
+def normalize(result, total):
+    """Takes a dictionary with absolute counts and a dictionary with message frequency.
+     Returns a tuple with the dateweek, absolute value, and normalized value"""
+     #Mysql yearweek() function has default mode of 0, weeks start Sunday and week 1 is first week with sunday in the year.
+     complete_year_weeks = []
+     years = [199800,199900,200000,200100,200200,200300,200400,200500,200600,200700,200800]
+     weeks = [i for i in range(0,54)]
+     for y in years:
+         for w in weeks:
+             complete_year_weeks.append(y+w)
+     
+     result_dict = {}
+     for r in result:
+         k = r.keys()
+         v = r.values()
+         result_dict[k[0]] = v[0]
+     
+     total_dict = {}
+     for t in total:
+         k = r.keys()
+         v = r.values()
+         total_dict[k[0]] = v[0]
+         
+     # for each element in total
+     result_lst = []
+     for c in complete_year_weeks:
+         try:
+             res_value = result_dict[c]  # find that year week in result
+             total_value = total_dict[c] 
+         except(KeyError):
+             #there was no value for that year
+     # generate the normalized result
+     # add that, plus the value of the year week result, and the year week itself to a tuple
+         
 def save_file(result, product, signified):
     f = file('/u/nernst/msr/data/icsm-pickles/'+product+'-'+ signified + '.pcl', 'wb')
     import pickle
