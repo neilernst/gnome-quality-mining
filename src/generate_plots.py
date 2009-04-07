@@ -136,8 +136,6 @@ if __name__ == '__main__':
     products =  ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
     #products = ['Totem']
     keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
-    #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
-    #keywords = ['Reliability']
     data_dict = {}
     save_file = open('/Users/nernst/Documents/current-papers/icsm09/test-icsm.csv', 'w')
     save_file.write('File-Keyword, r2, slope, intercept')
