@@ -3,14 +3,14 @@ class Taxonomy():
     #TODO account for misspelinges 
 
     usability_spell = ['usbility', 'useability',]
-    usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness']
-    usability_hyper = ['utility', 'usefulness']
-    usability_deriv = ['serviceable', 'usable', 'useable']
-    usability_mccall = ['flexibility', 'interface']
+    usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness'] #synonyms
+    usability_hyper = ['utility', 'usefulness'] #hypernyms
+    usability_deriv = ['serviceable', 'usable', 'useable'] # derived forms
+    usability_mccall = ['flexibility', 'interface'] #mccall defns
     usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
     usability_user = ['screen', 'user', 'friendly', 'convention', 'human', 'default', \
                         'button', 'click', 'window','guidelines', 'dialog', 'ugly', 'icons', 'mouse', 'ui', 'focus', \
-                        'feature', 'standard', 'convention', 'configure', 'menu', 'accessibility', 'gui']
+                        'feature', 'standard', 'convention', 'configure', 'menu', 'accessibility', 'gui'] #from mailing list
     usability =  usability_mccall + usability_user + usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
     
     functionality_spell = []
@@ -28,21 +28,22 @@ class Taxonomy():
     reliability_hyper = ['responsibility', 'responsibleness']
     reliability_mccall = ['integrity', 'resilience']
     reliability_deriv = ['dependable', 'reliable']
-    reliability_user = ['failure', 'error', 'redundancy', 'fails', 'bug', 'crash']
+    reliability_user = ['failure', 'error', 'redundancy', 'fails', 'bug', 'crash', 'stable', 'stability']
     reliability_meronym = ['Maturity', 'Recoverability', '"Fault Tolerance"'] #as defined in iso9126
-    reliability =  reliability_mccall + reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
+    reliability = reliability_user + reliability_mccall + reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
     
     maintainability_spell = []
     maintainability_syn = ['maintainable']
     maintainability_hyper = []
-    maintainability_user = ['component', 'module', 'modular', ]
+    maintainability_user = ['component', 'module', 'modular', 'decentralized', 'encapsulation', 'dependency', 'interdependent', 'library' ]
     maintainability_mccall = ['understandability', 'modifiability', 'modularity']
     maintainability_deriv = ['maintain']
     maintainability_meronym = ['Stability', 'Analyzability', 'Changeability', 'Testability'] #as defined in iso9126
-    maintainability =  maintainability_mccall + maintainability_syn + maintainability_hyper + maintainability_deriv + maintainability_meronym #+ _spell
+    maintainability = maintainability_user + maintainability_mccall + maintainability_syn + maintainability_hyper + maintainability_deriv + maintainability_meronym #+ _spell
     
     portability_spell = []
     portability_mccall = ['transferability', 'interoperability', 'documentation']
+    portability_user = ['internationalization', 'i18n', 'localization', 'l10n', 'windows', 'macos', 'standardized', 'migration', 'specification']
     portability_syn = ['portability']
     portability_hyper = ['movability', 'movableness']
     portability_deriv = ['portable']
@@ -50,7 +51,7 @@ class Taxonomy():
     portability = portability_mccall + portability_user + portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
     efficiency_spell = []
-    efficiency_user = ['optimization']
+    efficiency_user = ['optimization', 'fast', 'slow', 'faster', 'slower', 'penalty', 'factor', 'sluggish', '"moore\'s law"', 'optimize', 'profiled']
     efficiency_syn = ['performance', 'efficiency'] # added from personal experience...
     efficiency_hyper = [] #['ratio']
     efficiency_deriv = ['efficient']
