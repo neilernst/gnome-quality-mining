@@ -125,7 +125,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Documents/projects/msr/writeup/figures/abs-'+ project + '-'+ signifier + ' line.png')
+    F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/abs-'+ project + '-'+ signifier + ' line.png')
         
 if __name__ == '__main__':
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
@@ -139,13 +139,13 @@ if __name__ == '__main__':
     #keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality']
     #keywords = ['Reliability']
     data_dict = {}
-    save_file = open('/Users/nernst/Documents/projects/msr/writeup/non-normal-data_file.csv', 'w')
+    save_file = open('/Users/nernst/Documents/current-papers/icsm09/test-icsm.csv', 'w')
     save_file.write('File-Keyword, r2, slope, intercept')
     for product in products:
         for key in keywords:
-            filename = product + '-' + key
+            filename = product + '-' + key + '.pcl'
             print filename
-            f = open('/Users/nernst/Documents/projects/msr/data/pickles/'+ filename)
+            f = open('/Users/nernst/Documents/current-papers/icsm09/data/pickles/'+ filename)
             df = pickle.load(f)
             f.close()
             #save the r2 and slope/intercept numbers externally

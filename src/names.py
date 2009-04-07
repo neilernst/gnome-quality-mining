@@ -51,7 +51,7 @@ class Taxonomy():
     portability = portability_mccall + portability_user + portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
     efficiency_spell = []
-    efficiency_user = ['optimization', 'fast', 'slow', 'faster', 'slower', 'penalty', 'factor', 'sluggish', '"moore\'s law"', 'optimize', 'profiled']
+    efficiency_user = ['optimization', 'fast', 'slow', 'faster', 'slower', 'penalty', 'factor', 'sluggish', 'optimize', 'profiled'] #'"moore\'s law"'
     efficiency_syn = ['performance', 'efficiency'] # added from personal experience...
     efficiency_hyper = [] #['ratio']
     efficiency_deriv = ['efficient']
