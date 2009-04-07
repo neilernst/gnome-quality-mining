@@ -86,27 +86,29 @@ def normalize(result, total):
      
     total_dict = {}
     for t in total:
-         k = r.keys()
-         v = r.values()
+         k = t.keys()
+         v = t.values()
          total_dict[k[0]] = v[0]
          
     # for each element in total
     result_lst = []
+    save = False # determine if there is *any* data to save
     for c in complete_year_weeks:
-         try:
-             res_value = result_dict[c]  # find that year week in result
-         except(KeyError):
-             res_value = 0
-         try:
-             total_value = total_dict[c] 
-         except(KeyError):
-             total_value = 0 #there was no value for that year
-         normal = 0.0
-         if total_value != 0:
-             normal = normal_multiplier*float(res_value)/float(total_value)
-         res_tuple = (c, normal, res_value) # e.g., (200803, 3.3, 55)
-         result_lst.append(res_tuple)
-    print result_lst     
+        try:
+            res_value = result_dict[c]  # find that year week in result
+            save = True #omit leading zero results
+        except(KeyError):
+            res_value = 0
+        try:
+            total_value = total_dict[c] 
+        except(KeyError):
+            total_value = 0 #there was no value for that year
+        normal = 0.0
+        if total_value != 0:
+            normal = normal_multiplier*float(res_value)/float(total_value)        
+        res_tuple = (c, normal, res_value) # e.g., (200803, 3.3, 55)
+        if save:
+            result_lst.append(res_tuple)
     return result_lst
          
 def save_file(result, product, signified):
@@ -117,15 +119,12 @@ def save_file(result, product, signified):
     
 def main():
     t = Taxonomy()     
+    #result = query_database('Evolution', t.get_signifiers('Usability'))
     for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
             result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
-            #print result
             save_file(result, product, signified)
-            #print 'finished ' + product + ' ' + signified
-            #import generate_plots
-            #generate_plots.main(result, product, signified, normalized=False) #create the plot
-
+    
 if __name__ == "__main__":
     sys.exit(main())
 
