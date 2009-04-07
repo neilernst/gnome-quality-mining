@@ -37,32 +37,40 @@ def get_counts(keyword, product):  #, q, year):
                       group by yearweek(msr_date) ASC """ % {"product":product}
     try:
         store_cursor.execute(query_string)
-        key_num = store_cursor.fetchall()#.values()
-        print key_num#str(store_cursor.fetchone().values()[0]) #{'count(*)': 6L} dict
-#        except (AttributeError):
-        key_num = 0 # no result
+        key_num = store_cursor.fetchall()
+        key_num = create_dict(key_num) #create a dict with date-week as key, count as values
         store_cursor.execute(totals_query)
-        total_val = store_cursor.fetchone().values()
-        total_num = int(str(total_val[0]))
-        return int(key_num), total_num
+        total_val = store_cursor.fetchall()
+        total_num = create_dict(total_val)
+        return key_num, total_num #two tuples
     except (ValueError):
         print 'Error in query syntax'
         
+def create_dict(key_dict):
+    res_list = []
+    for x in key_dict:
+        dw = x.values()[0]
+        cnt = x.values()[1]
+        rdict = {dw: cnt}
+        res_list.append(rdict)
+    return res_list
+    
 def query_database(product, signifiers):
     """Sends the query"""
     result_lst = []
     signifier_list = ''
     for signifier in signifiers:
         signifier_list = signifier + ' ' + signifier_list
-        print "Getting counts for: " + signifier_list, product
-        result, total = get_counts(signifier_list, product)#, quarter, year)
-        print result, total
+    
+    print "Getting counts for: " + signifier_list, product
+    result, total = get_counts(signifier_list, product)#, quarter, year)
+    print result, total
 
-        normalized = 0
-        if total != 0:
-            normalized = 10000*float(result)/float(total)
-        res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
-        result_lst.append(res_tuple)
+    normalized = 0
+    if total != 0:
+        normalized = 10000*float(result)/float(total)
+    res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
+    result_lst.append(res_tuple)
     return result_lst
           
 def save_file(result, product, signified):
