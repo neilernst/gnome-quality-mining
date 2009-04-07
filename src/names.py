@@ -15,24 +15,27 @@ class Taxonomy():
     
     functionality_spell = []
     functionality_mccall = ['accuracy', 'correctness']
+    functionality_user = ['vulnerability', 'secure', 'accurate', 'vulnerability', 'vulnerable', 'trustworthy', 'malicious', \
+                            'policy', '"buffer overflow"', 'secured', 'certificate', 'exploit', 'compliant' ]
     functionality_syn = ['functionality']
     functionality_hyper = ['practicality']
     functionality_deriv = ['functional']
     functionality_meronym = ['Suitability', 'Interoperability', 'Accuracy', 'Compliance', 'Security'] #as defined in iso9126
-    functionality =  functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
+    functionality = functionality_mccall + functionality_user + functionality_syn + functionality_hyper + functionality_deriv + functionality_meronym #+ _spell
        
     reliability_spell = []
     reliability_syn = ['dependability', 'dependableness', 'reliability', 'reliableness']
     reliability_hyper = ['responsibility', 'responsibleness']
     reliability_mccall = ['integrity', 'resilience']
     reliability_deriv = ['dependable', 'reliable']
-    reliability_user = ['failure', 'error', 'redundancy']
+    reliability_user = ['failure', 'error', 'redundancy', 'fails', 'bug', 'crash']
     reliability_meronym = ['Maturity', 'Recoverability', '"Fault Tolerance"'] #as defined in iso9126
     reliability =  reliability_mccall + reliability_syn + reliability_hyper + reliability_deriv + reliability_meronym #+ _spell
     
     maintainability_spell = []
     maintainability_syn = ['maintainable']
     maintainability_hyper = []
+    maintainability_user = ['component', 'module', 'modular', ]
     maintainability_mccall = ['understandability', 'modifiability', 'modularity']
     maintainability_deriv = ['maintain']
     maintainability_meronym = ['Stability', 'Analyzability', 'Changeability', 'Testability'] #as defined in iso9126
@@ -44,14 +47,15 @@ class Taxonomy():
     portability_hyper = ['movability', 'movableness']
     portability_deriv = ['portable']
     portability_meronym = ['Installability', 'Replaceability', 'Adaptability', 'Conformance'] #as defined in iso9126
-    portability = portability_mccall + portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
+    portability = portability_mccall + portability_user + portability_syn + portability_hyper + portability_deriv + portability_meronym #+ _spell
     
     efficiency_spell = []
+    efficiency_user = ['optimization']
     efficiency_syn = ['performance', 'efficiency'] # added from personal experience...
     efficiency_hyper = [] #['ratio']
     efficiency_deriv = ['efficient']
     efficiency_meronym = ['"time behaviour"', '"resource behaviour"'] #as defined in iso9126
-    efficiency =  efficiency_syn + efficiency_hyper + efficiency_deriv + efficiency_meronym #+ _spell
+    efficiency =  efficiency_user + efficiency_syn + efficiency_hyper + efficiency_deriv + efficiency_meronym #+ _spell
     #efficiency = time/resource behaviour == performance
     
     global signifier_dict
