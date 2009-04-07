@@ -35,7 +35,7 @@ class Taxonomy():
     maintainability_spell = []
     maintainability_syn = ['maintainable']
     maintainability_hyper = []
-    maintainability_user = ['component', 'module', 'modular', 'decentralized', 'encapsulation', 'dependency', 'interdependent', 'library' ]
+    maintainability_user = ['component', 'module', 'modular', 'decentralized', 'encapsulation', 'dependency', 'interdependent' ]
     maintainability_mccall = ['understandability', 'modifiability', 'modularity']
     maintainability_deriv = ['maintain']
     maintainability_meronym = ['Stability', 'Analyzability', 'Changeability', 'Testability'] #as defined in iso9126
