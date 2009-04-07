@@ -28,13 +28,16 @@ def main(df, product, keyword, normalized=True):
     months   = mdates.MonthLocator(interval=3)  # every quarter
     yearsFmt = mdates.DateFormatter('%Y-%m') # want the x-axis to have ticks labelled (2008-Jan)
 
-    bug_dates = [datetime.date(1997, 8, 1), datetime.date(1998, 3, 10), datetime.date(1998, 6, 7), datetime.date(1998, 12, 30), datetime.date(1999, 3, 1), datetime.date(1999, 10, 12), datetime.date(2000, 5, 25), datetime.date(2001, 4, 3), datetime.date(2002, 6, 26), datetime.date(2003, 2, 5), datetime.date(2003, 9, 11), datetime.date(2003, 11, 29), datetime.date(2004, 3, 31), datetime.date(2004, 9, 15), datetime.date(2005, 3, 9), datetime.date(2005, 9, 7), datetime.date(2006, 3, 15), datetime.date(2006, 9, 6), datetime.date(2007, 3, 14), datetime.date(2007, 9, 19), datetime.date(2008, 3, 12), datetime.date(2008, 9, 24), datetime.date(2009, 2, 4)]
+    bug_dates = [datetime.datetime(1997, 8, 1), datetime.datetime(1998, 3, 10), datetime.datetime(1998, 6, 7), datetime.datetime(1998, 12, 30), datetime.datetime(1999, 3, 1), datetime.datetime(1999, 10, 12), datetime.datetime(2000, 5, 25), datetime.datetime(2001, 4, 3), datetime.datetime(2002, 6, 26), datetime.datetime(2003, 2, 5), datetime.datetime(2003, 9, 11), datetime.datetime(2003, 11, 29), datetime.datetime(2004, 3, 31), datetime.datetime(2004, 9, 15), datetime.datetime(2005, 3, 9), datetime.datetime(2005, 9, 7), datetime.datetime(2006, 3, 15), datetime.datetime(2006, 9, 6), datetime.datetime(2007, 3, 14), datetime.datetime(2007, 9, 19), datetime.datetime(2008, 3, 12), datetime.datetime(2008, 9, 24), datetime.datetime(2009, 2, 4)]
+    #bug_dates = [datetime.date(1997, 8, 1), datetime.date(1998, 3, 10), datetime.date(1998, 6, 7), datetime.date(1998, 12, 30), datetime.date(1999, 3, 1), datetime.date(1999, 10, 12), datetime.date(2000, 5, 25), datetime.date(2001, 4, 3), datetime.date(2002, 6, 26), datetime.date(2003, 2, 5), datetime.date(2003, 9, 11), datetime.date(2003, 11, 29), datetime.date(2004, 3, 31), datetime.date(2004, 9, 15), datetime.date(2005, 3, 9), datetime.date(2005, 9, 7), datetime.date(2006, 3, 15), datetime.date(2006, 9, 6), datetime.date(2007, 3, 14), datetime.date(2007, 9, 19), datetime.date(2008, 3, 12), datetime.date(2008, 9, 24), datetime.date(2009, 2, 4)]
     bug_descr = ['0.0', '0.13', '0.2', '0.91', '1.0.0', '1.0.53 ', '1.2', '1.4', '2', '2.2', '2.4', '2.5.0', '2.6', '2.8', '2.10', '2.12', '2.14', '2.16', '2.18', '2.20', '2.22', '2.24', '2.26b1']
     total_counts = []
     dates = []
     normal_counts = []
-    for normal, count, date in df:
+    for dateweek, normal, count in df:
        total_counts.append(count)
+       dateweek = str(dateweek) + '-0' #200845 first day of week
+       date = datetime.datetime.strptime(dateweek, '%Y%U-%w') 
        dates.append(date) 
        normal_counts.append(normal)
     
@@ -76,7 +79,7 @@ def main(df, product, keyword, normalized=True):
     add_label(dates, bug_dates, counts, bug_descr)
     #plt.show()
     export()
-    return r2, slope, intercept
+    return r2, slope, intercept, len(counts)
     
 def add_trend(x, y):
     """Add the least-squares linear regression, and corr. coeff"""
@@ -125,7 +128,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/abs-'+ project + '-'+ signifier + ' line.png')
+    F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/norm/' + project + '-'+ signifier + ' line.png')
         
 if __name__ == '__main__':
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
@@ -137,8 +140,8 @@ if __name__ == '__main__':
     #products = ['Totem']
     keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
     data_dict = {}
-    save_file = open('/Users/nernst/Documents/current-papers/icsm09/test-icsm.csv', 'w')
-    save_file.write('File-Keyword, r2, slope, intercept')
+    save_file = open('/Users/nernst/Documents/current-papers/icsm09/norm-icsm.csv', 'w')
+    save_file.write('File-Keyword, r2, slope, intercept, n\n')
     for product in products:
         for key in keywords:
             filename = product + '-' + key + '.pcl'
@@ -146,8 +149,9 @@ if __name__ == '__main__':
             f = open('/Users/nernst/Documents/current-papers/icsm09/data/pickles/'+ filename)
             df = pickle.load(f)
             f.close()
+            normalized = True
             #save the r2 and slope/intercept numbers externally
-            r2, slope, intercept = main(df, product, key, False)
+            r2, slope, intercept, n = main(df, product, key, normalized)
             #data_store = [r2,slope,intercept]
             #data_dict[filename] = data_store
-            #save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + '\n')
+            save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + str(n) + '\n')

@@ -8,7 +8,7 @@ import MySQLdb
 
 def connect_corpus(db_name):
     """ connect to db"""
-    storedb = MySQLdb.connect(passwd="hello", db=db_name, cursorclass=DictCursor)
+    storedb = MySQLdb.connect(passwd="happy1", db=db_name, cursorclass=DictCursor)
     store_cursor = storedb.cursor()
     return store_cursor
     
