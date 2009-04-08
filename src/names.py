@@ -43,7 +43,7 @@ class Taxonomy():
     
     portability_spell = []
     portability_mccall = ['transferability', 'interoperability', 'documentation']
-    portability_user = ['internationalization', 'i18n', 'localization', 'l10n', 'windows', 'macos', 'standardized', 'migration', 'specification']
+    portability_user = ['internationalization', 'i18n', 'localization', 'l10n', 'standardized', 'migration', 'specification']
     portability_syn = ['portability']
     portability_hyper = ['movability', 'movableness']
     portability_deriv = ['portable']
