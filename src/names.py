@@ -9,7 +9,7 @@ class Taxonomy():
     usability_mccall = ['flexibility', 'interface'] #mccall defns
     usability_meronym = ['Learnability', 'Understandability', 'Operability'] #as defined in iso9126
     usability_user = ['screen', 'user', 'friendly', 'convention', 'human', 'default', \
-                        'button', 'click', 'window','guidelines', 'dialog', 'ugly', 'icons', 'mouse', 'ui', 'focus', \
+                        'click', 'guidelines', 'dialog', 'ugly', 'icons', 'ui', 'focus', \
                         'feature', 'standard', 'convention', 'configure', 'menu', 'accessibility', 'gui'] #from mailing list
     usability =  usability_mccall + usability_user + usability_syn + usability_hyper + usability_deriv + usability_meronym #+ usability_spell
     

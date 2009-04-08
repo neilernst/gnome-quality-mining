@@ -49,7 +49,7 @@ def get_counts(keyword):
 def main():
    from names import Taxonomy
    t = Taxonomy()
-   signifiers = t.get_signifiers('Portability')
+   signifiers = t.get_signifiers('Reliability')
    signifier_list = ''
    for signifier in signifiers:
        signifier_list = signifier + ' ' + signifier_list
