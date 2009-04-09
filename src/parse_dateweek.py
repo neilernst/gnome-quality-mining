@@ -20,8 +20,22 @@ class DateReleaseObj():
         return self.date 
     def __str__(self):
         return 'hello' #str(self.date, self.dateweek, self.release_name)
-        
+
+def generate_compare(product, signified):
+    """Finds the average occurrences over project lifespan"""
+    pickle_dir = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'        
+    pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
+    data = pickle.load(open(pickle_file, 'rb'))
+    avg_norm = 0.0
+    avg_abs = 0.0
+    total_weeks = len(data)
+    for lst in data:
+        avg_norm = avg_norm + lst[1] # normalized
+        avg_abs = avg_abs + lst[2] # absolute numbers
+    print ' & \\textbf{' + str(round(avg_norm/total_weeks, 2)) + '} & ' + str(round(avg_abs/total_weeks, 2)) + ' & ' + str(total_weeks)
+    
 def find_window(product, signified):
+    """generates the r2, slope values for this product over the Gnome release data"""
     pickle_dir = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
     data = pickle.load(open(pickle_file, 'rb'))
@@ -91,8 +105,9 @@ def main():
         print signified + ' & ',
         for product in t.get_products():
             print '& ' + product,
-            gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
-            find_window(product, signified)
+            #             gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
+            #             find_window(product, signified)
+            generate_compare(product, signified)
             #print '\\hline'
             #pass
     #find_window("Deskbar", "Usability")
