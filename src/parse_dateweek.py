@@ -64,7 +64,7 @@ def find_window(product, signified):
                     slope = round(slope,2)
                     r2 = round(r2, 2)
                     #print len(values)
-                    print release_map[window].get_release_name() + ', '+ str(r2) + ', ' + str(slope) + ', ' + str(len(values))
+                    print '\\textbf{'+ release_map[window].get_release_name() +  '} & '+ str(r2) + ' & ' + str(slope) + '& ' + str(len(values))
 
 def main():
     gnome_dates = '/Users/nernst/Documents/projects/msr/data/yearweek.csv'
@@ -85,9 +85,10 @@ def main():
     t = Taxonomy()     
     for signified in t.get_signified(): # e.g. usability, performance, etc
         for product in t.get_products():
-            #find_window(product, signified)
-            pass
-    find_window("Evolution", "Usability")
+            print 'Release '
+            find_window(product, signified)
+            #pass
+    #find_window("Evolution", "Usability")
 
 if __name__ == '__main__':
     main()
