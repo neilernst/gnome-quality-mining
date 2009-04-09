@@ -18,12 +18,14 @@ class DateReleaseObj():
         return self.dateweek
     def get_date(self):
         return self.date 
-     
+    def __str__(self):
+        return self.date, self.dateweek, self.release_name
+        
 def find_window(product, signified):
     pickle_dir = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
     data = pickle.load(open(pickle_file, 'rb'))
-
+    #print product, signified, len(data)
     tmp = gnome_dates_dict.keys()
     tmp.sort() #in place sort
     for lst in data:#ev_eff_list:
@@ -63,8 +65,8 @@ def find_window(product, signified):
                     slope, intercept = z
                     slope = round(slope,2)
                     r2 = round(r2, 2)
-                    #print len(values)
-                    print '\\textbf{'+ release_map[window].get_release_name() +  '} & '+ str(r2) + ' & ' + str(slope) + '& ' + str(len(values))
+                    print product, signified, len(values)
+                    #print '\\textbf{' + product + '-' + signified + '}&'+ release_map[window].get_release_name() +  '& '+ str(r2) + ' & ' + str(slope) + ' & ' + str(len(values)) + '\\\\'
 
 def main():
     gnome_dates = '/Users/nernst/Documents/projects/msr/data/yearweek.csv'
@@ -81,12 +83,13 @@ def main():
     releases = [x for x in dr]
     for release in releases:
         release_map[int(release[1])] = DateReleaseObj(release)
-
+    print release_map
     t = Taxonomy()     
-    for signified in t.get_signified(): # e.g. usability, performance, etc
-        for product in t.get_products():
-            print 'Release '
-            find_window(product, signified)
+    #for signified in t.get_signified(): # e.g. usability, performance, etc
+    for product in t.get_products():
+            #print 'Project - Quality & Release & $r^2$ & slope & N \\\\'
+        find_window(product, 'Usability')
+            #print '\\hline'
             #pass
     #find_window("Evolution", "Usability")
 
