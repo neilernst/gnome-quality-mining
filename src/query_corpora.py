@@ -14,13 +14,13 @@ from names import Taxonomy
 
 def connect_corpus(db_name):
     """ connect to db"""
-    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor, unix_socket='/u/nernst/mysqld.socket')
+    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor)#, unix_socket='/u/nernst/mysqld.socket')
     store_cursor = storedb.cursor()
     return store_cursor
     
 def get_counts(keyword, product):  #, q, year):
     """ store in the database"""
-    db_name = 'msr_data'
+    db_name = 'data_objects'#'msr_data'
     store_cursor = connect_corpus(db_name)
 
     query_string = """SELECT yearweek(msr_date), COUNT(*) FROM t_data WHERE product = \'%(product)s\' 
@@ -82,13 +82,21 @@ def normalize(result, total):
     for r in result:
          k = r.keys()
          v = r.values()
-         result_dict[k[0]] = v[0]
+         if k[0] in result_dict.keys():
+            result_dict[k[0]] = result_dict[k[0]] + v[0] #previous value
+            #print str(k[0]) + ' was a dupe'
+         else:        
+             result_dict[k[0]] = v[0]
      
     total_dict = {}
     for t in total:
          k = t.keys()
          v = t.values()
-         total_dict[k[0]] = v[0]
+         if k[0] in total_dict.keys():
+              total_dict[k[0]] = total_dict[k[0]] + v[0] #previous value
+              #print str(k[0]) + ' was a dupe'
+         else:
+              total_dict[k[0]] = v[0]
          
     # for each element in total
     result_lst = []
@@ -112,7 +120,9 @@ def normalize(result, total):
     return result_lst
          
 def save_file(result, product, signified):
-    f = file('/u/nernst/msr/data/icsm-pickles/'+product+'-'+ signified + '.pcl', 'wb')
+    mac_loc = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'
+    comps_loc = '/u/nernst/msr/data/icsm-pickles/'
+    f = file(mac_loc+product+'-'+ signified + '.pcl', 'wb')
     import pickle
     pickle.dump(result, f)
     f.close()
@@ -127,50 +137,3 @@ def main():
     
 if __name__ == "__main__":
     sys.exit(main())
-
-    #Define the start and end of yearly quarters"""
-     # if q == 'q1':
-     #       q_end = '01-01'
-     #       q_start = '03-31'
-     #     if q == 'q2':
-     #       q_end = '04-01'     #note, these are backward, too lazy to change var name
-     #       q_start = '06-30'
-     #     if q == 'q3':
-     #       q_end = '07-01'
-     #       q_start = '09-30'
-     #     if q == 'q4':
-     #       q_end = '10-01'
-     #       q_start = '12-31'     
-     #this query determines number of events for the given keyword  
-     #in boolean mode match is case-insensitive and uses simple boolean keywords, e.g. no modifier = OR, + = AND, - = NOT
-     # query_string = """select count(*) from data where match(event) against (\'%(key)s\' in boolean mode) and 
-     #                     product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-     #                     cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
-     #                     select count(*) from t_data where match(event) against (\'%(key)s\' in boolean mode) and 
-     #                     product = \'%(product)s\' and  msr_date between cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-     #                     cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"key":keyword, "product":product, "year":year, "q_start":q_start, "q_end":q_end}
-
-     # totals_query =  """select count(*) from data where product = \'%(product)s\' and  msr_date between 
-     #                     cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-     #                     cast(\'%(year)s-%(q_start)s\' as Datetime) UNION ALL
-     #                     select count(*) from t_data where product = \'%(product)s\' and  msr_date between 
-     #                     cast(\'%(year)s-%(q_end)s\' as Datetime) and 
-     #                     cast(\'%(year)s-%(q_start)s\' as Datetime)""" % {"product":product, "year":year, "q_start":q_start, "q_end":q_end}
-     # for year in range(1998,2009):
-      #         for quarter in ('q1', 'q2', 'q3', 'q4'):
-
-     # month = 0
-     #  if quarter == 'q1': 
-     #      month = 3
-     #  elif quarter == 'q2':
-     #      month = 6
-     #  elif quarter == 'q3':
-     #      month = 9
-     #  elif quarter == 'q4':
-     #      month = 12     # 
-          # normalized = 0
-          # if total != 0:
-          #     normalized = 10000*float(result)/float(total)
-          # res_tuple = (normalized,result, datetime.date(year,month,30)) #use weeknum#a quarter's date representation is the end of the quarter
-          # result_lst.append(res_tuple)
-          # return result_lst

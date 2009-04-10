@@ -128,7 +128,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/norm/' + project + '-'+ signifier + ' line.png')
+    F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/norm/' + project + '-'+ signifier + '-line.png')
         
 if __name__ == '__main__':
     #sample data -- will be loaded from the query. Format is 1998-q1 -- 2009-q4
@@ -142,16 +142,18 @@ if __name__ == '__main__':
     data_dict = {}
     save_file = open('/Users/nernst/Documents/current-papers/icsm09/norm-icsm.csv', 'w')
     save_file.write('File-Keyword, r2, slope, intercept, n\n')
-    for product in products:
-        for key in keywords:
-            filename = product + '-' + key + '.pcl'
-            print filename
-            f = open('/Users/nernst/Documents/current-papers/icsm09/data/pickles/'+ filename)
-            df = pickle.load(f)
-            f.close()
-            normalized = True
-            #save the r2 and slope/intercept numbers externally
-            r2, slope, intercept, n = main(df, product, key, normalized)
-            #data_store = [r2,slope,intercept]
-            #data_dict[filename] = data_store
-            save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + str(n) + '\n')
+    # for product in products:
+    #     for key in keywords:
+    product = 'Nautilus'
+    key = 'Portability'
+    filename = product + '-' + key + '.pcl'
+    print filename
+    f = open('/Users/nernst/Documents/current-papers/icsm09/data/pickles/'+ filename)
+    df = pickle.load(f)
+    f.close()
+    normalized = True
+    #save the r2 and slope/intercept numbers externally
+    r2, slope, intercept, n = main(df, product, key, normalized)
+    #data_store = [r2,slope,intercept]
+    #data_dict[filename] = data_store
+    save_file.write(filename+ ',' + str(r2) + ',' + str(slope) + ',' + str(intercept) + str(n) + '\n')
