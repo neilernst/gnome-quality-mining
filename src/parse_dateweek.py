@@ -82,7 +82,7 @@ def find_window(product, signified):
                     slope = round(slope,2)
                     r2 = round(r2, 2)
                     #print product, signified, len(values)
-                    if release_map[window].get_release_name() == '2.8' or release_map[window].get_release_name() == '2.22': # ' & ' + str(len(values)) +
+                    if release_map[window].get_release_name() == '2.8' or release_map[window].get_release_name() == '2.20,': # ' & ' + str(len(values)) +
                         print '& &' + release_map[window].get_release_name() +  '& '+ str(r2) + ' & ' + str(slope) + '\\\\'
 
 def main():
@@ -110,7 +110,7 @@ def main():
             generate_compare(product, signified)
             #print '\\hline'
             #pass
-    #find_window("Deskbar", "Usability")
+    find_window("Nautilus", "Usability")
 
 if __name__ == '__main__':
     main()
