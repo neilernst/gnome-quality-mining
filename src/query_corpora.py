@@ -121,8 +121,8 @@ def normalize(result, total):
          
 def save_file(result, product, signified):
     mac_loc = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'
-    comps_loc = '/u/nernst/msr/data/icsm-pickles/'
-    f = file(mac_loc+product+'-'+ signified + '.pcl', 'wb')
+    comps_loc = '/u/nernst/msr/data/icsm-pickles2/'
+    f = file(comp_loc+product+'-'+ signified + '.pcl', 'wb')
     import pickle
     pickle.dump(result, f)
     f.close()
