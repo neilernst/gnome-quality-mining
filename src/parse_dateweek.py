@@ -23,7 +23,7 @@ class DateReleaseObj():
 
 def generate_compare(product, signified):
     """Finds the average occurrences over project lifespan"""
-    pickle_dir = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'        
+    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
     data = pickle.load(open(pickle_file, 'rb'))
     avg_norm = 0.0
@@ -36,7 +36,7 @@ def generate_compare(product, signified):
     
 def find_window(product, signified):
     """generates the r2, slope values for this product over the Gnome release data"""
-    pickle_dir = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'        
+    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
     data = pickle.load(open(pickle_file, 'rb'))
     #print product, signified, len(data)
@@ -105,12 +105,12 @@ def main():
         print signified + ' & ',
         for product in t.get_products():
             print '& ' + product,
-            #             gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
-            #             find_window(product, signified)
-            generate_compare(product, signified)
-            #print '\\hline'
+            gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
+            find_window(product, signified)
+            #generate_compare(product, signified)
+            # print '\\hline'
             #pass
-    find_window("Nautilus", "Usability")
+    #find_window("Nautilus", "Usability")
 
 if __name__ == '__main__':
     main()

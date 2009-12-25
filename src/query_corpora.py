@@ -18,23 +18,23 @@ def connect_corpus(db_name):
     store_cursor = storedb.cursor()
     return store_cursor
     
-def get_counts(keyword, product):  #, q, year):
+def get_counts(keyword, product, t):  #, q, year):
     """ store in the database"""
     db_name = 'data_objects'#'msr_data'
     store_cursor = connect_corpus(db_name)
-
-    query_string = """SELECT yearweek(msr_date), COUNT(*) FROM t_data WHERE product = \'%(product)s\' 
+    # alls = ''
+    # for word in keyword:
+    #     print word
+    #     alls += word
+    #     alls += t.find_spelling(word)
+    # print alls   
+    query_string = """SELECT yearweek(msr_date), COUNT(*) FROM refsq_data WHERE product = \'%(product)s\' 
                         AND MATCH(event) AGAINST (\'%(key)s\' in boolean mode) GROUP BY yearweek(msr_date)
-                        UNION ALL 
-                        SELECT yearweek(msr_date), COUNT(*) FROM data WHERE product = \'%(product)s\' 
-                        AND MATCH(event) AGAINST (\'%(key)s\' in boolean mode)
-                        GROUP BY yearweek(msr_date) ASC """ % {"key":keyword, "product":product}
+                        ASC """ % {"key":keyword, "product":product}
 
     #this query determines total events overall (to normalize against)                                
-    totals_query = """SELECT yearweek(msr_date), COUNT(*) FROM t_data WHERE product = \'%(product)s\' GROUP BY yearweek(msr_date)
-                        UNION ALL 
-                      select yearweek(msr_date), count(*) from data WHERE product = \'%(product)s\' 
-                      group by yearweek(msr_date) ASC """ % {"product":product}
+    totals_query = """SELECT yearweek(msr_date), COUNT(*) FROM refsq_data WHERE product = \'%(product)s\' 
+                    GROUP BY yearweek(msr_date) ASC """ % {"product":product}
     try:
         store_cursor.execute(query_string)
         key_num = store_cursor.fetchall()
@@ -55,15 +55,15 @@ def create_dict(key_dict):
         res_list.append(rdict)
     return res_list
     
-def query_database(product, signifiers):
+def query_database(product, signifiers,t):
     """Sends the query"""
     result_lst = []
-    signifier_list = ''
+    signifier_str = ''
     for signifier in signifiers:
-        signifier_list = signifier + ' ' + signifier_list
+        signifier_str = signifier + ' ' + signifier_str + ' ' + t.find_spelling(signifier)
     
-    print "Getting counts for: " + signifier_list, product
-    result, total = get_counts(signifier_list, product)#, quarter, year)
+    print "Getting counts for: " + signifier_str, product
+    result, total = get_counts(signifier_str, product,t)#, quarter, year)
     return normalize(result, total)
 
 def normalize(result, total):
@@ -120,7 +120,7 @@ def normalize(result, total):
     return result_lst
          
 def save_file(result, product, signified):
-    mac_loc = '/Users/nernst/Documents/current-papers/icsm09/data/pickles/'
+    mac_loc = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'
     comps_loc = '/u/nernst/msr/data/icsm-pickles/'
     f = file(mac_loc+product+'-'+ signified + '.pcl', 'wb')
     import pickle
@@ -129,11 +129,16 @@ def save_file(result, product, signified):
     
 def main():
     t = Taxonomy()     
-    #result = query_database('Evolution', t.get_signifiers('Usability'))
+    # s = t.get_signifiers('Usability')
+    # alls = ''
+    # for word in s:
+    #     alls += word
+    #     alls += t.find_spelling(word)
+    # result = query_database('Evolution', [alls])
     for signified in t.get_signified(): # e.g. usability, performance, etc
-        for product in t.get_products():
-            result = query_database(product, t.get_signifiers(signified)) #e.g. usability: usability, usable, etc.
-            save_file(result, product, signified)
+            for product in t.get_products():
+                result = query_database(product, t.get_signifiers(signified), t) #e.g. usability: usability, usable, etc.
+                save_file(result, product, signified)
     
 if __name__ == "__main__":
     sys.exit(main())

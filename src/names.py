@@ -1,7 +1,6 @@
 class Taxonomy():
     """ class to store lists of various terms of interest. Each element/term in the list will be queried once."""
-    #TODO account for misspelinges 
-
+    # http://nltk.googlecode.com/svn/trunk/doc/howto/wordnet.html
     usability_spell = ['usbility', 'useability',]
     usability_syn = ['usability', 'serviceability', 'serviceableness', 'usableness', 'useableness'] #synonyms
     usability_hyper = ['utility', 'usefulness'] #hypernyms
@@ -70,3 +69,20 @@ class Taxonomy():
         
     def get_products(self):
         return ['Evolution', 'Nautilus', 'Deskbar', 'Metacity', 'Ekiga', 'Totem', 'Evince', 'Empathy']
+    
+    def find_spelling(self, word):
+        """ use a Perl module to define some common typos, transpositions, etc."""
+        import subprocess
+        p = subprocess.Popen(["perl", "typo.pl", word], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE) 
+        (out, err) = p.communicate()
+        # print word, out
+        return out
+        wordlist = out.split()
+
+        
+    def stem_word(self, word):
+        """ use NLTK to find word stems """
+        from nltk import stem
+        stemmer = stem.PorterStemmer()
+        stemmer.stem(word)
+        

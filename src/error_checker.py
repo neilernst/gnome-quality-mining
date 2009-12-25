@@ -17,10 +17,8 @@ def get_counts(keyword):
     store_cursor = connect_corpus("data_objects")
 
     total = 100 
-    query_string = """select event from data_objects.data where match(event) 
-                    against (\'%(key)s\' in boolean mode) UNION ALL
-                    select event from data_objects.t_data where match(event) 
-                    against (\'%(key)s\' in boolean mode) 
+    query_string = """select event from data_objects.refsq_data where match(event) 
+                    against (\'%(key)s\' in boolean mode)
                     order by rand() limit %(total)d"""  % {"key":keyword, "total":total}
     
     try:

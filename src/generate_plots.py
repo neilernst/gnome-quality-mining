@@ -148,7 +148,7 @@ if __name__ == '__main__':
     key = 'Reliability'
     filename = product + '-' + key + '.pcl'
     #print filename
-    f = open('/Users/nernst/Documents/current-papers/icsm09/data/pickles/'+ filename)
+    f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'+ filename)
     df = pickle.load(f)
     f.close()
     normalized = False
