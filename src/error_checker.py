@@ -47,7 +47,8 @@ def get_counts(keyword):
 def main():
    from names import Taxonomy
    t = Taxonomy()
-   signifiers = t.get_signifiers('Reliability')
+   # signifiers = t.get_signifiers('Efficiency') #extended lists
+   signifiers = t.get_signifiers_wn('Functionality') # wordnet lists
    signifier_list = ''
    for signifier in signifiers:
        signifier_list = signifier + ' ' + signifier_list
