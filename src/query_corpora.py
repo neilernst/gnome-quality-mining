@@ -14,7 +14,7 @@ from names import Taxonomy
 
 def connect_corpus(db_name):
     """ connect to db"""
-    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor)#, unix_socket='/u/nernst/mysqld.socket')
+    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor, unix_socket='/u/nernst/mysqld.socket')
     store_cursor = storedb.cursor()
     return store_cursor
     
