@@ -26,4 +26,4 @@ src/Lingua-TypoGenerator-0.01/t/the.txt
 .DS_Store
 writeup/.DS_Store
 writeup/figures/.DS_Store
-src/names.pyc
+src/*.pyc
