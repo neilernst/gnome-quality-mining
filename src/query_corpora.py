@@ -14,7 +14,7 @@ from names import Taxonomy
 
 def connect_corpus(db_name):
     """ connect to db"""
-    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor, unix_socket='/u/nernst/mysqld.socket')
+    storedb = MySQLdb.connect(user='root', db=db_name, cursorclass=DictCursor)#, unix_socket='/u/nernst/mysqld.socket')
     store_cursor = storedb.cursor()
     return store_cursor
     
@@ -122,7 +122,7 @@ def normalize(result, total):
 def save_file(result, product, signified):
     mac_loc = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'
     comps_loc = '/u/nernst/msr/data/icsm-pickles/'
-    f = file(mac_loc+product+'-'+ signified + '.pcl', 'wb')
+    f = file(mac_loc+product+'-'+ signified + '-wn.pcl', 'wb')
     import pickle
     pickle.dump(result, f)
     f.close()
@@ -137,7 +137,7 @@ def main():
     # result = query_database('Evolution', [alls])
     for signified in t.get_signified(): # e.g. usability, performance, etc
             for product in t.get_products():
-                result = query_database(product, t.get_signifiers(signified), t) #e.g. usability: usability, usable, etc.
+                result = query_database(product, t.get_signifiers_wn(signified), t) #e.g. usability: usability, usable, etc.
                 save_file(result, product, signified)
     
 if __name__ == "__main__":

@@ -23,20 +23,26 @@ class DateReleaseObj():
 
 def generate_compare(product, signified):
     """Finds the average occurrences over project lifespan"""
-    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'        
+    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
+    significance_threshold = 3 # number of events below which we don't consider this important.
     data = pickle.load(open(pickle_file, 'rb'))
     avg_norm = 0.0
     avg_abs = 0.0
     total_weeks = len(data)
     for lst in data:
-        avg_norm = avg_norm + lst[1] # normalized
-        avg_abs = avg_abs + lst[2] # absolute numbers
-    print ' & \\textbf{' + str(round(avg_norm/total_weeks, 2)) + '} & ' + str(round(avg_abs/total_weeks, 2)) + ' & ' + str(total_weeks)
+        if (lst[2] <= significance_threshold and lst[1] > 500) or (lst[2] == 0):
+            #print 'excluded week ' + str(lst[0]) + 'insufficient events'
+            total_weeks -= 1
+        else:
+            avg_norm = avg_norm + lst[1] # normalized
+            avg_abs = avg_abs + lst[2] # absolute numbers
+    # print ' & \\textbf{' + str(round(avg_norm/total_weeks, 2)) + '} & ' + str(round(avg_abs/total_weeks, 2)) + ' & ' + str(total_weeks)
+    print ', ' + str(round(avg_norm/total_weeks, 2)) + ', ' + str(round(avg_abs/total_weeks, 2)) + ', ' + str(total_weeks) + ', ' + str(len(data))
     
 def find_window(product, signified):
     """generates the r2, slope values for this product over the Gnome release data"""
-    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'        
+    pickle_dir = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'        
     pickle_file = pickle_dir + product+'-'+ signified + '.pcl'
     data = pickle.load(open(pickle_file, 'rb'))
     #print product, signified, len(data)
@@ -83,7 +89,8 @@ def find_window(product, signified):
                     r2 = round(r2, 2)
                     #print product, signified, len(values)
                     if release_map[window].get_release_name() == '2.8' or release_map[window].get_release_name() == '2.20,': # ' & ' + str(len(values)) +
-                        print '& &' + release_map[window].get_release_name() +  '& '+ str(r2) + ' & ' + str(slope) + '\\\\'
+                        # print '& &' + release_map[window].get_release_name() +  '& '+ str(r2) + ' & ' + str(slope) + '\\\\'
+                        print release_map[window].get_release_name() +  ', '+ str(r2) + ', ' + str(slope) + ', ' + str(len(values))#+ '\\\\'
 
 def main():
     gnome_dates = '/Users/nernst/Documents/projects/msr/data/yearweek.csv'
@@ -102,9 +109,12 @@ def main():
         release_map[int(release[1])] = DateReleaseObj(release)
     t = Taxonomy()     
     for signified in t.get_signified(): # e.g. usability, performance, etc
-        print signified + ' & ',
+        # print signified + ' & ',
+        print signified #+ ' , ',
+
         for product in t.get_products():
-            print '& ' + product,
+            # print '& ' + product,
+            print product + ',',
             gnome_dates_dict = dict.fromkeys(gnome_dates_list,[])
             find_window(product, signified)
             #generate_compare(product, signified)

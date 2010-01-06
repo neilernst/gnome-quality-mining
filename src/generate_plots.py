@@ -13,15 +13,16 @@ import matplotlib.mlab as mlab
 
 import query_corpora
 
-fig = plt.figure()
-ax = fig.add_subplot(111,autoscale_on=False)
+
 from matplotlib import rcParams
 rcParams['text.usetex']=True
 rcParams['text.latex.unicode']=True
 
 def main(df, product, keyword, normalized=True):
-    
-    global project, signifier #is this evil?
+    global project, signifier,fig,ax #is this evil?
+    fig = plt.figure()
+    significance_threshold = 3 # don't count events that are very small
+    ax = fig.add_subplot(111,autoscale_on=False)
     project = product
     signifier = keyword
     years    = mdates.YearLocator()   # every year
@@ -35,24 +36,26 @@ def main(df, product, keyword, normalized=True):
     dates = []
     normal_counts = []
     for dateweek, normal, count in df:
-       total_counts.append(count)
-       dateweek = str(dateweek) + '-0' #200845 first day of week
-       date = datetime.datetime.strptime(dateweek, '%Y%U-%w') 
-       dates.append(date) 
-       normal_counts.append(normal)
+        if count <= significance_threshold and normal > 500:
+            continue
+        if count == 0: 
+            continue
+        total_counts.append(count)
+        dateweek = str(dateweek) + '-0' #200845 first day of week
+        date = datetime.datetime.strptime(dateweek, '%Y%U-%w') 
+        dates.append(date) 
+        normal_counts.append(normal)
     
     # do we want absolute or normalized values?
     if normalized:
         counts = normal_counts
     else: 
         counts = total_counts
-    
     min_x = 0
     for x in range(len(counts)):
         if counts[x] != 0: # find the first non-zero value and that becomes our start date (may miss some non-zero dates)
              min_x = x
              break
-    
     counts = counts[min_x:]
     dates = dates[min_x:]
     
@@ -74,12 +77,12 @@ def main(df, product, keyword, normalized=True):
     corr, slope, intercept = add_trend(dates, counts)
     
     ax.set_xlim(datemin, datemax)
-    #ax.set_ylim(0, max(counts)+2000)
+    ax.set_ylim(0, max(counts))#+2000)
     r2 = add_metadata(ax,corr)
     add_label(dates, bug_dates, counts, bug_descr)
-    ax.set_ylim(-10, 1600)
-    plt.show()
-    #export()
+    #ax.set_ylim(-10, 1600)
+    #$plt.show()
+    export()
     return r2, slope, intercept, len(counts)
     
 def add_trend(x, y):
@@ -114,7 +117,7 @@ def add_label(dates, bug_dates, counts, bug_descr):
     i = 0
     for bug_date in bug_dates:
     #each date position, at the maximum height, add the text of that date's release, vertically rotated
-        ax.text(bug_date,max(counts), bug_descr[i], rotation='vertical')
+        ax.text(bug_date,max(counts)-max(counts)/9, bug_descr[i], rotation='vertical')
         i = i + 1
     
 def add_metadata(ax,corr):
@@ -130,7 +133,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    #F.savefig('/Users/nernst/Documents/current-papers/icsm09/figures/abs/' + project + '-'+ signifier + '-line.png')
+    F.savefig('/Users/nernst/Documents/papers/current-papers/refsq/figures/norm/' + project + '-'+ signifier + '-line.png')
         
 if __name__ == '__main__':
     import pickle
@@ -140,21 +143,23 @@ if __name__ == '__main__':
     #products = ['Totem']
     keywords = ['Efficiency', 'Portability', 'Maintainability', 'Reliability', 'Functionality', 'Usability']
     data_dict = {}
-    #save_file = open('/Users/nernst/Documents/current-papers/icsm09/norm-latex-icsm.csv', 'w')
-    #save_file.write('File-Keyword, r2, slope, intercept, n\n')
-    # for product in products:
-    #          for key in keywords:
-    product = 'Nautilus'
-    key = 'Reliability'
-    filename = product + '-' + key + '.pcl'
-    #print filename
-    f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'+ filename)
-    df = pickle.load(f)
-    f.close()
-    normalized = False
-    #save the r2 and slope/intercept numbers externally
-    r2, slope, intercept, n = main(df, product, key, normalized)
-    #data_store = [r2,slope,intercept]
-    #data_dict[filename] = data_store
-#            save_file.write(product + ' & ' + key + ' & ' + str(r2) + ' & ' + str(slope) + ' & ' + str(intercept) + ' & ' + str(n) + ' \\\\\n')
-    print((product + ' & ' + key + ' & ' + str(round(r2,2)) + ' & ' + str(round(slope,2)) + ' & ' + str(round(intercept, 2)) + ' & ' + str(n) + ' \\\\\n'))
+    save_file = open('/Users/nernst/Documents/papers/current-papers/refsq/abs-latex-refsq.csv', 'w')
+    save_file.write('File-Keyword, r2, slope, intercept, n\n')
+    for product in products:
+        for key in keywords:
+    # product = 'Nautilus'
+    #     key = 'Reliability'
+            filename = product + '-' + key + '.pcl'
+            print filename
+            f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'+ filename)
+            df = pickle.load(f)
+            f.close()
+            normalized = True
+            #save the r2 and slope/intercept numbers externally
+            r2, slope, intercept, n = main(df, product, key, normalized)
+            #data_store = [r2,slope,intercept]
+            #data_dict[filename] = data_store
+            #save_file.write(product + ' & ' + key + ' & ' + str(r2) + ' & ' + str(slope) + ' & ' + str(intercept) + ' & ' + str(n) + ' \\\\\n')
+            save_file.write(product + ', ' + key + ' , ' + str(r2) + ' , ' + str(slope) + ' , ' + str(intercept) + ' , ' + str(n) + ' \\\\\n')
+
+            #print((product + ' & ' + key + ' & ' + str(round(r2,2)) + ' & ' + str(round(slope,2)) + ' & ' + str(round(intercept, 2)) + ' & ' + str(n) + ' \\\\\n'))
