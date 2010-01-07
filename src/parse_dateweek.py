@@ -83,6 +83,7 @@ def find_window(product, signified):
                     corr = int_corr[0][1] #note, not r^2 value
                     r2 = corr*corr
                     y = [float(x) for x in values]
+                    print len(y)
                     z = np.polyfit(new_x, y, 1) # a 1-degree regression
                     slope, intercept = z
                     slope = round(slope,2)

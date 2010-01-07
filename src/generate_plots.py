@@ -10,13 +10,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.mlab as mlab
-
 import query_corpora
-
-
 from matplotlib import rcParams
-rcParams['text.usetex']=True
-rcParams['text.latex.unicode']=True
+matplotlib.use('PDF')
+# rcParams['text.usetex']=True
+# rcParams['text.latex.unicode']=True
 
 def main(df, product, keyword, normalized=True):
     global project, signifier,fig,ax #is this evil?
@@ -91,13 +89,16 @@ def add_trend(x, y):
     new_x = []
     for i in range(len(x)):
        new_x.append(i)
+    print y
     int_corr = np.corrcoef(new_x, y) # of form array([[ 1.,  0.09553632], [ 0.09553632,  1.]])
     corr = int_corr[0][1]
     z = np.polyfit(new_x, y, 1) # a 1-degree regression
     slope, intercept = z
+    xr = np.polyval([slope,intercept],new_x)
     #print slope
-    p = np.poly1d(z)
-    trend_line = ax.plot(x, p(new_x), 'k-', label='\^{{y}} = {0:.2f} + {1:.2f} x '.format(intercept,slope))
+    #p = np.poly1d(z)
+                            #p(new_x)
+    trend_line = ax.plot(x, xr, 'k-', label='y = {0:.2f} + {1:.2f} x '.format(intercept,slope))
     #plt.text()
     return corr, slope, intercept
     
@@ -124,8 +125,9 @@ def add_metadata(ax,corr):
     r2 = corr * corr #r2 value, between 0-1
     plt.ylabel('Frequency')# (events/total events * 1000)')#("Frequency")
     plt.xlabel("Date")
-    plt.title("Frequency of signifier occurrence over time\n" + 'Product: ' + project + ", signifier: " + signifier 
-                + ', $r^2$={0:.2%}%'.format(r2), verticalalignment='bottom')
+    plt.title(#"Frequency of signifier occurrence over time\n" + 'Product: ' + project + ", signifier: " + signifier 
+                # + 
+                'r^2={0:.2%}'.format(r2), verticalalignment='bottom')
     # rotates and right aligns the x labels, and moves the bottom of the
     # axes up to make room for them
     fig.autofmt_xdate()
@@ -133,7 +135,7 @@ def add_metadata(ax,corr):
     
 def export():
     F = plt.gcf()
-    F.savefig('/Users/nernst/Documents/papers/current-papers/refsq/figures/norm/' + project + '-'+ signifier + '-line.png')
+    F.savefig('/Users/nernst/Documents/papers/current-papers/refsq/figures/abs/' + project + '-'+ signifier + '-line.pdf')
         
 if __name__ == '__main__':
     import pickle
@@ -145,21 +147,28 @@ if __name__ == '__main__':
     data_dict = {}
     save_file = open('/Users/nernst/Documents/papers/current-papers/refsq/abs-latex-refsq.csv', 'w')
     save_file.write('File-Keyword, r2, slope, intercept, n\n')
-    for product in products:
-        for key in keywords:
-    # product = 'Nautilus'
-    #     key = 'Reliability'
-            filename = product + '-' + key + '.pcl'
-            print filename
-            f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'+ filename)
-            df = pickle.load(f)
-            f.close()
-            normalized = True
-            #save the r2 and slope/intercept numbers externally
-            r2, slope, intercept, n = main(df, product, key, normalized)
-            #data_store = [r2,slope,intercept]
-            #data_dict[filename] = data_store
-            #save_file.write(product + ' & ' + key + ' & ' + str(r2) + ' & ' + str(slope) + ' & ' + str(intercept) + ' & ' + str(n) + ' \\\\\n')
-            save_file.write(product + ', ' + key + ' , ' + str(r2) + ' , ' + str(slope) + ' , ' + str(intercept) + ' , ' + str(n) + ' \\\\\n')
+    # for product in products:
+        # for key in keywords:
+    product = 'Nautilus'     
+    key = 'Reliability'
+    filename = product + '-' + key + '.pcl'
+    print filename
+    f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'+ filename)
+    df = pickle.load(f)
+    f.close()
+    df2 = []
+    print len(df)
+    for x in df:
+        # print x[0]
+        if x[0] != 200745 and x[0] != 200136 and x[0] != 200744: #if x[2] > 1000:# 
+            df2.append(x)
+    print len(df2)
+    normalized = False
+    #save the r2 and slope/intercept numbers externally
+    r2, slope, intercept, n = main(df2, product, key, normalized)
+    #data_store = [r2,slope,intercept]
+    #data_dict[filename] = data_store
+    #save_file.write(product + ' & ' + key + ' & ' + str(r2) + ' & ' + str(slope) + ' & ' + str(intercept) + ' & ' + str(n) + ' \\\\\n')
+    save_file.write(product + ', ' + key + ' , ' + str(r2) + ' , ' + str(slope) + ' , ' + str(intercept) + ' , ' + str(n) + ' \\\\\n')
 
-            #print((product + ' & ' + key + ' & ' + str(round(r2,2)) + ' & ' + str(round(slope,2)) + ' & ' + str(round(intercept, 2)) + ' & ' + str(n) + ' \\\\\n'))
+    #print((product + ' & ' + key + ' & ' + str(round(r2,2)) + ' & ' + str(round(slope,2)) + ' & ' + str(round(intercept, 2)) + ' & ' + str(n) + ' \\\\\n'))
