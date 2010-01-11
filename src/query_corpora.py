@@ -29,6 +29,7 @@ def get_counts(keyword, product, t):  #, q, year):
     #     alls += t.find_spelling(word)
     # print alls   
     query_string = """SELECT yearweek(msr_date), COUNT(*) FROM refsq_data WHERE product = \'%(product)s\' 
+                        and msr_type != 'Bug' 
                         AND MATCH(event) AGAINST (\'%(key)s\' in boolean mode) GROUP BY yearweek(msr_date)
                         ASC """ % {"key":keyword, "product":product}
 
@@ -120,25 +121,29 @@ def normalize(result, total):
     return result_lst
          
 def save_file(result, product, signified):
-    mac_loc = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/'
+    mac_loc = '/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/nobug/'
     comps_loc = '/u/nernst/msr/data/icsm-pickles/'
-    f = file(mac_loc+product+'-'+ signified + '-wn.pcl', 'wb')
+    f = file(mac_loc+product+'-'+ signified + '-ext.pcl', 'wb')
     import pickle
     pickle.dump(result, f)
     f.close()
     
 def main():
-    t = Taxonomy()     
+    t = Taxonomy()    
+    product = "Nautilus"
+    signified = "Reliability" 
     # s = t.get_signifiers('Usability')
     # alls = ''
     # for word in s:
     #     alls += word
     #     alls += t.find_spelling(word)
     # result = query_database('Evolution', [alls])
-    for signified in t.get_signified(): # e.g. usability, performance, etc
-            for product in t.get_products():
-                result = query_database(product, t.get_signifiers_wn(signified), t) #e.g. usability: usability, usable, etc.
-                save_file(result, product, signified)
+    # for signified in t.get_signified(): # e.g. usability, performance, etc
+    #            for product in t.get_products():
+    #                result = query_database(product, t.get_signifiers(signified), t) #e.g. usability: usability, usable, etc.
+    #                save_file(result, product, signified)
+    result = query_database(product, t.get_signifiers(signified), t) #e.g. usability: usability, usable, etc.
+    save_file(result, product, signified)
     
 if __name__ == "__main__":
     sys.exit(main())

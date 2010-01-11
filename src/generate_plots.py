@@ -150,7 +150,7 @@ if __name__ == '__main__':
     # for product in products:
         # for key in keywords:
     product = 'Nautilus'     
-    key = 'Reliability'
+    key = 'Portability'
     filename = product + '-' + key + '.pcl'
     print filename
     f = open('/Users/nernst/Documents/papers/current-papers/refsq/data/pickles/ext/'+ filename)
